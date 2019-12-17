@@ -87,6 +87,12 @@ public class ABMProducto extends javax.swing.JDialog {
     boolean CombosListo = false;
 
     public void CargarComboBoxes() {
+        cbFabricante.removeAllItems();
+        cbClaseProducto.removeAllItems();
+        cbTipoAgroquimico.removeAllItems();
+        cbEmpresaRegistrante.removeAllItems();
+        cbFormulacion.removeAllItems();
+
         //Carga los combobox con las consultas
         metodoscombo.CargarComboBox(cbFabricante, "SELECT fa_codigo, fa_descripcion FROM fabricante ORDER BY fa_descripcion");
         metodoscombo.CargarComboBox(cbClaseProducto, "SELECT cp_codigo, cp_descripcion FROM clase_producto ORDER BY cp_descripcion");
