@@ -545,11 +545,21 @@ public final class ABMEstablecimiento extends javax.swing.JDialog {
                 cbDepartamentoItemStateChanged(evt);
             }
         });
+        cbDepartamento.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbDepartamentoActionPerformed(evt);
+            }
+        });
 
         cbDistrito.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
         cbDistrito.setEnabled(false);
         cbDistrito.setMinimumSize(new java.awt.Dimension(55, 31));
         cbDistrito.setPreferredSize(new java.awt.Dimension(55, 31));
+        cbDistrito.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbDistritoActionPerformed(evt);
+            }
+        });
 
         jbIImagen2.setFont(new java.awt.Font("Arial", 1, 15)); // NOI18N
         jbIImagen2.setForeground(new java.awt.Color(255, 255, 255));
@@ -1138,6 +1148,14 @@ public final class ABMEstablecimiento extends javax.swing.JDialog {
     private void tbParcelasMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbParcelasMousePressed
         // TODO add your handling code here:
     }//GEN-LAST:event_tbParcelasMousePressed
+
+    private void cbDepartamentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbDepartamentoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cbDepartamentoActionPerformed
+
+    private void cbDistritoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbDistritoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cbDistritoActionPerformed
 
     public void SiguienteFoco(KeyEvent evt) {
         if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
