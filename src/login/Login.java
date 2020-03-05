@@ -71,9 +71,7 @@ public class Login extends javax.swing.JFrame {
             rs.close();
             st.close();
             //con.close();
-        } catch (NumberFormatException SQL) {
-            System.out.println("Error en SQL " + SQL.getMessage());
-        } catch (SQLException SQL) {
+        } catch (NumberFormatException | SQLException SQL) {
             System.out.println("Error en SQL " + SQL.getMessage());
         }
     }
