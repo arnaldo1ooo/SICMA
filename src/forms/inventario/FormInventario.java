@@ -29,6 +29,10 @@ import metodos.MetodosCombo;
  */
 public class FormInventario extends javax.swing.JDialog {
 
+    private Metodos metodos = new Metodos();
+    private MetodosCombo metodoscombo = new MetodosCombo();
+    private Conexion con;
+
     public FormInventario(java.awt.Frame parent, Boolean modal) {
         super(parent, modal);
         initComponents();
@@ -41,9 +45,6 @@ public class FormInventario extends javax.swing.JDialog {
     }
 
     //-------------METODOS----------//
-    Metodos metodos = new Metodos();
-    MetodosCombo metodoscombo = new MetodosCombo();
-
     private void CargarCombos() {
         metodoscombo.CargarComboBox(cbProductor, "SELECT prod_codigo, CONCAT(prod_nombre,' ', prod_apellido) FROM productor ORDER BY prod_nombre");
         metodoscombo.CargarComboBox(cbEstablecimiento, "SELECT estab_codigo, estab_descripcion FROM establecimiento WHERE estab_productor = " + metodoscombo.ObtenerIdComboBox(cbProductor) + " ORDER BY estab_descripcion");
@@ -100,7 +101,7 @@ public class FormInventario extends javax.swing.JDialog {
         Statement st;
         ResultSet rs;
         try {
-            connection = (Connection) Conexion.GetConnection();
+            connection = (Connection) Conexion.ConectarBasedeDatos();
             st = connection.createStatement();
             rs = st.executeQuery(sentencia);
             ResultSetMetaData mdrs = rs.getMetaData();
@@ -140,10 +141,10 @@ public class FormInventario extends javax.swing.JDialog {
         try {
             String sentencia = "SELECT es_descripcion FROM producto, formulacion, estado "
                     + "WHERE pro_formulacion = for_codigo AND for_estado = es_codigo AND pro_codigo = '" + rs.getString("pro_codigo") + "'";
-            Conexion con = metodos.ObtenerRSSentencia(sentencia);
-            con.rs.next();
+            con = metodos.ObtenerRSSentencia(sentencia);
+            con.getResultSet().next();
 
-            estado = con.rs.getString("es_descripcion");
+            estado = con.getResultSet().getString("es_descripcion");
             if (estado.equals("ml/Ha")) {
                 estado = ("Lts");
             } else {

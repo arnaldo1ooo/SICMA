@@ -6,7 +6,7 @@
 package forms.producto.tipoagroquimico;
 
 import conexion.Conexion;
-import forms.producto.ABMProducto;
+import forms.producto.ABMProductoViejo;
 import java.awt.HeadlessException;
 import java.awt.event.KeyEvent;
 import java.sql.Connection;
@@ -23,10 +23,10 @@ import metodos.Metodos;
  */
 public final class ABMTipoAgroquimico extends javax.swing.JDialog {
 
-    private ABMProducto abmproducto; //Para que tenga relacion con su form padre
-    private Connection con = (Connection) Conexion.GetConnection();
+    private ABMProductoViejo abmproducto; //Para que tenga relacion con su form padre
+    private Connection con = Conexion.ConectarBasedeDatos();
 
-    public ABMTipoAgroquimico(ABMProducto abmproducto, java.awt.Dialog parent, Boolean modal) {
+    public ABMTipoAgroquimico(ABMProductoViejo abmproducto, java.awt.Dialog parent, Boolean modal) {
         super(parent, modal);
         this.abmproducto = abmproducto;
         initComponents();

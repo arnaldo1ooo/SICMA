@@ -6,7 +6,7 @@
 package forms.zafra.establecimiento;
 
 import conexion.Conexion;
-import forms.producto.ABMProducto;
+import forms.producto.ABMProductoViejo;
 import forms.zafra.productor.ABMProductor;
 import java.awt.HeadlessException;
 import java.awt.event.KeyEvent;
@@ -935,8 +935,8 @@ public final class ABMEstablecimiento extends javax.swing.JDialog {
             sum = 0.0;
             cont = 0;
             Conexion con = metodos.ObtenerRSSentencia("SELECT par_extension FROM parcela WHERE par_establecimiento = " + txtCodigo.getText());
-            while (con.rs.next()) {
-                sum = sum + con.rs.getDouble("par_extension");
+            while (con.getResultSet().next()) {
+                sum = sum + con.getResultSet().getDouble("par_extension");
                 cont++;
             }
             lbSumExParcelas1.setText(df.format(sum) + " Has");
@@ -965,22 +965,22 @@ public final class ABMEstablecimiento extends javax.swing.JDialog {
         Conexion con = metodos.ObtenerRSSentencia("SELECT par_codigo, par_descripcion, par_extension, dep_descripcion, dis_descripcion, par_localidad, par_x, par_y  FROM parcela, departamento, distrito WHERE par_distrito = dis_codigo AND dep_codigo = dis_departamento AND par_establecimiento = " + tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 0).toString());
         String registro[] = new String[con.NumColumnsRS()];
         try {
-            while (con.rs.next()) {
-                registro[0] = (con.rs.getString("par_codigo"));
-                registro[1] = (con.rs.getString("par_descripcion"));
-                registro[2] = (con.rs.getString("par_extension"));
-                registro[3] = (con.rs.getString("dep_descripcion"));
-                registro[4] = (con.rs.getString("dis_descripcion"));
-                registro[5] = (con.rs.getString("par_localidad"));
-                registro[6] = (con.rs.getString("par_x"));
-                registro[7] = (con.rs.getString("par_y"));
+            while (con.getResultSet().next()) {
+                registro[0] = (con.getResultSet().getString("par_codigo"));
+                registro[1] = (con.getResultSet().getString("par_descripcion"));
+                registro[2] = (con.getResultSet().getString("par_extension"));
+                registro[3] = (con.getResultSet().getString("dep_descripcion"));
+                registro[4] = (con.getResultSet().getString("dis_descripcion"));
+                registro[5] = (con.getResultSet().getString("par_localidad"));
+                registro[6] = (con.getResultSet().getString("par_x"));
+                registro[7] = (con.getResultSet().getString("par_y"));
                 modeloParcelas.addRow(registro);//agrega el registro a la tabla
             }
             tbParcelas.setModel(modeloParcelas);//asigna a la tabla el modelo creado
             con.DesconectarBasedeDatos();
             metodos.AnchuraColumna(tbParcelas);
         } catch (SQLException ex) {
-            Logger.getLogger(ABMProducto.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ABMProductoViejo.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -1228,7 +1228,7 @@ public final class ABMEstablecimiento extends javax.swing.JDialog {
                 if (JOptionPane.YES_OPTION == confirmado) {
                     //REGISTRAR NUEVO
                     try {
-                        Connection con = (Connection) Conexion.GetConnection();
+                        Connection con = Conexion.ConectarBasedeDatos();
                         String sentencia = "CALL SP_EstablecimientoAlta ('" + descripcion + "','" + idproductor + "','" + iddistrito + "','" + localidad + "','" + X + "','" + Y + "')";
                         System.out.println("Insertar registro: " + sentencia);
                         Statement st = (Statement) con.createStatement();
@@ -1265,8 +1265,7 @@ public final class ABMEstablecimiento extends javax.swing.JDialog {
 
     public void RegistroModificar() {
         //guarda los datos que se han modificado en los campos
-        Connection con;
-        con = conexion.Conexion.GetConnection();
+                Connection con = Conexion.ConectarBasedeDatos();
         String sentencia;
 
         String codigo = txtCodigo.getText();
@@ -1325,8 +1324,7 @@ public final class ABMEstablecimiento extends javax.swing.JDialog {
                 if (confirmado == JOptionPane.YES_OPTION) {
                     codigo = (String) tbPrincipal.getModel().getValueAt(filasel, 0);
 
-                    Connection con;
-                    con = Conexion.GetConnection();
+                Connection con = Conexion.ConectarBasedeDatos();
                     String sentence;
                     sentence = "CALL SP_EstablecimientoEliminar(" + codigo + ")";
 

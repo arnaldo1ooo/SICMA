@@ -31,7 +31,7 @@ public final class TruncarTabla extends javax.swing.JDialog {
         DefaultTableModel modelotabla = new DefaultTableModel(null, titles);
 
         Connection con;
-        con = conexion.Conexion.GetConnection();
+        con = conexion.Conexion.ConectarBasedeDatos();
 
         String sentencia = "CALL SP_ObtenerNombresTablas('" + bd + "')";
         try {

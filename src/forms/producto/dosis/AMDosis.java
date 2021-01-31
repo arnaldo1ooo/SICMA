@@ -5,7 +5,7 @@
  */
 package forms.producto.dosis;
 
-import forms.producto.ABMProducto;
+import forms.producto.ABMProductoViejo;
 import java.awt.event.KeyEvent;
 import java.text.DecimalFormat;
 import javax.swing.JComponent;
@@ -19,9 +19,9 @@ import metodos.MetodosCombo;
  */
 public class AMDosis extends JDialog {
 
-    private ABMProducto abmproducto; //Para que tenga relacion con su form padre
+    private ABMProductoViejo abmproducto; //Para que tenga relacion con su form padre
 
-    public AMDosis(ABMProducto abmproducto, java.awt.Dialog parent, Boolean modal) {
+    public AMDosis(ABMProductoViejo abmproducto, java.awt.Dialog parent, Boolean modal) {
         super(parent,modal);
         this.abmproducto = abmproducto;
         initComponents();

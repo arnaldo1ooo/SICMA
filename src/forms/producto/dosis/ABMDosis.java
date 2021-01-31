@@ -6,7 +6,7 @@
 package forms.producto.dosis;
 
 import conexion.Conexion;
-import forms.producto.ABMProducto;
+import forms.producto.ABMProductoViejo;
 import java.awt.HeadlessException;
 import java.awt.event.KeyEvent;
 import java.sql.Connection;
@@ -50,18 +50,18 @@ public final class ABMDosis extends javax.swing.JDialog {
         Conexion con = metodos.ObtenerRSSentencia("CALL SP_DosisConsulta('" + idproducto + "')");
         String registro[] = new String[con.NumColumnsRS()];
         try {
-            while (con.rs.next()) {
-                registro[0] = (con.rs.getString("do_codigo"));
-                registro[1] = (con.rs.getString("do_dosismin"));
-                registro[2] = (con.rs.getString("do_dosismax"));
-                registro[3] = (con.rs.getString("tc_descripcion"));
+            while (con.getResultSet().next()) {
+                registro[0] = (con.getResultSet().getString("do_codigo"));
+                registro[1] = (con.getResultSet().getString("do_dosismin"));
+                registro[2] = (con.getResultSet().getString("do_dosismax"));
+                registro[3] = (con.getResultSet().getString("tc_descripcion"));
                 modelotabla.addRow(registro);//agrega el registro a la tabla  
             }
             tbTabla.setModel(modelotabla);//asigna a la tabla el modelo creado
             con.DesconectarBasedeDatos();
             metodos.AnchuraColumna(tbTabla);
         } catch (SQLException ex) {
-            Logger.getLogger(ABMProducto.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ABMProductoViejo.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -651,7 +651,7 @@ public final class ABMDosis extends javax.swing.JDialog {
                 if (JOptionPane.YES_OPTION == confirmado) {
                     //REGISTRAR NUEVO
                     try {
-                        Connection con = (Connection) Conexion.GetConnection();
+                        Connection con = (Connection) Conexion.ConectarBasedeDatos();
                         String sentencia = "CALL SP_DosisAlta ('" + idproducto + "', '" + idtipocultivo + "', '" + dosismin + "', '" + dosismax + "')";
                         System.out.println("Insertar registro: " + sentencia);
                         Statement st = (Statement) con.createStatement();
@@ -686,7 +686,7 @@ public final class ABMDosis extends javax.swing.JDialog {
     public void RegistroModificar() {
         //guarda los datos que se han modificado en los campos
         Connection con;
-        con = conexion.Conexion.GetConnection();
+        con = conexion.Conexion.ConectarBasedeDatos();
         String sentencia;
         String codigo = txtCodigo.getText();
         int idproducto = metodoscombo.ObtenerIdComboBox(cbProducto);
@@ -736,7 +736,7 @@ public final class ABMDosis extends javax.swing.JDialog {
                     codigo = (String) tbTabla.getModel().getValueAt(filasel, 0);
 
                     Connection con;
-                    con = Conexion.GetConnection();
+                    con = Conexion.ConectarBasedeDatos();
                     String sentence;
                     sentence = "CALL SP_DosisEliminar(" + codigo + ")";
 

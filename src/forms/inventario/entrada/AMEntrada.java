@@ -7,7 +7,7 @@ package forms.inventario.entrada;
 
 import conexion.Conexion;
 import forms.inventario.empresa_vendedora.ABMEmpresaVendedora;
-import forms.producto.ABMProducto;
+import forms.producto.ABMProductoViejo;
 import java.awt.HeadlessException;
 import java.awt.event.KeyEvent;
 import java.sql.Connection;
@@ -23,8 +23,6 @@ import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import metodos.Metodos;
 import metodos.MetodosCombo;
-import static login.Login.CodUsuario;
-import static login.Login.NomApeUsuario;
 
 /**
  *
@@ -60,9 +58,6 @@ public class AMEntrada extends javax.swing.JDialog {
         dcFechaEntrada.setCalendar(calendario);
 
         CargarCombos();
-
-        txtCodUsuario.setText(CodUsuario);
-        txtUsuario.setText(NomApeUsuario);
     }
     //-------------METODOS-------------//
     Metodos metodos = new Metodos();
@@ -601,7 +596,7 @@ public class AMEntrada extends javax.swing.JDialog {
     }//GEN-LAST:event_btnGuardarKeyPressed
 
     private void btnProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProductoActionPerformed
-        ABMProducto abmproducto = new ABMProducto(null, true, cbProducto);
+        ABMProductoViejo abmproducto = new ABMProductoViejo(null, true, cbProducto);
         abmproducto.setVisible(true);
     }//GEN-LAST:event_btnProductoActionPerformed
 
@@ -692,9 +687,9 @@ public class AMEntrada extends javax.swing.JDialog {
             try {
                 Conexion con = metodos.ObtenerRSSentencia("SELECT es_descripcion FROM producto, formulacion, estado "
                         + "WHERE pro_formulacion = for_codigo AND for_estado = es_codigo AND pro_codigo = '" + metodoscombo.ObtenerIdComboBox(cbProducto) + "'");
-                con.rs.next();
+                con.getResultSet().next();
 
-                String estado = con.rs.getString("es_descripcion");
+                String estado = con.getResultSet().getString("es_descripcion");
                 if (estado.equals("ml/Ha")) {
                     lbPresentacion.setText("Lts");
                 } else {
@@ -760,7 +755,7 @@ public class AMEntrada extends javax.swing.JDialog {
                 if (JOptionPane.YES_OPTION == confirmado) {
                     //REGISTRAR NUEVO
                     try {
-                        try ( Connection con = (Connection) Conexion.GetConnection()) {
+                        try (Connection con = Conexion.ConectarBasedeDatos()) {
                             String sentencia = "CALL SP_EntradaAlta ('" + idestablecimiento + "', '" + idproducto + "', '" + numfactura
                                     + "', '" + idempresavendedora + "', '" + fechaentrada + "', '" + fechacompra + "', '"
                                     + cantidad + "', '" + presentacion + "', '" + preciounitario + "', '" + preciototal + "', '"
@@ -807,7 +802,7 @@ public class AMEntrada extends javax.swing.JDialog {
 
             //REGISTRAR NUEVO INVENTARIO
             try {
-                try ( Connection con = (Connection) Conexion.GetConnection()) {
+                try ( Connection con = (Connection) Conexion.ConectarBasedeDatos()) {
                     String sentencia = "CALL SP_InventarioAlta ('" + idestablecimiento + "', '" + idproducto + "', '"
                             + presentacion + "', '" + fechaultimaentrada + "', '" + fechaultimasalida + "', '"
                             + cantidadentrada + "', '" + cantidadsalida + "', '" + existencia + "', '"

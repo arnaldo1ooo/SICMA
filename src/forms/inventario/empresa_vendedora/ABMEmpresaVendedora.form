@@ -53,7 +53,7 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Component id="jpBanner" alignment="0" pref="911" max="32767" attributes="0"/>
+              <Component id="jpBanner" alignment="0" pref="913" max="32767" attributes="0"/>
               <Group type="102" attributes="0">
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Component id="jtpEdicion" alignment="0" min="-2" max="-2" attributes="0"/>
@@ -216,9 +216,6 @@
                   <Image iconType="3" name="/iconos/Iconos20x20/IconoBuscar.png"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="  BUSCAR "/>
-                <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-                  <Border info="null"/>
-                </Property>
               </Properties>
             </Component>
             <Component class="javax.swing.JTextField" name="txtBuscar">
@@ -364,13 +361,13 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="btnNuevo" max="32767" attributes="0"/>
+                      <Component id="btnNuevo" pref="57" max="32767" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="btnModificar" max="32767" attributes="0"/>
+                      <Component id="btnModificar" pref="57" max="32767" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="btnEliminar" max="32767" attributes="0"/>
+                      <Component id="btnEliminar" pref="57" max="32767" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="btnReporte" max="32767" attributes="0"/>
+                      <Component id="btnReporte" pref="57" max="32767" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>

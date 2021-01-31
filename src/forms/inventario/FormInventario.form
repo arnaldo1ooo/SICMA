@@ -190,7 +190,7 @@
                           <Group type="102" alignment="0" attributes="0">
                               <EmptySpace max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                  <Component id="btnNuevaEntrada" pref="55" max="32767" attributes="0"/>
+                                  <Component id="btnNuevaEntrada" pref="57" max="32767" attributes="0"/>
                                   <Component id="btnGuardar2" max="32767" attributes="0"/>
                               </Group>
                               <EmptySpace max="-2" attributes="0"/>

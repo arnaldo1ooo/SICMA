@@ -6,7 +6,6 @@
 package forms.inventario.empresa_vendedora;
 
 import conexion.Conexion;
-import forms.producto.ABMProducto;
 import java.awt.HeadlessException;
 import java.awt.event.KeyEvent;
 import java.sql.Connection;
@@ -638,7 +637,7 @@ public final class ABMEmpresaVendedora extends javax.swing.JDialog {
                 if (JOptionPane.YES_OPTION == confirmado) {
                     //REGISTRAR NUEVO
                     try {
-                        Connection con = (Connection) Conexion.GetConnection();
+                        Connection con = Conexion.ConectarBasedeDatos();
                         String sentencia = "CALL SP_EmpresaVendedoraAlta ('" + descri + "')";
                         System.out.println("Insertar registro: " + sentencia);
                         Statement statement = (Statement) con.createStatement();
@@ -672,7 +671,7 @@ public final class ABMEmpresaVendedora extends javax.swing.JDialog {
     public void RegistroModificar() {
         //guarda los datos que se han modificado en los campos
         Connection con;
-        con = conexion.Conexion.GetConnection();
+        con = conexion.Conexion.ConectarBasedeDatos();
         String sentencia;
         String cod, descri;
         cod = txtCodigo.getText();
@@ -718,8 +717,7 @@ public final class ABMEmpresaVendedora extends javax.swing.JDialog {
                 if (confirmado == JOptionPane.YES_OPTION) {
                     codigo = (String) tbTabla.getModel().getValueAt(filasel, 0);
 
-                    Connection con;
-                    con = Conexion.GetConnection();
+                    Connection con = Conexion.ConectarBasedeDatos();
                     String sentence;
                     sentence = "CALL SP_EmpresaVendedoraEliminar(" + codigo + ")";
 

@@ -6,7 +6,7 @@
 package forms.zafra.productor;
 
 import conexion.Conexion;
-import forms.producto.ABMProducto;
+import forms.producto.ABMProductoViejo;
 import java.awt.HeadlessException;
 import java.awt.event.KeyEvent;
 import java.sql.Connection;
@@ -25,7 +25,7 @@ import metodos.Metodos;
  * @author Arnaldo Cantero
  */
 public final class ABMProductor extends javax.swing.JDialog {
-    
+
     public ABMProductor(java.awt.Frame parent, Boolean modal) {
         super(parent, modal);
         initComponents();
@@ -37,18 +37,18 @@ public final class ABMProductor extends javax.swing.JDialog {
         btnModificar.setMnemonic(KeyEvent.VK_M); //ALT+M
         btnEliminar.setMnemonic(KeyEvent.VK_E); //ALT+E
     }
-    
+
     Metodos metodos = new Metodos();
-    
+
     public void TablaConsultaBD(String filtro) {//Realiza la consulta de los productos que tenemos en la base de datos
         String nombresp = "SP_ProductorConsulta";
         String titlesJtabla[] = {"Código", "Nombre", "Apellido", "RUC/CI", "Email", "Teléfono", "Tipo de empresa"}; //Debe tener la misma cantidad que titlesconsulta
         String titlesconsulta[] = {"prod_codigo", "prod_nombre", "prod_apellido", "prod_rucci", "prod_email", "prod_telefono", "prod_tipoempresa"};
-        
+
         metodos.ConsultaFiltroTablaBD(tbPrincipal, titlesJtabla, titlesconsulta, nombresp, filtro, cbCampoBuscar);
         metodos.AnchuraColumna(tbPrincipal);
     }
-    
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -717,7 +717,7 @@ public final class ABMProductor extends javax.swing.JDialog {
         if (Character.isLetter(s)) {
             txtBuscar.setText(txtBuscar.getText().toUpperCase());
         }
-        
+
         if (tbPrincipal.getSelectedRowCount() != 0) {
             ModoVistaPrevia();
         } else {
@@ -729,11 +729,11 @@ public final class ABMProductor extends javax.swing.JDialog {
         if (tbPrincipal.isEnabled() == true) {
             btnModificar.setEnabled(true);
             btnEliminar.setEnabled(true);
-            
+
             ModoVistaPrevia();
         }
     }//GEN-LAST:event_tbPrincipalMouseClicked
-    
+
     private void ModoVistaPrevia() {
         txtCodigo.setText(tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 0).toString());
         txtNombre.setText(tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 1).toString());
@@ -815,27 +815,27 @@ public final class ABMProductor extends javax.swing.JDialog {
     private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
         ModoEdicion(true);
     }//GEN-LAST:event_btnModificarActionPerformed
-    
+
     private void ConsultaTablaEstablecimientos() {
         String[] titlesEstablecimientos = {"Codigo", "Descripción", "Distrito", "Localidad", "Coordenada X", "Coordenada Y"};
         DefaultTableModel modeloEstablecimientos = new DefaultTableModel(null, titlesEstablecimientos);
         Conexion con = metodos.ObtenerRSSentencia("SELECT estab_codigo, estab_descripcion, dis_descripcion, estab_localidad, estab_x, estab_y  FROM establecimiento, distrito WHERE estab_distrito = dis_codigo AND estab_productor = " + tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 0).toString());
         String registro[] = new String[con.NumColumnsRS()];
         try {
-            while (con.rs.next()) {
-                registro[0] = (con.rs.getString("estab_codigo"));
-                registro[1] = (con.rs.getString("estab_descripcion"));
-                registro[2] = (con.rs.getString("dis_descripcion"));
-                registro[3] = (con.rs.getString("estab_localidad"));
-                registro[4] = (con.rs.getString("estab_x"));
-                registro[5] = (con.rs.getString("estab_y"));
+            while (con.getResultSet().next()) {
+                registro[0] = (con.getResultSet().getString("estab_codigo"));
+                registro[1] = (con.getResultSet().getString("estab_descripcion"));
+                registro[2] = (con.getResultSet().getString("dis_descripcion"));
+                registro[3] = (con.getResultSet().getString("estab_localidad"));
+                registro[4] = (con.getResultSet().getString("estab_x"));
+                registro[5] = (con.getResultSet().getString("estab_y"));
                 modeloEstablecimientos.addRow(registro);//agrega el registro a la tabla
             }
             tbEstablecimientos.setModel(modeloEstablecimientos);//asigna a la tabla el modelo creado
             con.DesconectarBasedeDatos();
             metodos.AnchuraColumna(tbEstablecimientos);
         } catch (SQLException ex) {
-            Logger.getLogger(ABMProducto.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ABMProductoViejo.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -864,7 +864,7 @@ public final class ABMProductor extends javax.swing.JDialog {
         if (tbPrincipal.isEnabled() == true) {
             btnModificar.setEnabled(true);
             btnEliminar.setEnabled(true);
-            
+
             ModoVistaPrevia();
         }
     }//GEN-LAST:event_tbPrincipalMousePressed
@@ -962,13 +962,13 @@ public final class ABMProductor extends javax.swing.JDialog {
     private void cbTipoEmpresaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbTipoEmpresaActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_cbTipoEmpresaActionPerformed
-    
+
     public void SiguienteFoco(KeyEvent evt) {
         if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
             ((JComponent) evt.getSource()).transferFocus();//Con esta parte transfieres el foco al siguiente campo sea un Jtextfield, Jpasswordfield, boton, etc..
         }
     }
-    
+
     private void ModoEdicion(boolean valor) {
         txtBuscar.setEnabled(!valor);
         tbPrincipal.setEnabled(!valor);
@@ -984,10 +984,10 @@ public final class ABMProductor extends javax.swing.JDialog {
         btnGuardar.setEnabled(valor);
         btnCancelar.setEnabled(valor);
         btnEliminar1.setEnabled(!valor);
-        
+
         txtNombre.requestFocus();
     }
-    
+
     private void Limpiar() {
         txtCodigo.setText("");
         txtNombre.setText("");
@@ -996,10 +996,10 @@ public final class ABMProductor extends javax.swing.JDialog {
         txtEmail.setText("");
         txtTelefono.setText("");
         cbTipoEmpresa.setSelectedIndex(0);
-        
+
         txtBuscar.requestFocus();
     }
-    
+
     public void RegistroNuevo() {
         try {
             String nombre = txtNombre.getText();
@@ -1008,21 +1008,21 @@ public final class ABMProductor extends javax.swing.JDialog {
             String email = txtEmail.getText();
             String telefono = txtTelefono.getText();
             String tipoempresa = cbTipoEmpresa.getSelectedItem() + "";
-            
+
             if (!nombre.trim().isEmpty()
                     && !apellido.trim().isEmpty()) {
                 int confirmado = JOptionPane.showConfirmDialog(null, "¿Esta seguro crear este nuevo registro?", "Confirmación", JOptionPane.YES_OPTION);
-                
+
                 if (JOptionPane.YES_OPTION == confirmado) {
                     //REGISTRAR NUEVO
                     try {
-                        Connection con = (Connection) Conexion.GetConnection();
+                        Connection con = Conexion.ConectarBasedeDatos();
                         String sentencia = "CALL SP_ProductorAlta ('" + nombre + "','" + apellido + "','"
                                 + rucci + "','" + email + "','" + telefono + "','" + tipoempresa + "')";
                         System.out.println("Insertar registro: " + sentencia);
                         Statement statement = (Statement) con.createStatement();
                         statement.executeUpdate(sentencia);
-                        
+
                         con.close();
                         JOptionPane.showMessageDialog(this, "Se agrego correctamente", "Información", JOptionPane.INFORMATION_MESSAGE);
                         ModoEdicion(false);
@@ -1035,25 +1035,24 @@ public final class ABMProductor extends javax.swing.JDialog {
                 } else {
                     System.out.println("No se guardo el registro");
                 }
-                
+
             } else {
                 JOptionPane.showMessageDialog(null, "Completa todos los campos marcados con *", "Error", JOptionPane.ERROR_MESSAGE);
                 txtNombre.requestFocus();
             }
-            
+
         } catch (HeadlessException ex) {
             JOptionPane.showMessageDialog(null, "Completar los campos obligarios marcados con * ", "Advertencia", JOptionPane.WARNING_MESSAGE);
             System.out.println("Completar los campos obligarios marcados con * " + ex);
             txtNombre.requestFocus();
         }
     }
-    
+
     public void RegistroModificar() {
         //guarda los datos que se han modificado en los campos
-        Connection con;
-        con = conexion.Conexion.GetConnection();
+        Connection con = Conexion.ConectarBasedeDatos();
         String sentencia;
-        
+
         String codigo = txtCodigo.getText();
         String nombre = txtNombre.getText();
         String apellido = txtApellido.getText();
@@ -1066,20 +1065,20 @@ public final class ABMProductor extends javax.swing.JDialog {
         if (!codigo.isEmpty()
                 && !nombre.isEmpty()
                 && !apellido.isEmpty()) {
-            
+
             int confirmado = JOptionPane.showConfirmDialog(null, "¿Esta seguro de modificar este registro?", "Confirmación", JOptionPane.YES_OPTION);
             if (JOptionPane.YES_OPTION == confirmado) {
-                
+
                 sentencia = "CALL SP_ProductorModificar(" + codigo + ",'" + nombre + "','" + apellido + "','" + rucci
                         + "','" + email + "','" + telefono + "','" + tipoempresa + "')";
                 System.out.println("Actualizar registro: " + sentencia);
                 getToolkit().beep();
                 JOptionPane.showMessageDialog(null, "Registro modificado correctamente", "Información", JOptionPane.INFORMATION_MESSAGE);
-                
+
                 try {
                     PreparedStatement pst = con.prepareStatement(sentencia);
                     pst.executeUpdate();
-                    
+
                 } catch (SQLException ex) {
                     System.out.println("Error al modificar registro " + ex);
                 }
@@ -1092,7 +1091,7 @@ public final class ABMProductor extends javax.swing.JDialog {
             JOptionPane.showMessageDialog(null, "No dejar vacio ningun campo", "Advertencia", JOptionPane.WARNING_MESSAGE);
         }
     }
-    
+
     private void RegistroEliminar() {
         int filasel;
         String codigo;
@@ -1105,12 +1104,11 @@ public final class ABMProductor extends javax.swing.JDialog {
                 int confirmado = javax.swing.JOptionPane.showConfirmDialog(null, "¿Realmente desea eliminar este registro?", "Confirmación", JOptionPane.YES_OPTION);
                 if (confirmado == JOptionPane.YES_OPTION) {
                     codigo = (String) tbPrincipal.getModel().getValueAt(filasel, 0);
-                    
-                    Connection con;
-                    con = Conexion.GetConnection();
+
+                    Connection con = Conexion.ConectarBasedeDatos();
                     String sentence;
                     sentence = "CALL SP_ProductorEliminar(" + codigo + ")";
-                    
+
                     try {
                         PreparedStatement pst = con.prepareStatement(sentence);
                         pst.executeUpdate();

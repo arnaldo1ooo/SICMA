@@ -25,7 +25,7 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 import conexion.Conexion;
-import forms.producto.ABMProducto;
+import forms.producto.ABMProductoViejo;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.util.logging.Level;
@@ -40,16 +40,16 @@ import javax.swing.JInternalFrame;
 public class Metodos {
 
     public int CantRegistros = 0;
+    private Conexion con = new Conexion();
 
     public Conexion ObtenerRSSentencia(String sentencia) { //con.Desconectar luego de usar el metodo
-        Conexion con = new Conexion();
+
         try {
             con.ConectarBasedeDatos();
-            System.out.println("Ejecutar sentencia ObtenerRSSentencia " + sentencia);
-            con.rs = con.st.executeQuery(sentencia);
+            con=con.ObtenerRSSentencia(sentencia);
 
             int cantreg = 0;
-            while (con.rs.next() && cantreg < 2) { //Revisamos cuantos registro trajo la consulta
+            while (con.getResultSet().next() && cantreg < 2) { //Revisamos cuantos registro trajo la consulta
                 cantreg++;
             }
 
@@ -59,11 +59,11 @@ public class Metodos {
                     break;
                 case 1:
                     System.out.println("ObtenerRSSentencia trajo un resultado");
-                    con.rs.beforeFirst(); //Ponemos antes del primer registro en el puntero
+                    con.getResultSet().beforeFirst(); //Ponemos antes del primer registro en el puntero
                     break;
                 case 2:
                     System.out.println("ObtenerRSSentencia trajo mas de un resultado");
-                    con.rs.beforeFirst(); //Ponemos antes del primer registro en el puntero
+                    con.getResultSet().beforeFirst(); //Ponemos antes del primer registro en el puntero
                     break;
                 default:
                 //aca se escribe lo que si o si se ejecuta
@@ -171,7 +171,7 @@ public class Metodos {
         Statement st;
         ResultSet rs;
         try {
-            connection = (Connection) Conexion.GetConnection();
+            connection = (Connection) Conexion.ConectarBasedeDatos();
             st = connection.createStatement();
             rs = st.executeQuery(sentencia);
             ResultSetMetaData mdrs = rs.getMetaData();
@@ -209,12 +209,12 @@ public class Metodos {
         try {
             Conexion con = this.ObtenerRSSentencia("SELECT MAX(" + campocodigo + ") AS idultimoregistro FROM " + tabla);
 
-            while (con.rs.next()) {
-                idultimoregistro = con.rs.getInt("idultimoregistro");
+            while (con.getResultSet().next()) {
+                idultimoregistro = con.getResultSet().getInt("idultimoregistro");
             }
             con.DesconectarBasedeDatos();
         } catch (SQLException ex) {
-            Logger.getLogger(ABMProducto.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ABMProductoViejo.class.getName()).log(Level.SEVERE, null, ex);
             System.out.println("No se pudo obtener el idultimoproducto: " + idultimoregistro);
         }
         return idultimoregistro;

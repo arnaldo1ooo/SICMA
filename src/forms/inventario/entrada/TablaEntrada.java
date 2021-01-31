@@ -564,7 +564,7 @@ public class TablaEntrada extends javax.swing.JDialog {
             ResultSet rs;
             SimpleDateFormat formatofechanormal = new SimpleDateFormat("dd/MM/yyyy");  //25/08/2015
             try {
-                connection = (Connection) Conexion.GetConnection();
+                connection = Conexion.ConectarBasedeDatos();
                 st = connection.createStatement();
                 rs = st.executeQuery(sentencia);
                 ResultSetMetaData mdrs = rs.getMetaData();
@@ -605,9 +605,9 @@ public class TablaEntrada extends javax.swing.JDialog {
             sentencia = "SELECT es_descripcion FROM producto, formulacion, estado "
                     + "WHERE pro_formulacion = for_codigo AND for_estado = es_codigo AND pro_codigo = '" + rs.getString("pro_codigo") + "'";
             Conexion con = metodos.ObtenerRSSentencia(sentencia);
-            con.rs.next();
+            con.getResultSet().next();
 
-            estado = con.rs.getString("es_descripcion");
+            estado = con.getResultSet().getString("es_descripcion");
             if (estado.equals("ml/Ha")) {
                 estado = ("Lts");
             } else {
@@ -696,8 +696,8 @@ public class TablaEntrada extends javax.swing.JDialog {
             amentrada.setTxtCodigo(codigo);
 
             Conexion con = metodos.ObtenerRSSentencia("SELECT en_producto, en_usuario FROM entrada WHERE en_codigo = " + codigo);
-            con.rs.next();
-            amentrada.setCbProducto(con.rs.getInt("en_producto"));
+            con.getResultSet().next();
+            amentrada.setCbProducto(con.getResultSet().getInt("en_producto"));
 
             amentrada.setDcFechaEntrada(fechaentrada);
             amentrada.setDcFechaCompra(fechacompra);
@@ -707,7 +707,7 @@ public class TablaEntrada extends javax.swing.JDialog {
             amentrada.setTxtPrecioTotal(preciototal.replace(" $", ""));
             amentrada.setTxtNumFactura(numfactura);
             amentrada.setCbEmpresaVendedora(empresavendedora);
-            amentrada.setTxtCodUsuario(con.rs.getString("en_usuario"));
+            amentrada.setTxtCodUsuario(con.getResultSet().getString("en_usuario"));
             amentrada.setTxtUsuario(usuario);
             amentrada.setTaObs(obs);
 

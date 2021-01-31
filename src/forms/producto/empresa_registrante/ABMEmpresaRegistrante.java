@@ -6,7 +6,7 @@
 package forms.producto.empresa_registrante;
 
 import conexion.Conexion;
-import forms.producto.ABMProducto;
+import forms.producto.ABMProductoViejo;
 import java.awt.HeadlessException;
 import java.awt.event.KeyEvent;
 import java.sql.Connection;
@@ -23,10 +23,10 @@ import metodos.Metodos;
  */
 public final class ABMEmpresaRegistrante extends javax.swing.JDialog {
 
-    private ABMProducto abmproducto; //Para que tenga relacion con su form padre
+    private ABMProductoViejo abmproducto; //Para que tenga relacion con su form padre
     public String framepadre = "";
 
-    public ABMEmpresaRegistrante(ABMProducto abmproducto, java.awt.Frame parent, Boolean modal) {
+    public ABMEmpresaRegistrante(ABMProductoViejo abmproducto, java.awt.Frame parent, Boolean modal) {
         super(parent, modal);
         this.abmproducto = abmproducto;
         initComponents();
@@ -630,7 +630,7 @@ public final class ABMEmpresaRegistrante extends javax.swing.JDialog {
                 if (JOptionPane.YES_OPTION == confirmado) {
                     //REGISTRAR NUEVO
                     try {
-                        Connection con = (Connection) Conexion.GetConnection();
+                        Connection con = Conexion.ConectarBasedeDatos();
                         String sentencia = "CALL SP_EmpresaRegistranteAlta ('" + descri + "')";
                         System.out.println("Insertar registro: " + sentencia);
                         Statement statement = (Statement) con.createStatement();
@@ -663,8 +663,7 @@ public final class ABMEmpresaRegistrante extends javax.swing.JDialog {
 
     public void RegistroModificar() {
         //guarda los datos que se han modificado en los campos
-        Connection con;
-        con = conexion.Conexion.GetConnection();
+        Connection con = Conexion.ConectarBasedeDatos();
         String sentencia;
         String cod, descri;
         cod = txtCodigo.getText();
@@ -710,8 +709,7 @@ public final class ABMEmpresaRegistrante extends javax.swing.JDialog {
                 if (confirmado == JOptionPane.YES_OPTION) {
                     codigo = (String) tbTabla.getModel().getValueAt(filasel, 0);
 
-                    Connection con;
-                    con = Conexion.GetConnection();
+                    Connection con = Conexion.ConectarBasedeDatos();
                     String sentence;
                     sentence = "CALL SP_EmpresaRegistranteEliminar(" + codigo + ")";
 

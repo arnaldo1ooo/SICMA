@@ -82,12 +82,12 @@ public class MetodosCombo {
             Conexion con = new Conexion();
             con.ConectarBasedeDatos();
             System.out.println("Cargar combo (" + ElCombo.getName() + "): " + sentencia);
-            con.rs = con.st.executeQuery(sentencia);
+            con=con.ObtenerRSSentencia(sentencia);
 
-            while (con.rs.next()) {
+            while (con.getResultSet().next()) {
                 ElCombo.addItem(new MetodosCombo(
-                        con.rs.getInt(1),
-                        con.rs.getString(2)));
+                        con.getResultSet().getInt(1),
+                        con.getResultSet().getString(2)));
             }
             ElCombo.setSelectedIndex(-1);
             ElCombo.setMaximumRowCount(ElCombo.getModel().getSize()); //Hace que se despliegue en toda la pantalla vertical el combo

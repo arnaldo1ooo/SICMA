@@ -97,7 +97,7 @@ public final class ABMParcela extends javax.swing.JDialog {
             Statement st;
             ResultSet rs;
             try {
-                connection = (Connection) Conexion.GetConnection();
+                connection = (Connection) Conexion.ConectarBasedeDatos();
                 st = connection.createStatement();
                 rs = st.executeQuery(sentencia);
                 ResultSetMetaData mdrs = rs.getMetaData();
@@ -1002,7 +1002,7 @@ public final class ABMParcela extends javax.swing.JDialog {
                 if (JOptionPane.YES_OPTION == confirmado) {
                     //REGISTRAR NUEVO
                     try {
-                        Connection con = (Connection) Conexion.GetConnection();
+                        Connection con = (Connection) Conexion.ConectarBasedeDatos();
                         sentencia = "CALL SP_ParcelaAlta ('" + descripcion + "','" + idestablecimiento + "','" + extension
                                 + "','" + iddistrito + "','" + localidad + "','" + X + "','" + Y + "')";
                         System.out.println("Insertar registro: " + sentencia);
@@ -1037,8 +1037,7 @@ public final class ABMParcela extends javax.swing.JDialog {
 
     public void RegistroModificar() {
         //guarda los datos que se han modificado en los campos
-        Connection con;
-        con = conexion.Conexion.GetConnection();
+        Connection con = Conexion.ConectarBasedeDatos();
         String sentencia;
 
         String codigo = txtCodigo.getText();
@@ -1094,8 +1093,7 @@ public final class ABMParcela extends javax.swing.JDialog {
                 if (confirmado == JOptionPane.YES_OPTION) {
                     codigo = (String) tbPrincipal.getModel().getValueAt(filasel, 0);
 
-                    Connection con;
-                    con = Conexion.GetConnection();
+                    Connection con = Conexion.ConectarBasedeDatos();
                     String sentence;
                     sentence = "CALL SP_ParcelaEliminar(" + codigo + ")";
 

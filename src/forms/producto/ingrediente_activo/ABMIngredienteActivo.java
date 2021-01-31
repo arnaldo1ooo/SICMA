@@ -6,7 +6,7 @@
 package forms.producto.ingrediente_activo;
 
 import conexion.Conexion;
-import forms.producto.ABMProducto;
+import forms.producto.ABMProductoViejo;
 import java.awt.HeadlessException;
 import java.awt.event.KeyEvent;
 import java.sql.Connection;
@@ -23,11 +23,11 @@ import metodos.Metodos;
  */
 public final class ABMIngredienteActivo extends javax.swing.JDialog {
 
-    Connection con = (Connection) Conexion.GetConnection();
-    private ABMProducto abmproducto; //Para que tenga relacion con su form padre
+    Connection con = Conexion.ConectarBasedeDatos();
+    private ABMProductoViejo abmproducto; //Para que tenga relacion con su form padre
     private Metodos metodos = new Metodos();
 
-    public ABMIngredienteActivo(ABMProducto abmproducto, java.awt.Frame parent, Boolean modal) {
+    public ABMIngredienteActivo(ABMProductoViejo abmproducto, java.awt.Frame parent, Boolean modal) {
         super(parent, modal);
         this.abmproducto = abmproducto;
         initComponents();

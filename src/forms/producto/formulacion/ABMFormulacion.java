@@ -6,7 +6,7 @@
 package forms.producto.formulacion;
 
 import conexion.Conexion;
-import forms.producto.ABMProducto;
+import forms.producto.ABMProductoViejo;
 import java.awt.HeadlessException;
 import java.awt.event.KeyEvent;
 import java.sql.Connection;
@@ -25,11 +25,11 @@ import metodos.MetodosCombo;
  */
 public class ABMFormulacion extends JDialog {
 
-    private ABMProducto abmproducto; //Para que tenga relacion con su form padre
+    private ABMProductoViejo abmproducto; //Para que tenga relacion con su form padre
     Metodos metodos = new Metodos();
     MetodosCombo metodoscombo = new MetodosCombo();
 
-    public ABMFormulacion(ABMProducto abmproducto, java.awt.Frame parent, Boolean modal) {
+    public ABMFormulacion(ABMProductoViejo abmproducto, java.awt.Frame parent, Boolean modal) {
         super(parent, modal);
         this.abmproducto = abmproducto;
         initComponents();
@@ -718,7 +718,7 @@ public class ABMFormulacion extends JDialog {
                 if (JOptionPane.YES_OPTION == confirmado) {
                     //REGISTRAR NUEVO
                     try {
-                        Connection con = (Connection) Conexion.GetConnection();
+                        Connection con = Conexion.ConectarBasedeDatos();
                         String sentencia = "CALL SP_FormulacionAlta ('" + descri + "', '" + abreviatura + "','" + idestado + "')";
                         System.out.println("Insertar registro: " + sentencia);
                         Statement st = (Statement) con.createStatement();
@@ -750,8 +750,7 @@ public class ABMFormulacion extends JDialog {
 
     public void RegistroModificar() {
         //guarda los datos que se han modificado en los campos
-        Connection con;
-        con = conexion.Conexion.GetConnection();
+        Connection con = Conexion.ConectarBasedeDatos();
         String sentencia;
         String cod = txtCodigo.getText();
         String descri = txtDescripcion.getText();
@@ -799,8 +798,7 @@ public class ABMFormulacion extends JDialog {
                 if (confirmado == JOptionPane.YES_OPTION) {
                     codigo = (String) tbTabla.getModel().getValueAt(filasel, 0);
 
-                    Connection con;
-                    con = Conexion.GetConnection();
+                    Connection con = Conexion.ConectarBasedeDatos();
                     String sentence;
                     sentence = "CALL SP_FormulacionEliminar(" + codigo + ")";
 

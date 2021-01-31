@@ -7,18 +7,16 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import metodos.Metodos;
 
 public class Conexion {
 
-    public Connection connection;
-    public Statement st;
-    public ResultSet rs;
+    private Conexion con;
+    private Connection connection;
+    private Statement st;
+    private ResultSet rs;
     private static String controlador;
     private static String usuarioDB;
     private static String passDB; //Contrasena de la BD
@@ -28,13 +26,13 @@ public class Conexion {
     private static String servidor;
 
     public static Connection ConectarBasedeDatos() {
+        controlador = "com.mysql.cj.jdbc.Driver";
         String tipoHost = "local";
         switch (tipoHost) {
-            case "local":
+            case "local": {
                 //Modo host local
-                controlador = "com.mysql.cj.jdbc.Driver";
                 usuarioDB = "root";
-                passDB = "toor5127"; //Contrasena de la BD
+                passDB = "toor5127-"; //Contrasena de la BD
                 nombreBD = "sicua";
                 host = "localhost";
                 puerto = "3306";
@@ -47,13 +45,13 @@ public class Conexion {
                         + "&useSSL=false"
                         + "&allowPublicKeyRetrieval=true";
                 break;
-            case "remoto":
+            }
+            case "remoto": {
                 //Modo host remoto
-                controlador = "com.mysql.cj.jdbc.Driver";
                 usuarioDB = "supervisor";
-                passDB = "toor5127"; //Contrasena de la BD
-                nombreBD = "sicua";
-                host = "192.168.88.240"; //San roque 192.168.1.240
+                passDB = "toor5127-"; //Contrasena de la BD
+                nombreBD = "syschool";
+                host = "192.168.100.234"; //San roque 192.168.1.240
                 puerto = "3306";
                 servidor = "jdbc:mysql://" + host + ":" + puerto + "/" + nombreBD
                         + "?useUnicode=true"
@@ -62,12 +60,12 @@ public class Conexion {
                         + "&serverTimezone=UTC"
                         + "&useSSL=false";
                 break;
-            case "online":
+            }
+            case "online": {
                 //Modo host online
-                controlador = "com.mysql.cj.jdbc.Driver";
                 usuarioDB = "root";
-                passDB = "toor5127"; //Contrasena de la BD
-                nombreBD = "sicua";
+                passDB = "toor5127-"; //Contrasena de la BD
+                nombreBD = "escuela";
                 host = "181.123.175.39";
                 puerto = "3306";
                 servidor = "jdbc:mysql://" + host + ":" + puerto + "/" + nombreBD
@@ -77,64 +75,57 @@ public class Conexion {
                         + "&serverTimezone=UTC"
                         + "&useSSL=false";
                 break;
+            }
 
             default:
-                JOptionPane.showMessageDialog(null, "No se encontró", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Switch no se encontro Conexion class, tipoHost: " + tipoHost, "Error", JOptionPane.ERROR_MESSAGE);
                 break;
         }
 
-        Connection conexion;
+        Connection connection;
         try {
             Class.forName(controlador);
-            conexion = DriverManager.getConnection(servidor, usuarioDB, passDB);
-            if (conexion != null) {
+            connection = DriverManager.getConnection(servidor, usuarioDB, passDB);
+            if (connection != null) {
                 System.out.println("\nCONEXIÓN A " + nombreBD + ", EXITOSA..");
-
             }
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(Conexion.class
-                    .getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(
-                    null, "Error1 al conecta al BD, Verifique los datos de la conexion a la BD");
-            System.out.println(
-                    "Error1 al conecta al BD, Verifique los datos de la conexion a la BD  " + ex.getMessage());
-            conexion = null;
-        } catch (SQLException ex) {
-            Logger.getLogger(Conexion.class
-                    .getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(
-                    null, "Error2 al conecta al BD, Verifique los datos de la conexion a la BD");
-            System.out.println(
-                    "Error2 al conecta al BD, Verifique los datos de la conexion a la BD  " + ex.getMessage());
-            conexion = null;
-        } catch (Exception ex) {
-            Logger.getLogger(Conexion.class
-                    .getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(
-                    null, "Error3 al conecta al BD, Verifique los datos de la conexion a la BD");
-            System.out.println(
-                    "Error3 al conecta al BD, Verifique los datos de la conexion a la BD  " + ex.getMessage());
-            conexion = null;
+        } catch (ClassNotFoundException | SQLException ex) {
+            connection = null;
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Error de conexion a la base de datos", "Error", JOptionPane.ERROR_MESSAGE);
         }
-        return conexion;
+        return connection;
+    }
+
+    public Connection getConnection() {
+        return connection;
+    }
+
+    public Statement getStatement() {
+        return st;
+    }
+
+    public ResultSet getResultSet() {
+        return rs;
     }
 
     public void DesconectarBasedeDatos() {
         try {
-            if (connection != null) {
-                connection.close();
-                if (st != null) {
-                    st.close();
-                    if (rs != null) {
-                        rs.close();
-                    }
-                }
-                System.out.println("DESCONEXIÓN DEL CONNECTION(" + nombreBD + "), RESULTSET y del STATEMENT, EXITOSA..\n");
+            if (getConnection() != null) {
+                getConnection().close();
             }
+            if (getStatement() != null) {
+                getStatement().close();
+            }
+            if (getResultSet() != null) {
+                getResultSet().close();
+            }
+            System.out.println("DESCONEXIÓN DE LA BD (" + nombreBD + ") EXITOSA..");
+
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, ex.getMessage(), "ERROR AL INTENTAR DESCONECTAR "
-                    + "CONNECTION(" + nombreBD + "), RESULTSET y del STATEMENT", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, ex.getMessage(), "ERROR AL INTENTAR DESCONECTAR CONNECTION(" + nombreBD + "), RESULTSET y del STATEMENT", JOptionPane.ERROR_MESSAGE);
             System.exit(1);
+            ex.printStackTrace();
         }
     }
 
@@ -144,19 +135,23 @@ public class Conexion {
             NumColumnsRS = rs.getMetaData().getColumnCount();
 
         } catch (SQLException ex) {
-            Logger.getLogger(Conexion.class
-                    .getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
         }
         return NumColumnsRS;
     }
 
+    DefaultTableModel modelotabla;
+    ResultSetMetaData mdrs;
+    int numColumns;
+    Object[] registro;
+
     public DefaultTableModel ConsultaTableBD(String sentencia, String titlesJtabla[], JComboBox ElComboCampos) {
-        DefaultTableModel modelotabla = new DefaultTableModel(null, titlesJtabla);
-        Conexion con = ObtenerRSSentencia(sentencia);
+        modelotabla = new DefaultTableModel(null, titlesJtabla);
+        con = ObtenerRSSentencia(sentencia);
         try {
-            ResultSetMetaData mdrs = con.rs.getMetaData();
-            int numColumns = mdrs.getColumnCount();
-            Object[] registro = new Object[numColumns]; //el numero es la cantidad de columnas del rs
+            mdrs = con.rs.getMetaData();
+            numColumns = mdrs.getColumnCount();
+            registro = new Object[numColumns]; //el numero es la cantidad de columnas del rs
             while (con.rs.next()) {
                 for (int c = 0; c < numColumns; c++) {
                     registro[c] = (con.rs.getString(c + 1));
@@ -169,72 +164,75 @@ public class Conexion {
                 ElComboCampos.setModel(modelCombo);
             }
         } catch (SQLException ex) {
-            System.out.println("Error en ConsultaTableBD " + ex);
+            ex.printStackTrace();
         }
         con.DesconectarBasedeDatos();
         return modelotabla;
     }
 
     public Conexion ObtenerRSSentencia(String sentencia) { //con.Desconectar luego de usar el metodo
-        Conexion conexion = new Conexion();
+        System.out.println("ObtenerRSSentencia: " + sentencia);
+        con = new Conexion();
         try {
-            System.out.println("Ejecutar sentencia ObtenerRSSentencia " + sentencia);
-            conexion.connection = (Connection) Conexion.ConectarBasedeDatos();
-            conexion.st = conexion.connection.createStatement();
-            conexion.rs = conexion.st.executeQuery(sentencia);
-            int cantreg = 0;
-            while (conexion.rs.next() && cantreg < 2) { //Revisamos cuantos registro trajo la consulta
-                cantreg = cantreg + 1;
-            }
+            con.connection = (Connection) Conexion.ConectarBasedeDatos();
+            con.st = con.connection.createStatement();
+            con.rs = con.st.executeQuery(sentencia);
 
-            switch (cantreg) {
-                case 0:
-                    System.out.println("ObtenerRSSentencia no trajo ningun resultado");
-                    //con.rs.beforeFirst(); //Ponemos antes del primer registro en el puntero
-                    break;
-                case 1:
-                    System.out.println("ObtenerRSSentencia trajo un resultado");
-                    conexion.rs.beforeFirst(); //Ponemos antes del primer registro en el puntero
-                    break;
-                case 2:
-                    System.out.println("ObtenerRSSentencia trajo mas de un resultado");
-                    conexion.rs.beforeFirst(); //Ponemos antes del primer registro en el puntero
-                    break;
-                default:
-                //aca se escribe lo que si o si se ejecuta
-            }
-
+            con.rs.last(); //Poner el puntero en el ultimo
+            System.out.println("ObtenerRSSentencia trajo " + con.rs.getRow() + " resultados, consulta: " + sentencia);
+            con.getResultSet().beforeFirst(); //Poner el puntero en el anteprimero
         } catch (SQLException e) {
-            System.out.println("Error al EjecutarSentencia ObtenerRSSentencia,  sentencia: " + sentencia + ",  ERROR " + e);
-            Logger
-                    .getLogger(Conexion.class
-                            .getName()).log(Level.SEVERE, null, e);
+            e.printStackTrace();
+            if (e.getMessage().equals("Can not issue data manipulation statements with executeQuery().")) {
+                System.out.println("Se esta ejecutando un update en ObtenerConsulta, cambie de metodo a EjecutarABM sentencia:" + sentencia + ", Error:" + e);
+                JOptionPane.showMessageDialog(null, "Se esta ejecutando un update en ObtenerConsulta, cambie de metodo a EjecutarABM");
+            }
         } catch (NullPointerException e) {
-            System.out.println("ObtenerRSSentencia no trajo ningun resultado (null),  sentencia: " + sentencia + ",  ERROR " + e);
-            Logger
-                    .getLogger(Conexion.class
-                            .getName()).log(Level.SEVERE, null, e);
+            e.printStackTrace();
         }
-        return conexion;
+        return con;
     }
 
     public void EjecutarABM(String sentencia, boolean conAviso) {
         //Ejecuta consultas de Altas, Bajas y Modificaciones
         try {
-            Connection con = Conexion.ConectarBasedeDatos();
-            Statement st = con.createStatement();
-            System.out.println("Insertar o Modificar registro: " + sentencia);
+            System.out.println("EjecutarABM: " + sentencia);
+            connection = Conexion.ConectarBasedeDatos();
+            st = connection.createStatement();
             st.executeUpdate(sentencia);
-            con.close();
+            connection.close();
             st.close();
 
             if (conAviso == true) {
                 Toolkit.getDefaultToolkit().beep(); //BEEP
-                JOptionPane.showMessageDialog(null, "Se realizó correctamente", "Información", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(null, "La operación se realizó correctamente", "Información", JOptionPane.INFORMATION_MESSAGE);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Metodos.class.getName() + " Sentencia: " + sentencia).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(null, "Error al intentar crear o modificar registro" + ex, "Error", JOptionPane.ERROR_MESSAGE);
+            ex.printStackTrace();
+        }
+    }
+
+    public Boolean SiYaExisteEnLaBD(String sentencia) {
+        con = new Conexion();
+        int cantreg = 0;
+        try {
+            System.out.println("Comprobar si ya existe en la BD: " + sentencia);
+            con.connection = (Connection) Conexion.ConectarBasedeDatos();
+            con.st = con.connection.createStatement();
+            con.rs = con.st.executeQuery(sentencia);
+            while (con.rs.next() && cantreg < 2) { //Revisamos cuantos registro trajo la consulta
+                cantreg = cantreg + 1;
+            }
+
+        } catch (SQLException | NullPointerException e) {
+            e.printStackTrace();
+        }
+        con.DesconectarBasedeDatos();
+
+        if (cantreg > 0) {
+            return true;
+        } else {
+            return false;
         }
     }
 }

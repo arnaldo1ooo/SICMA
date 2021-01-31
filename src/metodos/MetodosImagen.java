@@ -5,7 +5,7 @@
  */
 package metodos;
 
-import forms.producto.ABMProducto;
+import forms.producto.ABMProductoViejo;
 import java.awt.Graphics2D;
 import java.awt.HeadlessException;
 import java.awt.Image;
@@ -90,7 +90,7 @@ public class MetodosImagen {
                     ImageIO.write(biImagen, fileextension, new File(rutadestinoimagen + "." + fileextension));
                 } catch (IOException ex) {
                     JOptionPane.showMessageDialog(null, "Error al guardar imagen del producto... " + ex, "Error", JOptionPane.ERROR_MESSAGE);
-                    Logger.getLogger(ABMProducto.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(ABMProductoViejo.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         } catch (HeadlessException | IOException e) {
@@ -173,7 +173,7 @@ public class MetodosImagen {
         try {
             javax.swing.UIManager.setLookAndFeel(look);
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
-            Logger.getLogger(ABMProducto.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ABMProductoViejo.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 }
