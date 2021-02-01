@@ -119,6 +119,7 @@ public class Login extends javax.swing.JFrame {
         getContentPane().add(panel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 520, 40));
 
         panel1.setColorPrimario(new java.awt.Color(1, 1, 11));
+        panel1.setColorSecundario(new java.awt.Color(0, 102, 51));
 
         lblError.setFont(new java.awt.Font("Sitka Text", 1, 14)); // NOI18N
         lblError.setForeground(new java.awt.Color(255, 0, 0));

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package forms.producto.tipoagroquimico;
+package forms.producto.registrante;
 
 import conexion.Conexion;
 import forms.producto.ABMProductoViejo;
@@ -21,16 +21,16 @@ import metodos.Metodos;
  *
  * @author Ing.Ivan
  */
-public final class ABMTipoAgroquimico extends javax.swing.JDialog {
+public final class ABMEmpresaRegistrante extends javax.swing.JDialog {
 
     private ABMProductoViejo abmproducto; //Para que tenga relacion con su form padre
-    private Connection con = Conexion.ConectarBasedeDatos();
+    public String framepadre = "";
 
-    public ABMTipoAgroquimico(ABMProductoViejo abmproducto, java.awt.Dialog parent, Boolean modal) {
+    public ABMEmpresaRegistrante(ABMProductoViejo abmproducto, java.awt.Frame parent, Boolean modal) {
         super(parent, modal);
         this.abmproducto = abmproducto;
         initComponents();
-        TablaConsulta(""); //Trae todos los registros
+        TablaSQL(""); //Trae todos los registros
         txtBuscar.requestFocus();
 
         //Shortcuts 
@@ -41,10 +41,10 @@ public final class ABMTipoAgroquimico extends javax.swing.JDialog {
 
     Metodos metodos = new Metodos();
 
-    public void TablaConsulta(String filtro) {//Realiza la consulta de los productos que tenemos en la base de datos
-        String nombresp = "SP_TipoAgroquimicoConsulta";
+    public void TablaSQL(String filtro) {//Realiza la consulta de los productos que tenemos en la base de datos
+        String nombresp = "SP_EmpresaRegistranteConsulta";
         String titlesJtabla[] = {"Codigo", "Descripción"};
-        String titlesconsulta[] = {"ta_codigo", "ta_descripcion"};
+        String titlesconsulta[] = {"er_codigo", "er_descripcion"};
 
         metodos.ConsultaFiltroTablaBD(tbTabla, titlesJtabla, titlesconsulta, nombresp, filtro, cbCampoBuscar);
         metodos.AnchuraColumna(tbTabla);
@@ -82,8 +82,7 @@ public final class ABMTipoAgroquimico extends javax.swing.JDialog {
         btnGuardar = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
 
-        setTitle("Ventana Tipos de agroquimicos");
-        setAlwaysOnTop(true);
+        setTitle("Ventana Empresas Registrantes");
         setBackground(new java.awt.Color(45, 62, 80));
         setResizable(false);
 
@@ -111,13 +110,12 @@ public final class ABMTipoAgroquimico extends javax.swing.JDialog {
         );
 
         jpTabla.setBackground(new java.awt.Color(45, 62, 80));
-        jpTabla.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(javax.swing.border.EtchedBorder.RAISED), "Tipo de agroquimicos", javax.swing.border.TitledBorder.LEFT, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Sitka Subheading", 1, 28), new java.awt.Color(0, 204, 204))); // NOI18N
+        jpTabla.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(javax.swing.border.EtchedBorder.RAISED), "Empresas registrantes", javax.swing.border.TitledBorder.LEFT, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Sitka Subheading", 1, 28), new java.awt.Color(0, 204, 204))); // NOI18N
 
         jLabel10.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         jLabel10.setForeground(new java.awt.Color(255, 255, 255));
         jLabel10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/iconos40x40/IconoBuscar.png"))); // NOI18N
         jLabel10.setText("  BUSCAR ");
-        jLabel10.setBorder(null);
 
         txtBuscar.setBackground(new java.awt.Color(0, 0, 0));
         txtBuscar.setFont(new java.awt.Font("Tahoma", 1, 17)); // NOI18N
@@ -138,7 +136,7 @@ public final class ABMTipoAgroquimico extends javax.swing.JDialog {
 
         tbTabla.setAutoCreateRowSorter(true);
         tbTabla.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED, null, new java.awt.Color(153, 153, 153), null, new java.awt.Color(102, 102, 102)));
-        tbTabla.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        tbTabla.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         tbTabla.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -169,12 +167,6 @@ public final class ABMTipoAgroquimico extends javax.swing.JDialog {
         lblBuscarCampo.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         lblBuscarCampo.setText("Buscar por:");
 
-        cbCampoBuscar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cbCampoBuscarActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout jpTablaLayout = new javax.swing.GroupLayout(jpTabla);
         jpTabla.setLayout(jpTablaLayout);
         jpTablaLayout.setHorizontalGroup(
@@ -186,11 +178,11 @@ public final class ABMTipoAgroquimico extends javax.swing.JDialog {
                     .addGroup(jpTablaLayout.createSequentialGroup()
                         .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtBuscar)
+                        .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 348, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lblBuscarCampo)
+                        .addComponent(lblBuscarCampo, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cbCampoBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(cbCampoBuscar, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jpTablaLayout.setVerticalGroup(
@@ -263,11 +255,11 @@ public final class ABMTipoAgroquimico extends javax.swing.JDialog {
             jpBotonesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jpBotonesLayout.createSequentialGroup()
                 .addGap(29, 29, 29)
-                .addComponent(btnNuevo, javax.swing.GroupLayout.DEFAULT_SIZE, 55, Short.MAX_VALUE)
+                .addComponent(btnNuevo, javax.swing.GroupLayout.PREFERRED_SIZE, 55, Short.MAX_VALUE)
                 .addGap(15, 15, 15)
-                .addComponent(btnModificar, javax.swing.GroupLayout.DEFAULT_SIZE, 55, Short.MAX_VALUE)
+                .addComponent(btnModificar, javax.swing.GroupLayout.PREFERRED_SIZE, 55, Short.MAX_VALUE)
                 .addGap(15, 15, 15)
-                .addComponent(btnEliminar, javax.swing.GroupLayout.DEFAULT_SIZE, 54, Short.MAX_VALUE)
+                .addComponent(btnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 54, Short.MAX_VALUE)
                 .addGap(29, 29, 29))
         );
 
@@ -337,8 +329,8 @@ public final class ABMTipoAgroquimico extends javax.swing.JDialog {
                 .addGap(4, 4, 4)
                 .addGroup(jpEdicionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(txtCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtDescripcion, javax.swing.GroupLayout.PREFERRED_SIZE, 382, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(322, Short.MAX_VALUE))
+                    .addComponent(txtDescripcion, javax.swing.GroupLayout.PREFERRED_SIZE, 629, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(75, Short.MAX_VALUE))
         );
         jpEdicionLayout.setVerticalGroup(
             jpEdicionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -470,10 +462,10 @@ public final class ABMTipoAgroquimico extends javax.swing.JDialog {
         //actualiza la tabla conforme a la letra que teclea
         if (txtBuscar.getText().trim().length() >= 1) {
             String filtro = txtBuscar.getText();
-            TablaConsulta(filtro);
+            TablaSQL(filtro);
             tbTabla.setVisible(true);
         } else {
-            TablaConsulta("");
+            TablaSQL("");
         }
 
         //Convertir a mayuscula
@@ -487,6 +479,10 @@ public final class ABMTipoAgroquimico extends javax.swing.JDialog {
         if (tbTabla.isEnabled() == true) {
             btnModificar.setEnabled(true);
             btnEliminar.setEnabled(true);
+        }
+
+        if (framepadre == "ABMProducto" && evt.getClickCount() == 2) { //Si se da doble click en el registro y el boton anadir esta activo
+            //metodos.
         }
     }//GEN-LAST:event_tbTablaMouseClicked
 
@@ -595,10 +591,6 @@ public final class ABMTipoAgroquimico extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_tbTablaMousePressed
 
-    private void cbCampoBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbCampoBuscarActionPerformed
-        TablaConsulta(txtBuscar.getText());
-    }//GEN-LAST:event_cbCampoBuscarActionPerformed
-
     public void SiguienteFoco(KeyEvent evt) {
         if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
             ((JComponent) evt.getSource()).transferFocus();//Con esta parte transfieres el foco al siguiente campo sea un Jtextfield, Jpasswordfield, boton, etc..
@@ -622,7 +614,7 @@ public final class ABMTipoAgroquimico extends javax.swing.JDialog {
         txtCodigo.setText("");
         txtDescripcion.setText("");
         tbTabla.clearSelection();
-        TablaConsulta(""); //Trae todos los registros
+        TablaSQL(""); //Trae todos los registros
         txtBuscar.setText("");
 
         txtBuscar.requestFocus();
@@ -637,11 +629,13 @@ public final class ABMTipoAgroquimico extends javax.swing.JDialog {
                 if (JOptionPane.YES_OPTION == confirmado) {
                     //REGISTRAR NUEVO
                     try {
-                        String sentencia = "CALL SP_TipoAgroquimicoAlta ('" + descri + "')";
+                        Connection con = Conexion.ConectarBasedeDatos();
+                        String sentencia = "CALL SP_EmpresaRegistranteAlta ('" + descri + "')";
                         System.out.println("Insertar registro: " + sentencia);
                         Statement statement = (Statement) con.createStatement();
                         statement.executeUpdate(sentencia);
 
+                        con.close();
                         JOptionPane.showMessageDialog(this, "Se agrego correctamente", "Información", JOptionPane.INFORMATION_MESSAGE);
                         ModoEdicion(false);
                         Limpiar();
@@ -668,6 +662,7 @@ public final class ABMTipoAgroquimico extends javax.swing.JDialog {
 
     public void RegistroModificar() {
         //guarda los datos que se han modificado en los campos
+        Connection con = Conexion.ConectarBasedeDatos();
         String sentencia;
         String cod, descri;
         cod = txtCodigo.getText();
@@ -678,7 +673,7 @@ public final class ABMTipoAgroquimico extends javax.swing.JDialog {
             int confirmado = JOptionPane.showConfirmDialog(null, "¿Esta seguro de modificar este registro?", "Confirmación", JOptionPane.YES_OPTION);
             if (JOptionPane.YES_OPTION == confirmado) {
 
-                sentencia = "CALL SP_TipoAgroquimicoModificar(" + cod + ",'" + descri + "')";
+                sentencia = "CALL SP_EmpresaRegistranteModificar(" + cod + ",'" + descri + "')";
                 System.out.println("Actualizar registro: " + sentencia);
                 getToolkit().beep();
                 JOptionPane.showMessageDialog(null, "Registro modificado correctamente", "Información", JOptionPane.INFORMATION_MESSAGE);
@@ -713,8 +708,9 @@ public final class ABMTipoAgroquimico extends javax.swing.JDialog {
                 if (confirmado == JOptionPane.YES_OPTION) {
                     codigo = (String) tbTabla.getModel().getValueAt(filasel, 0);
 
+                    Connection con = Conexion.ConectarBasedeDatos();
                     String sentence;
-                    sentence = "CALL SP_TipoAgroquimicoEliminar(" + codigo + ")";
+                    sentence = "CALL SP_EmpresaRegistranteEliminar(" + codigo + ")";
 
                     try {
                         PreparedStatement pst = con.prepareStatement(sentence);

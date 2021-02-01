@@ -1,13 +1,9 @@
 package forms.producto;
 
 import conexion.Conexion;
-import forms.producto.dosis.AMDosis;
-import forms.producto.ingrediente_activo.*;
-import forms.producto.empresa_registrante.ABMEmpresaRegistrante;
+import forms.producto.registrante.ABMEmpresaRegistrante;
 import forms.producto.formulacion.ABMFormulacion;
-import forms.producto.clase_producto.ABMClaseProducto;
 import forms.producto.fabricante.ABMFabricante;
-import forms.producto.tipoagroquimico.ABMTipoAgroquimico;
 import java.awt.HeadlessException;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
@@ -1197,8 +1193,8 @@ public class ABMProductoViejo extends javax.swing.JDialog {
     }//GEN-LAST:event_btnCargarImagenActionPerformed
 
     private void btnTipoProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTipoProductoActionPerformed
-        ABMClaseProducto abmclaseproducto = new ABMClaseProducto(this, null, false);
-        abmclaseproducto.setVisible(true);
+        /*ABMClaseProducto abmclaseproducto = new ABMClaseProducto(this, null, false);
+        abmclaseproducto.setVisible(true);*/
     }//GEN-LAST:event_btnTipoProductoActionPerformed
 
     private void btnEmpresaRegistranteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEmpresaRegistranteActionPerformed
@@ -1216,9 +1212,9 @@ public class ABMProductoViejo extends javax.swing.JDialog {
     }//GEN-LAST:event_btnMenosActionPerformed
 
     private void btnMasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMasActionPerformed
-        ABMIngredienteActivo abmingredienteactivo = new ABMIngredienteActivo(this, null, true);
+/*        ABMIngredienteActivo abmingredienteactivo = new ABMIngredienteActivo(this, null, true);
         abmingredienteactivo.getBtnAnadir().setEnabled(true); //Se activa el boton anadir
-        abmingredienteactivo.setVisible(true);
+        abmingredienteactivo.setVisible(true);*/
     }//GEN-LAST:event_btnMasActionPerformed
 
     private void tbIngrActivosMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbIngrActivosMousePressed
@@ -1307,7 +1303,7 @@ public class ABMProductoViejo extends javax.swing.JDialog {
     }//GEN-LAST:event_tbDosisMousePressed
 
     private void btnMasDosisActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMasDosisActionPerformed
-        if (cbFormulacion.getSelectedIndex() != -1) {
+      /*  if (cbFormulacion.getSelectedIndex() != -1) {
             AMDosis amdosis = new AMDosis(this, this, true);
             metodoscombo.CargarComboBox(amdosis.cbCultivo, "SELECT tc_codigo, tc_descripcion FROM tipo_cultivo ORDER BY tc_descripcion");
             amdosis.lbDosisMinEstado.setText((lbEstado.getText().replace("(", "")).replace(")", ""));
@@ -1324,7 +1320,7 @@ public class ABMProductoViejo extends javax.swing.JDialog {
             amdosis.setVisible(true);
         } else {
             JOptionPane.showMessageDialog(null, "No se seleccionó ninguna formulación", "Error", JOptionPane.ERROR_MESSAGE);
-        }
+        }*/
     }//GEN-LAST:event_btnMasDosisActionPerformed
 
     ArrayList<String> ArrayEliminadosDosis = new ArrayList<>();
@@ -1341,8 +1337,8 @@ public class ABMProductoViejo extends javax.swing.JDialog {
     }//GEN-LAST:event_btnMenosDosisActionPerformed
 
     private void btnTipoAgroquimicoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTipoAgroquimicoActionPerformed
-        ABMTipoAgroquimico abmtipoagroquimico = new ABMTipoAgroquimico(this, this, false);
-        abmtipoagroquimico.setVisible(true);
+/*        ABMTipoAgroquimico abmtipoagroquimico = new ABMTipoAgroquimico(this, this, false);
+        abmtipoagroquimico.setVisible(true);*/
     }//GEN-LAST:event_btnTipoAgroquimicoActionPerformed
 
     @SuppressWarnings("static-access")
@@ -1393,7 +1389,7 @@ public class ABMProductoViejo extends javax.swing.JDialog {
     }
 
     private void btnModificarDosisActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarDosisActionPerformed
-        if (cbFormulacion.getSelectedIndex() != -1) {
+        /*if (cbFormulacion.getSelectedIndex() != -1) {
             AMDosis amdosis = new AMDosis(this, this, true);
             amdosis.setTitle("Ventana modificar dosis recomendada");
             amdosis.txtCodigo.setText(tbDosis.getValueAt(tbDosis.getSelectedRow(), 0) + "");
@@ -1416,7 +1412,7 @@ public class ABMProductoViejo extends javax.swing.JDialog {
             amdosis.setVisible(true);
         } else {
             JOptionPane.showMessageDialog(null, "No se seleccionó ninguna formulación", "Error", JOptionPane.ERROR_MESSAGE);
-        }
+        }*/
     }//GEN-LAST:event_btnModificarDosisActionPerformed
 
     private void btnModificarDosisKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btnModificarDosisKeyReleased

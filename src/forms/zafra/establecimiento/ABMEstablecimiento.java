@@ -7,7 +7,6 @@ package forms.zafra.establecimiento;
 
 import conexion.Conexion;
 import forms.producto.ABMProductoViejo;
-import forms.zafra.productor.ABMProductor;
 import java.awt.HeadlessException;
 import java.awt.event.KeyEvent;
 import java.sql.Connection;
@@ -1092,8 +1091,8 @@ public final class ABMEstablecimiento extends javax.swing.JDialog {
     }//GEN-LAST:event_txtLocalidadKeyTyped
 
     private void btnProductorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProductorActionPerformed
-        ABMProductor abmproductor = new ABMProductor(null, false);
-        abmproductor.setVisible(true);
+        /*ABMCliente abmproductor = new ABMCliente(null, false);
+        abmproductor.setVisible(true);*/
     }//GEN-LAST:event_btnProductorActionPerformed
 
     private void txtYKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtYKeyPressed
