@@ -280,10 +280,6 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItem6ActionPerformed"/>
               </Events>
             </MenuItem>
-            <MenuItem class="javax.swing.JPopupMenu$Separator" name="jSeparator22">
-            </MenuItem>
-            <MenuItem class="javax.swing.JPopupMenu$Separator" name="jSeparator24">
-            </MenuItem>
             <MenuItem class="javax.swing.JPopupMenu$Separator" name="jSeparator18">
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="meitPerfil">
@@ -398,7 +394,7 @@
                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
                       <Component id="btnUsuario" alignment="0" max="32767" attributes="0"/>
                       <Component id="btnProducto" alignment="0" max="32767" attributes="0"/>
-                      <Component id="btnZafra" alignment="0" max="32767" attributes="0"/>
+                      <Component id="btnCliente" alignment="0" max="32767" attributes="0"/>
                       <Component id="btnInventario" alignment="0" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace pref="902" max="32767" attributes="0"/>
@@ -413,7 +409,7 @@
                   <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
                   <Component id="btnInventario" min="-2" pref="61" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="btnZafra" min="-2" pref="61" max="-2" attributes="0"/>
+                  <Component id="btnCliente" min="-2" pref="61" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="btnProducto" min="-2" pref="61" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
@@ -444,20 +440,20 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnInventarioActionPerformed"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JButton" name="btnZafra">
+        <Component class="javax.swing.JButton" name="btnCliente">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Century Gothic" size="14" style="1"/>
             </Property>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/iconos/iconos40x40/IconoBuscar.png"/>
+              <Image iconType="3" name="/iconos/iconos40x40/IconoClientes40.png"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="ZAFRAS"/>
+            <Property name="text" type="java.lang.String" value="CLIENTES"/>
             <Property name="enabled" type="boolean" value="false"/>
             <Property name="horizontalAlignment" type="int" value="2"/>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnZafraActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnClienteActionPerformed"/>
           </Events>
         </Component>
         <Component class="javax.swing.JButton" name="btnUsuario">

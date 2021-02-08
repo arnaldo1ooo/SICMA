@@ -1,10 +1,14 @@
 package principal;
 
 import conexion.Conexion;
+import forms.aplicaciones.cliente.ABMCliente;
+import forms.banners.ABMPerfil;
 import forms.banners.ABMUsuario;
+import forms.banners.ABMUsuarioRol;
 import forms.inventario.FormInventario;
 import forms.producto.ABMProducto;
 import forms.producto.ABMProductoViejo;
+import forms.usuario.ABMModulo;
 import forms.zafra.ABMZafra;
 import java.sql.SQLException;
 import java.text.DateFormat;
@@ -47,14 +51,10 @@ public class Principal extends javax.swing.JFrame implements Runnable {
             while (con.getResultSet().next()) {
                 modulo = con.getResultSet().getString("mo_denominacion");
                 switch (modulo) {
-                    case "INVENTARIO" -> {
-                        btnInventario.setEnabled(true);
-                        meInventario.setEnabled(true);
+                    case "CLIENTE" -> {
+                        btnCliente.setEnabled(true);
                     }
-                    case "ZAFRA" -> {
-                        btnZafra.setEnabled(true);
-                        meZafra.setEnabled(true);
-                    }
+                    
                     case "PRODUCTO" -> {
                         btnProducto.setEnabled(true);
                         meProducto.setEnabled(true);
@@ -116,7 +116,7 @@ public class Principal extends javax.swing.JFrame implements Runnable {
 
         piPrincipal = new org.edisoncor.gui.panel.PanelImage();
         btnInventario = new javax.swing.JButton();
-        btnZafra = new javax.swing.JButton();
+        btnCliente = new javax.swing.JButton();
         btnUsuario = new javax.swing.JButton();
         btnProducto = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
@@ -167,8 +167,6 @@ public class Principal extends javax.swing.JFrame implements Runnable {
         jMenuItem18 = new javax.swing.JMenuItem();
         meConfiguracion = new javax.swing.JMenu();
         jMenuItem6 = new javax.swing.JMenuItem();
-        jSeparator22 = new javax.swing.JPopupMenu.Separator();
-        jSeparator24 = new javax.swing.JPopupMenu.Separator();
         jSeparator18 = new javax.swing.JPopupMenu.Separator();
         meitPerfil = new javax.swing.JMenuItem();
         jSeparator6 = new javax.swing.JPopupMenu.Separator();
@@ -200,14 +198,14 @@ public class Principal extends javax.swing.JFrame implements Runnable {
             }
         });
 
-        btnZafra.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
-        btnZafra.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/iconos40x40/IconoBuscar.png"))); // NOI18N
-        btnZafra.setText("ZAFRAS");
-        btnZafra.setEnabled(false);
-        btnZafra.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btnZafra.addActionListener(new java.awt.event.ActionListener() {
+        btnCliente.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
+        btnCliente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/iconos40x40/IconoClientes40.png"))); // NOI18N
+        btnCliente.setText("CLIENTES");
+        btnCliente.setEnabled(false);
+        btnCliente.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnCliente.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnZafraActionPerformed(evt);
+                btnClienteActionPerformed(evt);
             }
         });
 
@@ -437,7 +435,7 @@ public class Principal extends javax.swing.JFrame implements Runnable {
                 .addGroup(piPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(btnUsuario, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnProducto, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnZafra, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnCliente, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnInventario, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 902, Short.MAX_VALUE)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -449,7 +447,7 @@ public class Principal extends javax.swing.JFrame implements Runnable {
                 .addGap(26, 26, 26)
                 .addComponent(btnInventario, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnZafra, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -652,8 +650,6 @@ public class Principal extends javax.swing.JFrame implements Runnable {
             }
         });
         meConfiguracion.add(jMenuItem6);
-        meConfiguracion.add(jSeparator22);
-        meConfiguracion.add(jSeparator24);
         meConfiguracion.add(jSeparator18);
 
         meitPerfil.setText("Perfiles");
@@ -713,22 +709,22 @@ public class Principal extends javax.swing.JFrame implements Runnable {
 
 
     private void meitModuloActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_meitModuloActionPerformed
-        /*ABMModulo abmmodulos = new ABMModulo(this, true);
+        ABMModulo abmmodulos = new ABMModulo(this, true);
         abmmodulos.setLocationRelativeTo(this); //Centrar
-        abmmodulos.setVisible(true);*/
+        abmmodulos.setVisible(true);
     }//GEN-LAST:event_meitModuloActionPerformed
 
     private void meitPerfilActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_meitPerfilActionPerformed
-        /*ABMPerfil abmperfil = new ABMPerfil(this, true);
+        ABMPerfil abmperfil = new ABMPerfil(this, true);
         abmperfil.setLocationRelativeTo(this); //Centrar
-        abmperfil.setVisible(true);*/
+        abmperfil.setVisible(true);
     }//GEN-LAST:event_meitPerfilActionPerformed
 
 
     private void meitRolActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_meitRolActionPerformed
-        /*ABMUsuarioRol abmusuariorol = new ABMUsuarioRol(this, true);
+        ABMUsuarioRol abmusuariorol = new ABMUsuarioRol(this, true);
         abmusuariorol.setLocationRelativeTo(this); //Centrar
-        abmusuariorol.setVisible(true);*/
+        abmusuariorol.setVisible(true);
     }//GEN-LAST:event_meitRolActionPerformed
 
     private void ObtenerFechayHora() {
@@ -757,11 +753,11 @@ public class Principal extends javax.swing.JFrame implements Runnable {
         conf.setVisible(true);*/
     }//GEN-LAST:event_jMenuItem6ActionPerformed
 
-    private void btnZafraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnZafraActionPerformed
-        ABMZafra abmzafra = new ABMZafra(this, true);
-        abmzafra.setLocationRelativeTo(this); //Centrar
-        abmzafra.setVisible(true);
-    }//GEN-LAST:event_btnZafraActionPerformed
+    private void btnClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClienteActionPerformed
+        ABMCliente abmcliente = new ABMCliente(this, true);
+        abmcliente.setLocationRelativeTo(this); //Centrar
+        abmcliente.setVisible(true);
+    }//GEN-LAST:event_btnClienteActionPerformed
 
     private void btnInventarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInventarioActionPerformed
         FormInventario forminventario = new FormInventario(this, true);
@@ -786,7 +782,7 @@ public class Principal extends javax.swing.JFrame implements Runnable {
     }//GEN-LAST:event_btnProductoActionPerformed
 
     private void meiReportePlanillaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_meiReportePlanillaActionPerformed
-/*        ReportePlanilla reporteplanilla = new ReportePlanilla(this, true);
+        /*        ReportePlanilla reporteplanilla = new ReportePlanilla(this, true);
         reporteplanilla.setLocationRelativeTo(this);
         reporteplanilla.setVisible(true);*/
     }//GEN-LAST:event_meiReportePlanillaActionPerformed
@@ -880,10 +876,10 @@ public class Principal extends javax.swing.JFrame implements Runnable {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnCliente;
     private javax.swing.JButton btnInventario;
     private javax.swing.JButton btnProducto;
     private javax.swing.JButton btnUsuario;
-    private javax.swing.JButton btnZafra;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -906,8 +902,6 @@ public class Principal extends javax.swing.JFrame implements Runnable {
     private javax.swing.JPopupMenu.Separator jSeparator17;
     private javax.swing.JPopupMenu.Separator jSeparator18;
     private javax.swing.JPopupMenu.Separator jSeparator19;
-    private javax.swing.JPopupMenu.Separator jSeparator22;
-    private javax.swing.JPopupMenu.Separator jSeparator24;
     private javax.swing.JPopupMenu.Separator jSeparator25;
     private javax.swing.JPopupMenu.Separator jSeparator27;
     private javax.swing.JPopupMenu.Separator jSeparator6;
