@@ -15,7 +15,7 @@
         <Menu class="javax.swing.JMenu" name="meInventario">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/iconos/iconos40x40/IconoBuscar.png"/>
+              <Image iconType="3" name="/iconos/iconos40x40/IconoBuscar40.png"/>
             </Property>
             <Property name="text" type="java.lang.String" value="INVENTARIOS"/>
             <Property name="enabled" type="boolean" value="false"/>
@@ -58,7 +58,7 @@
         <Menu class="javax.swing.JMenu" name="meZafra">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/iconos/iconos40x40/IconoBuscar.png"/>
+              <Image iconType="3" name="/iconos/iconos40x40/IconoBuscar40.png"/>
             </Property>
             <Property name="text" type="java.lang.String" value="ZAFRAS"/>
             <Property name="enabled" type="boolean" value="false"/>
@@ -188,7 +188,7 @@
         <Menu class="javax.swing.JMenu" name="meReporte">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/iconos/iconos40x40/IconoBuscar.png"/>
+              <Image iconType="3" name="/iconos/iconos40x40/IconoReporte40.png"/>
             </Property>
             <Property name="text" type="java.lang.String" value="REPORTES"/>
             <Property name="enabled" type="boolean" value="false"/>
@@ -430,7 +430,7 @@
               <Font name="Century Gothic" size="14" style="1"/>
             </Property>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/iconos/iconos40x40/IconoBuscar.png"/>
+              <Image iconType="3" name="/iconos/iconos40x40/IconoBuscar40.png"/>
             </Property>
             <Property name="text" type="java.lang.String" value="INVENTARIOS"/>
             <Property name="enabled" type="boolean" value="false"/>

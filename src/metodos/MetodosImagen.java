@@ -98,23 +98,34 @@ public class MetodosImagen {
         }
     }
 
-    public void LeerImagen(JLabel ElLabel, String rutaimagen) {
-        //rutaimagen = System.getProperty("user.dir") + rutaimagen;
+    public boolean LeerImagen(JLabel ElLabel, String rutaimagen) {
+        rutaimagen = System.getProperty("user.dir") + rutaimagen;
         //ObtenerImagen Escalado al Label
-        String ruta = rutaimagen + ".png";
-        File ficheroimagen = new File(ruta);
-        if (ficheroimagen.exists() == false) {
-            ruta = rutaimagen + ".jpg";
-            ficheroimagen = new File(ruta);
-        }
+        String ruta;
+        File ficheroimagen;
 
+        ruta = rutaimagen + ".png";
+        ficheroimagen = new File(ruta);
         if (ficheroimagen.exists()) {
             ElLabel.setText("");
             EscalarImagen(ElLabel, null, ruta);
             System.out.println("Se cargó la imagen: " + ruta);
+            return true;
         } else {
             System.out.println("Error al LeerImagen, La imagen solicitada no existe o la ruta esta mal, revise la extension o ruta: " + ficheroimagen.getAbsolutePath());
         }
+
+        ruta = rutaimagen + ".jpg";
+        ficheroimagen = new File(ruta);
+        if (ficheroimagen.exists()) {
+            ElLabel.setText("");
+            EscalarImagen(ElLabel, null, ruta);
+            System.out.println("Se cargó la imagen: " + ruta);
+            return true;
+        } else {
+            System.out.println("Error al LeerImagen, La imagen solicitada no existe o la ruta esta mal, revise la extension o ruta: " + ficheroimagen.getAbsolutePath());
+        }
+        return false;
     }
 
     public void EliminarImagen(String rutaimagen) {

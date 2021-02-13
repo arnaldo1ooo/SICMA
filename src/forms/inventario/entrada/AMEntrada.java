@@ -6,7 +6,7 @@
 package forms.inventario.entrada;
 
 import conexion.Conexion;
-import forms.inventario.empresa_vendedora.ABMEmpresaVendedora;
+import forms.inventario.registrante.ABMEmpresaVendedora;
 import forms.producto.ABMProductoViejo;
 import java.awt.HeadlessException;
 import java.awt.event.KeyEvent;

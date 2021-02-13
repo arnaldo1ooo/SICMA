@@ -188,7 +188,7 @@ public class Principal extends javax.swing.JFrame implements Runnable {
         piPrincipal.setPreferredSize(new java.awt.Dimension(2000, 655));
 
         btnInventario.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
-        btnInventario.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/iconos40x40/IconoBuscar.png"))); // NOI18N
+        btnInventario.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/iconos40x40/IconoBuscar40.png"))); // NOI18N
         btnInventario.setText("INVENTARIOS");
         btnInventario.setEnabled(false);
         btnInventario.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -462,7 +462,7 @@ public class Principal extends javax.swing.JFrame implements Runnable {
         jMenuBar1.setMinimumSize(new java.awt.Dimension(120, 70));
         jMenuBar1.setPreferredSize(new java.awt.Dimension(120, 55));
 
-        meInventario.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/iconos40x40/IconoBuscar.png"))); // NOI18N
+        meInventario.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/iconos40x40/IconoBuscar40.png"))); // NOI18N
         meInventario.setText("INVENTARIOS");
         meInventario.setEnabled(false);
         meInventario.setFont(new java.awt.Font("Century Gothic", 1, 12)); // NOI18N
@@ -491,7 +491,7 @@ public class Principal extends javax.swing.JFrame implements Runnable {
 
         jMenuBar1.add(meInventario);
 
-        meZafra.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/iconos40x40/IconoBuscar.png"))); // NOI18N
+        meZafra.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/iconos40x40/IconoBuscar40.png"))); // NOI18N
         meZafra.setText("ZAFRAS");
         meZafra.setEnabled(false);
         meZafra.setFont(new java.awt.Font("Century Gothic", 1, 12)); // NOI18N
@@ -589,7 +589,7 @@ public class Principal extends javax.swing.JFrame implements Runnable {
 
         jMenuBar1.add(meProducto);
 
-        meReporte.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/iconos40x40/IconoBuscar.png"))); // NOI18N
+        meReporte.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/iconos40x40/IconoReporte40.png"))); // NOI18N
         meReporte.setText("REPORTES");
         meReporte.setEnabled(false);
         meReporte.setFont(new java.awt.Font("Century Gothic", 1, 12)); // NOI18N
