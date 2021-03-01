@@ -273,7 +273,7 @@ public class ABMModulo extends javax.swing.JDialog {
         btnNuevo.setBackground(new java.awt.Color(14, 154, 153));
         btnNuevo.setFont(new java.awt.Font("sansserif", 1, 12)); // NOI18N
         btnNuevo.setForeground(new java.awt.Color(255, 255, 255));
-        btnNuevo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/iconos40x40/IconoNuevo.png"))); // NOI18N
+        btnNuevo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/iconos40x40/IconoNuevo40.png"))); // NOI18N
         btnNuevo.setText("NUEVO");
         btnNuevo.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnNuevo.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
@@ -286,7 +286,7 @@ public class ABMModulo extends javax.swing.JDialog {
         btnModificar.setBackground(new java.awt.Color(14, 154, 153));
         btnModificar.setFont(new java.awt.Font("sansserif", 1, 12)); // NOI18N
         btnModificar.setForeground(new java.awt.Color(255, 255, 255));
-        btnModificar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/iconos40x40/IconoModifcar.png"))); // NOI18N
+        btnModificar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/iconos40x40/IconoModifcar40.png"))); // NOI18N
         btnModificar.setText("MODIFICAR");
         btnModificar.setEnabled(false);
         btnModificar.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -299,7 +299,7 @@ public class ABMModulo extends javax.swing.JDialog {
         btnEliminar.setBackground(new java.awt.Color(14, 154, 153));
         btnEliminar.setFont(new java.awt.Font("sansserif", 1, 12)); // NOI18N
         btnEliminar.setForeground(new java.awt.Color(255, 255, 255));
-        btnEliminar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/iconos40x40/IconoEliminar.png"))); // NOI18N
+        btnEliminar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/iconos40x40/IconoEliminar40.png"))); // NOI18N
         btnEliminar.setText("ELIMINAR");
         btnEliminar.setEnabled(false);
         btnEliminar.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);

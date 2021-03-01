@@ -12,12 +12,12 @@
         </Property>
       </Properties>
       <SubComponents>
-        <Menu class="javax.swing.JMenu" name="meInventario">
+        <Menu class="javax.swing.JMenu" name="meAplicacion">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="3" name="/iconos/iconos40x40/IconoBuscar40.png"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="INVENTARIOS"/>
+            <Property name="text" type="java.lang.String" value="APLICACIONES"/>
             <Property name="enabled" type="boolean" value="false"/>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Century Gothic" size="12" style="1"/>
@@ -395,9 +395,9 @@
                       <Component id="btnUsuario" alignment="0" max="32767" attributes="0"/>
                       <Component id="btnProducto" alignment="0" max="32767" attributes="0"/>
                       <Component id="btnCliente" alignment="0" max="32767" attributes="0"/>
-                      <Component id="btnInventario" alignment="0" max="32767" attributes="0"/>
+                      <Component id="btnAplicacion" alignment="0" max="32767" attributes="0"/>
                   </Group>
-                  <EmptySpace pref="902" max="32767" attributes="0"/>
+                  <EmptySpace pref="890" max="32767" attributes="0"/>
                   <Component id="jPanel1" min="-2" max="-2" attributes="0"/>
               </Group>
               <Component id="panel1" max="32767" attributes="0"/>
@@ -407,7 +407,7 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" attributes="0">
                   <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
-                  <Component id="btnInventario" min="-2" pref="61" max="-2" attributes="0"/>
+                  <Component id="btnAplicacion" min="-2" pref="61" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="btnCliente" min="-2" pref="61" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
@@ -424,7 +424,7 @@
         </DimensionLayout>
       </Layout>
       <SubComponents>
-        <Component class="javax.swing.JButton" name="btnInventario">
+        <Component class="javax.swing.JButton" name="btnAplicacion">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Century Gothic" size="14" style="1"/>
@@ -432,12 +432,12 @@
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="3" name="/iconos/iconos40x40/IconoBuscar40.png"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="INVENTARIOS"/>
+            <Property name="text" type="java.lang.String" value="APLICACIONES"/>
             <Property name="enabled" type="boolean" value="false"/>
             <Property name="horizontalAlignment" type="int" value="2"/>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnInventarioActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnAplicacionActionPerformed"/>
           </Events>
         </Component>
         <Component class="javax.swing.JButton" name="btnCliente">

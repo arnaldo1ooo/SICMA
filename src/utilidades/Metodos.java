@@ -110,6 +110,7 @@ public class Metodos {
                 }
             }
         }
+
         laTabla.getTableHeader().setResizingAllowed(false); //Bloquear cambio de tamaño manual de columnas
         laTabla.setAutoResizeMode(JTable.AUTO_RESIZE_OFF); //Desactiva el autoresize
     }
@@ -347,8 +348,6 @@ public class Metodos {
         con.DesconectarBasedeDatos();
         return permisos;
     }
-
- 
 
     public String SiStringEsNull(String laCadena) {
         if (laCadena.equals("null")) {

@@ -1,6 +1,7 @@
 package principal;
 
 import conexion.Conexion;
+import forms.aplicaciones.Aplicacion;
 import forms.aplicaciones.cliente.ABMCliente;
 import forms.banners.ABMPerfil;
 import forms.banners.ABMUsuario;
@@ -51,10 +52,15 @@ public class Principal extends javax.swing.JFrame implements Runnable {
             while (con.getResultSet().next()) {
                 modulo = con.getResultSet().getString("mo_denominacion");
                 switch (modulo) {
+                    case "APLICACION" -> {
+                        btnAplicacion.setEnabled(true);
+                        meAplicacion.setEnabled(true);
+                    }
+                    
                     case "CLIENTE" -> {
                         btnCliente.setEnabled(true);
                     }
-                    
+
                     case "PRODUCTO" -> {
                         btnProducto.setEnabled(true);
                         meProducto.setEnabled(true);
@@ -115,7 +121,7 @@ public class Principal extends javax.swing.JFrame implements Runnable {
     private void initComponents() {
 
         piPrincipal = new org.edisoncor.gui.panel.PanelImage();
-        btnInventario = new javax.swing.JButton();
+        btnAplicacion = new javax.swing.JButton();
         btnCliente = new javax.swing.JButton();
         btnUsuario = new javax.swing.JButton();
         btnProducto = new javax.swing.JButton();
@@ -138,7 +144,7 @@ public class Principal extends javax.swing.JFrame implements Runnable {
         lbHoraTitulo = new javax.swing.JLabel();
         lbHora = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
-        meInventario = new javax.swing.JMenu();
+        meAplicacion = new javax.swing.JMenu();
         meitRol3 = new javax.swing.JMenuItem();
         jSeparator16 = new javax.swing.JPopupMenu.Separator();
         jMenuItem22 = new javax.swing.JMenuItem();
@@ -187,14 +193,14 @@ public class Principal extends javax.swing.JFrame implements Runnable {
         piPrincipal.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/fondo_principal.png"))); // NOI18N
         piPrincipal.setPreferredSize(new java.awt.Dimension(2000, 655));
 
-        btnInventario.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
-        btnInventario.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/iconos40x40/IconoBuscar40.png"))); // NOI18N
-        btnInventario.setText("INVENTARIOS");
-        btnInventario.setEnabled(false);
-        btnInventario.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btnInventario.addActionListener(new java.awt.event.ActionListener() {
+        btnAplicacion.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
+        btnAplicacion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/iconos40x40/IconoBuscar40.png"))); // NOI18N
+        btnAplicacion.setText("APLICACIONES");
+        btnAplicacion.setEnabled(false);
+        btnAplicacion.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnAplicacion.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnInventarioActionPerformed(evt);
+                btnAplicacionActionPerformed(evt);
             }
         });
 
@@ -436,8 +442,8 @@ public class Principal extends javax.swing.JFrame implements Runnable {
                     .addComponent(btnUsuario, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnProducto, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnCliente, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnInventario, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 902, Short.MAX_VALUE)
+                    .addComponent(btnAplicacion, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 890, Short.MAX_VALUE)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
             .addComponent(panel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
@@ -445,7 +451,7 @@ public class Principal extends javax.swing.JFrame implements Runnable {
             piPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(piPrincipalLayout.createSequentialGroup()
                 .addGap(26, 26, 26)
-                .addComponent(btnInventario, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnAplicacion, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -462,13 +468,13 @@ public class Principal extends javax.swing.JFrame implements Runnable {
         jMenuBar1.setMinimumSize(new java.awt.Dimension(120, 70));
         jMenuBar1.setPreferredSize(new java.awt.Dimension(120, 55));
 
-        meInventario.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/iconos40x40/IconoBuscar40.png"))); // NOI18N
-        meInventario.setText("INVENTARIOS");
-        meInventario.setEnabled(false);
-        meInventario.setFont(new java.awt.Font("Century Gothic", 1, 12)); // NOI18N
-        meInventario.setMaximumSize(new java.awt.Dimension(150, 32767));
-        meInventario.setMinimumSize(new java.awt.Dimension(150, 70));
-        meInventario.setPreferredSize(new java.awt.Dimension(150, 70));
+        meAplicacion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/iconos40x40/IconoBuscar40.png"))); // NOI18N
+        meAplicacion.setText("APLICACIONES");
+        meAplicacion.setEnabled(false);
+        meAplicacion.setFont(new java.awt.Font("Century Gothic", 1, 12)); // NOI18N
+        meAplicacion.setMaximumSize(new java.awt.Dimension(150, 32767));
+        meAplicacion.setMinimumSize(new java.awt.Dimension(150, 70));
+        meAplicacion.setPreferredSize(new java.awt.Dimension(150, 70));
 
         meitRol3.setText("Entradas");
         meitRol3.setEnabled(false);
@@ -477,8 +483,8 @@ public class Principal extends javax.swing.JFrame implements Runnable {
                 meitRol3ActionPerformed(evt);
             }
         });
-        meInventario.add(meitRol3);
-        meInventario.add(jSeparator16);
+        meAplicacion.add(meitRol3);
+        meAplicacion.add(jSeparator16);
 
         jMenuItem22.setText("Salidas");
         jMenuItem22.setEnabled(false);
@@ -487,9 +493,9 @@ public class Principal extends javax.swing.JFrame implements Runnable {
                 jMenuItem22ActionPerformed(evt);
             }
         });
-        meInventario.add(jMenuItem22);
+        meAplicacion.add(jMenuItem22);
 
-        jMenuBar1.add(meInventario);
+        jMenuBar1.add(meAplicacion);
 
         meZafra.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/iconos40x40/IconoBuscar40.png"))); // NOI18N
         meZafra.setText("ZAFRAS");
@@ -759,11 +765,11 @@ public class Principal extends javax.swing.JFrame implements Runnable {
         abmcliente.setVisible(true);
     }//GEN-LAST:event_btnClienteActionPerformed
 
-    private void btnInventarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInventarioActionPerformed
-        FormInventario forminventario = new FormInventario(this, true);
-        forminventario.setLocationRelativeTo(this); //Centrar
-        forminventario.setVisible(true);
-    }//GEN-LAST:event_btnInventarioActionPerformed
+    private void btnAplicacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAplicacionActionPerformed
+        Aplicacion aplicacion = new Aplicacion(this, true);
+        aplicacion.setLocationRelativeTo(this); //Centrar
+        aplicacion.setVisible(true);
+    }//GEN-LAST:event_btnAplicacionActionPerformed
 
     private void btnUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUsuarioActionPerformed
         ABMUsuario abmusuario = new ABMUsuario(this, true);
@@ -876,8 +882,8 @@ public class Principal extends javax.swing.JFrame implements Runnable {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAplicacion;
     private javax.swing.JButton btnCliente;
-    private javax.swing.JButton btnInventario;
     private javax.swing.JButton btnProducto;
     private javax.swing.JButton btnUsuario;
     private javax.swing.JLabel jLabel1;
@@ -912,8 +918,8 @@ public class Principal extends javax.swing.JFrame implements Runnable {
     private javax.swing.JLabel lbHora;
     private javax.swing.JLabel lbHoraTitulo;
     private javax.swing.JLabel lblPerfil;
+    private javax.swing.JMenu meAplicacion;
     private javax.swing.JMenu meConfiguracion;
-    private javax.swing.JMenu meInventario;
     private javax.swing.JMenu meProducto;
     private javax.swing.JMenu meReporte;
     private javax.swing.JMenu meSalir;
