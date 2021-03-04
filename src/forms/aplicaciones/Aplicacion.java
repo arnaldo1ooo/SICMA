@@ -490,6 +490,7 @@ public class Aplicacion extends javax.swing.JDialog {
             }
         };
         jButton2 = new javax.swing.JButton();
+        btnVaciarTabla = new javax.swing.JButton();
         jpPrincipal = new javax.swing.JPanel();
         panel1 = new org.edisoncor.gui.panel.Panel();
         labelMetric1 = new org.edisoncor.gui.label.LabelMetric();
@@ -529,7 +530,6 @@ public class Aplicacion extends javax.swing.JDialog {
         NuevoAplicacion.setTitle("Ventana Aplicaciones");
         NuevoAplicacion.setBackground(new java.awt.Color(45, 62, 80));
         NuevoAplicacion.setModal(true);
-        NuevoAplicacion.setResizable(false);
         NuevoAplicacion.setSize(new java.awt.Dimension(952, 621));
 
         jpPrincipal1.setBackground(new java.awt.Color(233, 255, 255));
@@ -757,8 +757,8 @@ public class Aplicacion extends javax.swing.JDialog {
 
         SelectProductos.setTitle("Agregar producto");
         SelectProductos.setModal(true);
-        SelectProductos.setPreferredSize(new java.awt.Dimension(900, 600));
-        SelectProductos.setSize(new java.awt.Dimension(900, 600));
+        SelectProductos.setPreferredSize(new java.awt.Dimension(1020, 600));
+        SelectProductos.setSize(new java.awt.Dimension(1020, 600));
 
         jLabel12.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         jLabel12.setForeground(new java.awt.Color(255, 255, 255));
@@ -843,9 +843,8 @@ public class Aplicacion extends javax.swing.JDialog {
 
         scSelectProductos.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
-        tbProductosSelect.setAutoCreateRowSorter(true);
         tbProductosSelect.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        tbProductosSelect.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+        tbProductosSelect.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
         tbProductosSelect.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -899,26 +898,37 @@ public class Aplicacion extends javax.swing.JDialog {
             }
         });
 
+        btnVaciarTabla.setBackground(new java.awt.Color(153, 0, 51));
+        btnVaciarTabla.setText("Vaciar productos seleccionados");
+        btnVaciarTabla.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnVaciarTablaActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jpSelectProductosLayout = new javax.swing.GroupLayout(jpSelectProductos);
         jpSelectProductos.setLayout(jpSelectProductosLayout);
         jpSelectProductosLayout.setHorizontalGroup(
             jpSelectProductosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jpSelectProductosLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(scSelectProductos)
+                .addGroup(jpSelectProductosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(scSelectProductos)
+                    .addGroup(jpSelectProductosLayout.createSequentialGroup()
+                        .addComponent(jButton2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnVaciarTabla)))
                 .addContainerGap())
-            .addGroup(jpSelectProductosLayout.createSequentialGroup()
-                .addGap(288, 288, 288)
-                .addComponent(jButton2)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jpSelectProductosLayout.setVerticalGroup(
             jpSelectProductosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jpSelectProductosLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(scSelectProductos, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
-                .addComponent(jButton2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jpSelectProductosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnVaciarTabla, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
 
@@ -929,21 +939,24 @@ public class Aplicacion extends javax.swing.JDialog {
             .addGroup(panel6Layout.createSequentialGroup()
                 .addGap(14, 14, 14)
                 .addGroup(panel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(scAllProductosSelect)
                     .addGroup(panel6Layout.createSequentialGroup()
-                        .addComponent(jButton1)
-                        .addGap(331, 331, 331)
-                        .addComponent(lbCantRegistrosProductosSelect, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addComponent(jpSelectProductos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel6Layout.createSequentialGroup()
-                        .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtBuscarAgregarProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 276, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(99, 99, 99)
-                        .addComponent(lblBuscarCampoApoderado)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cbCampoBuscarProductosSelect, 0, 275, Short.MAX_VALUE)))
-                .addContainerGap())
+                        .addGroup(panel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel6Layout.createSequentialGroup()
+                                .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txtBuscarAgregarProducto, javax.swing.GroupLayout.DEFAULT_SIZE, 369, Short.MAX_VALUE)
+                                .addGap(99, 99, 99)
+                                .addComponent(lblBuscarCampoApoderado)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(cbCampoBuscarProductosSelect, javax.swing.GroupLayout.PREFERRED_SIZE, 274, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jpSelectProductos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(scAllProductosSelect))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(panel6Layout.createSequentialGroup()
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 400, Short.MAX_VALUE)
+                        .addComponent(lbCantRegistrosProductosSelect, javax.swing.GroupLayout.PREFERRED_SIZE, 473, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(52, 52, 52))))
         );
         panel6Layout.setVerticalGroup(
             panel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -958,11 +971,11 @@ public class Aplicacion extends javax.swing.JDialog {
                 .addComponent(scAllProductosSelect, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(panel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lbCantRegistrosProductosSelect, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1))
-                .addGap(18, 18, 18)
+                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 38, Short.MAX_VALUE)
+                    .addComponent(lbCantRegistrosProductosSelect, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jpSelectProductos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(62, Short.MAX_VALUE))
+                .addGap(60, 60, 60))
         );
 
         jpSelectProductos.getAccessibleContext().setAccessibleName("Productosseleccionados");
@@ -982,7 +995,6 @@ public class Aplicacion extends javax.swing.JDialog {
         setTitle("Ventana Aplicaciones");
         setBackground(new java.awt.Color(45, 62, 80));
         setModal(true);
-        setResizable(false);
         setSize(new java.awt.Dimension(952, 621));
 
         jpPrincipal.setBackground(new java.awt.Color(233, 255, 255));
@@ -1396,7 +1408,9 @@ public class Aplicacion extends javax.swing.JDialog {
     }//GEN-LAST:event_tbProductosMousePressed
 
     private void tbProductosKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tbProductosKeyReleased
-        // TODO add your handling code here:
+        if (evt.getKeyCode() == KeyEvent.VK_DELETE && tbProductosSelect.getSelectedRowCount() > 0) {
+            JOptionPane.showMessageDialog(SelectProductos, "Has pulsado Delete");
+        }
     }//GEN-LAST:event_tbProductosKeyReleased
 
     private void btnEliminar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminar1ActionPerformed
@@ -1487,6 +1501,11 @@ public class Aplicacion extends javax.swing.JDialog {
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton2ActionPerformed
 
+    private void btnVaciarTablaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVaciarTablaActionPerformed
+        tableModelProductosSelect = (DefaultTableModel) tbProductosSelect.getModel();
+        tableModelProductosSelect.setRowCount(0);
+    }//GEN-LAST:event_btnVaciarTablaActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -1553,6 +1572,7 @@ public class Aplicacion extends javax.swing.JDialog {
     private javax.swing.JButton btnModificar1;
     private javax.swing.JButton btnNuevo;
     private javax.swing.JButton btnNuevo1;
+    private javax.swing.JButton btnVaciarTabla;
     private javax.swing.JComboBox<MetodosCombo> cbBloque;
     private javax.swing.JComboBox cbCampoBuscarProductosSelect;
     private javax.swing.JComboBox<MetodosCombo> cbEmprendimiento;
