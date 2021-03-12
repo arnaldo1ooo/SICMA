@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package forms.banners;
+package forms.usuario;
 
 import conexion.Conexion;
 import java.awt.Color;
@@ -38,6 +38,7 @@ public class ABMUsuario extends javax.swing.JDialog {
     private MetodosTXT metodostxt = new MetodosTXT();
     private MetodosCombo metodoscombo = new MetodosCombo();
     private DefaultTableModel tablemodelUsuario;
+    private Color colorGris = Color.GRAY;
 
     public ABMUsuario(java.awt.Frame parent, Boolean modal) {
         super(parent, modal);
@@ -704,7 +705,7 @@ public class ABMUsuario extends javax.swing.JDialog {
     }//GEN-LAST:event_txtApellidoKeyTyped
 
     private void txtApellidoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtApellidoKeyReleased
-        metodostxt.TxtColorLabelKeyReleased(txtApellido, lblApellido);
+        metodostxt.TxtColorLabelKeyReleased(txtApellido, lblApellido, colorGris);
         metodostxt.TxtMayusKeyReleased(txtApellido, evt);
     }//GEN-LAST:event_txtApellidoKeyReleased
 
@@ -716,7 +717,7 @@ public class ABMUsuario extends javax.swing.JDialog {
     }//GEN-LAST:event_txtNombreKeyTyped
 
     private void txtNombreKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNombreKeyReleased
-        metodostxt.TxtColorLabelKeyReleased(txtNombre, lblNombre);
+        metodostxt.TxtColorLabelKeyReleased(txtNombre, lblNombre, colorGris);
         metodostxt.TxtMayusKeyReleased(txtNombre, evt);
     }//GEN-LAST:event_txtNombreKeyReleased
 

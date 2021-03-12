@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package forms.aplicaciones.cliente;
+package forms.cliente;
 
 import conexion.Conexion;
 import java.awt.Color;
@@ -37,6 +37,7 @@ public class ABMCliente extends javax.swing.JDialog {
     private MetodosTXT metodostxt = new MetodosTXT();
     private MetodosCombo metodoscombo = new MetodosCombo();
     private DefaultTableModel modelTableClientes;
+    private Color colorGris = Color.GRAY;
 
     public ABMCliente(java.awt.Frame parent, Boolean modal) {
         super(parent, modal);
@@ -913,7 +914,7 @@ public class ABMCliente extends javax.swing.JDialog {
     }//GEN-LAST:event_txtApellidoKeyTyped
 
     private void txtApellidoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtApellidoKeyReleased
-        metodostxt.TxtColorLabelKeyReleased(txtApellido, lblApellido);
+        metodostxt.TxtColorLabelKeyReleased(txtApellido, lblApellido, colorGris);
     }//GEN-LAST:event_txtApellidoKeyReleased
 
     private void txtNombreKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNombreKeyTyped
@@ -924,7 +925,7 @@ public class ABMCliente extends javax.swing.JDialog {
     }//GEN-LAST:event_txtNombreKeyTyped
 
     private void txtNombreKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNombreKeyReleased
-        metodostxt.TxtColorLabelKeyReleased(txtNombre, lblNombre);
+        metodostxt.TxtColorLabelKeyReleased(txtNombre, lblNombre, colorGris);
     }//GEN-LAST:event_txtNombreKeyReleased
 
     private void taObsKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_taObsKeyPressed

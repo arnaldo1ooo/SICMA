@@ -6,6 +6,7 @@
 package forms.usuario;
 
 import conexion.Conexion;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.FocusTraversalPolicy;
@@ -30,6 +31,7 @@ public class ABMModulo extends javax.swing.JDialog {
     private Metodos metodos = new Metodos();
     private MetodosTXT metodostxt = new MetodosTXT();
     private DefaultTableModel modelTableModulos;
+    private Color colorGris = Color.GRAY;
 
     public ABMModulo(java.awt.Frame parent, Boolean modal) {
         super(parent, modal);
@@ -585,7 +587,7 @@ public class ABMModulo extends javax.swing.JDialog {
     }//GEN-LAST:event_txtDenominacionKeyTyped
 
     private void txtDenominacionKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDenominacionKeyReleased
-        metodostxt.TxtColorLabelKeyReleased(txtDenominacion, lblNombre);
+        metodostxt.TxtColorLabelKeyReleased(txtDenominacion, lblNombre, colorGris);
     }//GEN-LAST:event_txtDenominacionKeyReleased
 
     private void tbPrincipalKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tbPrincipalKeyReleased

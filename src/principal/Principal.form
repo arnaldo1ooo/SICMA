@@ -370,7 +370,7 @@
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Component id="piPrincipal" alignment="0" pref="768" max="32767" attributes="0"/>
+          <Component id="piPrincipal" alignment="0" pref="774" max="32767" attributes="0"/>
       </Group>
     </DimensionLayout>
   </Layout>
@@ -390,14 +390,22 @@
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" attributes="0">
-                  <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                      <Component id="btnUsuario" alignment="0" max="32767" attributes="0"/>
-                      <Component id="btnProducto" alignment="0" max="32767" attributes="0"/>
-                      <Component id="btnCliente" alignment="0" max="32767" attributes="0"/>
-                      <Component id="btnAplicacion" alignment="0" max="32767" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="102" attributes="0">
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                              <Component id="btnUsuario" alignment="0" max="32767" attributes="0"/>
+                              <Component id="btnProducto" alignment="0" max="32767" attributes="0"/>
+                              <Component id="btnCliente" alignment="0" max="32767" attributes="0"/>
+                              <Component id="btnAplicacion" alignment="0" max="32767" attributes="0"/>
+                          </Group>
+                      </Group>
+                      <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace min="-2" pref="14" max="-2" attributes="0"/>
+                          <Component id="panelImage4" min="-2" max="-2" attributes="0"/>
+                      </Group>
                   </Group>
-                  <EmptySpace pref="890" max="32767" attributes="0"/>
+                  <EmptySpace max="32767" attributes="0"/>
                   <Component id="jPanel1" min="-2" max="-2" attributes="0"/>
               </Group>
               <Component id="panel1" max="32767" attributes="0"/>
@@ -414,8 +422,11 @@
                   <Component id="btnProducto" min="-2" pref="61" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="btnUsuario" min="-2" pref="61" max="-2" attributes="0"/>
-                  <EmptySpace pref="279" max="32767" attributes="0"/>
-                  <Component id="jPanel1" min="-2" pref="166" max="-2" attributes="0"/>
+                  <EmptySpace pref="285" max="32767" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Component id="jPanel1" alignment="1" min="-2" pref="166" max="-2" attributes="0"/>
+                      <Component id="panelImage4" alignment="1" min="-2" max="-2" attributes="0"/>
+                  </Group>
                   <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
                   <Component id="panel1" min="-2" max="-2" attributes="0"/>
                   <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
@@ -813,6 +824,26 @@
               </Properties>
             </Component>
           </SubComponents>
+        </Container>
+        <Container class="org.edisoncor.gui.panel.PanelImage" name="panelImage4">
+          <Properties>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="3" name="/images/logo_SICMA.png"/>
+            </Property>
+          </Properties>
+
+          <Layout>
+            <DimensionLayout dim="0">
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <EmptySpace min="0" pref="480" max="32767" attributes="0"/>
+              </Group>
+            </DimensionLayout>
+            <DimensionLayout dim="1">
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <EmptySpace min="0" pref="162" max="32767" attributes="0"/>
+              </Group>
+            </DimensionLayout>
+          </Layout>
         </Container>
       </SubComponents>
     </Container>

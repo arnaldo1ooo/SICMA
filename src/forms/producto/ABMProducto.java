@@ -26,20 +26,22 @@ import utilidades.MetodosTXT;
  * @author Arnaldo Cantero
  */
 public class ABMProducto extends javax.swing.JDialog {
-    
+
     private Conexion con = new Conexion();
     private Metodos metodos = new Metodos();
     private MetodosTXT metodostxt = new MetodosTXT();
     private MetodosCombo metodoscombo = new MetodosCombo();
     private MetodosImagen metodosimagen = new MetodosImagen();
     private DefaultTableModel tableModelProducto;
+    private DefaultTableModel tableModelCompuesto;
     private Color colorVerde = new Color(6, 147, 27);
     private Color colorRojo = new Color(206, 16, 45);
-    
+    private Color colorGris = Color.GRAY;
+
     public ABMProducto(java.awt.Frame parent, Boolean modal) {
         super(parent, modal);
         initComponents();
-        
+
         metodos.AnchuraColumna(tbPrincipal);
 
         //LLamar metodos
@@ -69,7 +71,7 @@ public class ABMProducto extends javax.swing.JDialog {
         metodoscombo.CargarComboConsulta(cbPaisOrigen, "SELECT po_codigo, po_descripcion FROM pais_origen ORDER BY po_descripcion", -1);
         metodoscombo.CargarComboConsulta(cbToxicologia, "SELECT to_codigo, to_descripcion FROM toxicologia ORDER BY to_descripcion", -1);
     }
-    
+
     private void ConsultaAllProducto() {//Realiza la consulta de los productos que tenemos en la base de datos
         tableModelProducto = (DefaultTableModel) tbPrincipal.getModel();
         tableModelProducto.setRowCount(0);
@@ -81,7 +83,7 @@ public class ABMProducto extends javax.swing.JDialog {
             con = con.ObtenerRSSentencia(sentencia);
             String numregistro, numventa, nombre, idcompuesto, tipo_compuesto, compuesto, registrante, fabricante, claseuso, formulacion, paisorigen, toxicologia;
             int codigo;
-            
+
             while (con.getResultSet().next()) {
                 codigo = con.getResultSet().getInt("pro_codigo");
                 numregistro = con.getResultSet().getString("pro_numregistro");
@@ -96,13 +98,13 @@ public class ABMProducto extends javax.swing.JDialog {
                 formulacion = con.getResultSet().getString("for_descripcion");
                 paisorigen = con.getResultSet().getString("po_descripcion");
                 toxicologia = con.getResultSet().getString("to_descripcion");
-                
+
                 tableModelProducto.addRow(new Object[]{codigo, numregistro, numventa, nombre, idcompuesto, tipo_compuesto, compuesto, registrante, fabricante, claseuso, formulacion, paisorigen, toxicologia});
             }
             tbPrincipal.setModel(tableModelProducto);
             metodos.OcultarColumna(tbPrincipal, 4); //Ocultar columna idCompuesto
             metodos.AnchuraColumna(tbPrincipal);
-            
+
             if (tbPrincipal.getModel().getRowCount() == 1) {
                 lbCantRegistros.setText(tbPrincipal.getModel().getRowCount() + " Registro encontrado");
             } else {
@@ -113,14 +115,47 @@ public class ABMProducto extends javax.swing.JDialog {
         }
         con.DesconectarBasedeDatos();
     }
-    
+
+    private void ConsultaAllCompuestos() {//Realiza la consulta de los productos que tenemos en la base de datos
+        tableModelCompuesto = (DefaultTableModel) tbCompuestoBuscadorCompuesto.getModel();
+        tableModelCompuesto.setRowCount(0);
+        if (cbCampoBuscarCompuesto.getItemCount() == 0) {
+            metodos.CargarTitlesaCombo(cbCampoBuscarCompuesto, tbCompuestoBuscadorCompuesto);
+        }
+        try {
+            String sentencia = "CALL SP_CompuestoConsulta()";
+            con = con.ObtenerRSSentencia(sentencia);
+            int codigo;
+            String descripcion, tipocompuesto;
+
+            while (con.getResultSet().next()) {
+                codigo = con.getResultSet().getInt("co_codigo");
+                descripcion = con.getResultSet().getString("co_descripcion");
+                tipocompuesto = con.getResultSet().getString("tc_descripcion");
+
+                tableModelCompuesto.addRow(new Object[]{codigo, descripcion, tipocompuesto});
+            }
+            tbCompuestoBuscadorCompuesto.setModel(tableModelCompuesto);
+            metodos.AnchuraColumna(tbCompuestoBuscadorCompuesto);
+
+            if (tbCompuestoBuscadorCompuesto.getModel().getRowCount() == 1) {
+                lblCantRegistroBuscadorCompuesto.setText(tbCompuestoBuscadorCompuesto.getModel().getRowCount() + " Registro encontrado");
+            } else {
+                lblCantRegistroBuscadorCompuesto.setText(tbCompuestoBuscadorCompuesto.getModel().getRowCount() + " Registros encontrados");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        con.DesconectarBasedeDatos();
+    }
+
     public void RegistroNuevoModificar() {
         try {
             if (ComprobarCampos() == true) {
                 String codigo, numregistro, numventa, nombrecomercial;
                 int idcompuesto, idregistrante, idfabricante, idclaseuso, idformulacion, idpaisorigen, idtoxicologia;
                 String sentencia = "";
-                
+
                 codigo = txtCodigo.getText();
                 numregistro = txtNumRegistro.getText();
                 numventa = txtNumRegistro.getText();
@@ -132,19 +167,21 @@ public class ABMProducto extends javax.swing.JDialog {
                 idformulacion = metodoscombo.ObtenerIDSelectCombo(cbFormulacion);
                 idpaisorigen = metodoscombo.ObtenerIDSelectCombo(cbPaisOrigen);
                 idtoxicologia = metodoscombo.ObtenerIDSelectCombo(cbToxicologia);
-                
+
                 if (txtCodigo.getText().equals("")) {//Si es nuevo
                     int confirmado = JOptionPane.showConfirmDialog(this, "¿Esta seguro crear este nuevo registro?", "Confirmación", JOptionPane.YES_OPTION);
                     if (JOptionPane.YES_OPTION == confirmado) {
                         //REGISTRAR NUEVO
-                        sentencia = "CALL SP_ProductoAlta ('" + numregistro + "','" + numventa + "','" + nombrecomercial + "','" + idcompuesto + "'," + idregistrante + ",'"
-                                + idfabricante + "','" + idclaseuso + "','" + idformulacion + "','" + idpaisorigen + "','" + idtoxicologia + "')";
+                        sentencia = "CALL SP_ProductoAlta ('" + numregistro + "','" + numventa + "','" + nombrecomercial + "','"
+                                + idcompuesto + "'," + idregistrante + ",'" + idfabricante + "','" + idclaseuso + "','"
+                                + idformulacion + "','" + idpaisorigen + "','" + idtoxicologia + "')";
                     }
                 } else {
                     int confirmado = JOptionPane.showConfirmDialog(this, "¿Estás seguro de modificar este registro?", "Confirmación", JOptionPane.YES_OPTION);
                     if (JOptionPane.YES_OPTION == confirmado) {
-                        sentencia = "CALL SP_ProductoModificar('" + codigo + "','" + numregistro + "','" + numventa + "','" + nombrecomercial + "','" + idcompuesto + "',"
-                                + idregistrante + ",'" + idfabricante + "','" + idclaseuso + "','" + idformulacion + "','" + idpaisorigen + "','" + idtoxicologia + "')";
+                        sentencia = "CALL SP_ProductoModificar('" + codigo + "','" + numregistro + "','" + numventa + "','"
+                                + nombrecomercial + "','" + idcompuesto + "'," + idregistrante + ",'" + idfabricante + "','"
+                                + idclaseuso + "','" + idformulacion + "','" + idpaisorigen + "','" + idtoxicologia + "')";
                     }
                 }
                 con.EjecutarABM(sentencia, true);
@@ -158,7 +195,7 @@ public class ABMProducto extends javax.swing.JDialog {
             txtNumRegistro.requestFocus();
         }
     }
-    
+
     private void RegistroEliminar() {
         int codigo;
         int filasel = tbPrincipal.getSelectedRow();
@@ -168,7 +205,7 @@ public class ABMProducto extends javax.swing.JDialog {
                 codigo = Integer.parseInt(tbPrincipal.getValueAt(filasel, 0) + "");
                 String sentencia = "CALL SP_ProductoEliminar(" + codigo + ")";
                 con.EjecutarABM(sentencia, true);
-                
+
                 ConsultaAllProducto(); //Actualizar tabla
                 ModoEdicion(false);
                 Limpiar();
@@ -177,33 +214,33 @@ public class ABMProducto extends javax.swing.JDialog {
             JOptionPane.showMessageDialog(this, "No se ha seleccionado ninguna fila", "Advertencia", JOptionPane.WARNING_MESSAGE);
         }
     }
-    
+
     private void ModoVistaPrevia() {
         txtCodigo.setText(metodos.SiStringEsNull(tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 0) + ""));
         txtNumRegistro.setText(metodos.SiStringEsNull(tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 1) + ""));
         txtNumVenta.setText(metodos.SiStringEsNull(tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 2) + ""));
         txtNombreComercial.setText(metodos.SiStringEsNull(tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 3) + ""));
         txtIdCompuesto.setText(metodos.SiStringEsNull(tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 4) + ""));
-        lblCompuestos.setText(metodos.SiStringEsNull(tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 5) + ""));
-        taCompuestos.setText(metodos.SiStringEsNull(tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 6) + ""));
+        txtTipoCompuesto.setText(metodos.SiStringEsNull(tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 5) + ""));
+        taDescriCompuesto.setText(metodos.SiStringEsNull(tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 6) + ""));
         metodoscombo.SetSelectedNombreItem(cbRegistrante, tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 7).toString());
         metodoscombo.SetSelectedNombreItem(cbFabricante, tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 8).toString());
         metodoscombo.SetSelectedNombreItem(cbClaseUso, tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 9).toString());
         metodoscombo.SetSelectedNombreItem(cbFormulacion, tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 10).toString());
         metodoscombo.SetSelectedNombreItem(cbPaisOrigen, tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 11).toString());
         metodoscombo.SetSelectedNombreItem(cbToxicologia, tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 12).toString());
-        
-        if (metodosimagen.LeerImagen(lbImagen, "/src/forms/producto/imagenes/image_" + txtCodigo.getText()+"_A") == false) {
+
+        if (metodosimagen.LeerImagen(lbImagen, "/src/forms/producto/imagenes/image_" + txtCodigo.getText() + "_A") == false) {
             URL url = this.getClass().getResource("/forms/producto/imagenes/IconoProductoSinFoto.png");
             lbImagen.setIcon(new ImageIcon(url));
         }
-        
+
     }
-    
+
     private void ModoEdicion(boolean valor) {
         txtBuscar.setEnabled(!valor);
         tbPrincipal.setEnabled(!valor);
-        
+
         txtNumRegistro.setEnabled(valor);
         txtNumVenta.setEnabled(valor);
         txtNombreComercial.setEnabled(valor);
@@ -213,53 +250,116 @@ public class ABMProducto extends javax.swing.JDialog {
         cbFormulacion.setEnabled(valor);
         cbPaisOrigen.setEnabled(valor);
         cbToxicologia.setEnabled(valor);
-        
+
         btnCompuestos.setEnabled(valor);
         btnNuevo.setEnabled(!valor);
         btnModificar.setEnabled(false);
         btnEliminar.setEnabled(false);
         btnGuardar.setEnabled(valor);
         btnCancelar.setEnabled(valor);
-        
+
         txtNumRegistro.requestFocus();
     }
-    
+
     private void Limpiar() {
         txtCodigo.setText("");
         txtNumRegistro.setText("");
         txtNumVenta.setText("");
         txtNombreComercial.setText("");
         txtIdCompuesto.setText("");
-        taCompuestos.setText("");
+        taDescriCompuesto.setText("");
+        txtTipoCompuesto.setText("");
         cbClaseUso.setSelectedItem("SIN DATOS");
         cbRegistrante.setSelectedItem("SIN DATOS");
         cbFabricante.setSelectedItem("SIN DATOS");
         cbFormulacion.setSelectedItem("SIN DATOS");
         cbPaisOrigen.setSelectedItem("SIN DATOS");
         cbToxicologia.setSelectedItem("SIN DATOS");
-        
-        lblNumRegistro.setForeground(Color.DARK_GRAY);
-        lblNumVenta.setForeground(Color.DARK_GRAY);
-        lblNombreComercial.setForeground(Color.DARK_GRAY);
-        
+
         tbPrincipal.clearSelection();
     }
-    
+
     public boolean ComprobarCampos() {
         if (metodostxt.ValidarCampoVacioTXT(txtNumRegistro, lblNumRegistro) == false) {
             return false;
         }
-        
+
+        if (txtCodigo.getText().equals("")) { //Si es nuevo producto
+            try {
+                con = con.ObtenerRSSentencia("SELECT pro_numregistro FROM producto WHERE pro_numregistro='" + txtNumRegistro.getText() + "'");
+                if (con.getResultSet().next() == true) { //Si ya existe el numero de cedula en la tabla
+                    Toolkit.getDefaultToolkit().beep();
+                    JOptionPane.showMessageDialog(this, "El Número de registro ingresado ya se encuentra registrado", "Error", JOptionPane.ERROR_MESSAGE);
+                    lblNumRegistro.setForeground(colorRojo);
+                    txtNumRegistro.requestFocus();
+                    return false;
+                }
+            } catch (SQLException e) {
+                System.out.println("Error al buscar si numero de registro ya existe en bd: " + e);
+            } catch (NullPointerException e) {
+                System.out.println("El numero de registro no existe en la bd, aprobado: " + e);
+            }
+            con.DesconectarBasedeDatos();
+        }
+
         if (metodostxt.ValidarCampoVacioTXT(txtNumVenta, lblNumVenta) == false) {
             return false;
         }
-        
+
+        if (metodostxt.ValidarCampoVacioTXT(txtNombreComercial, lblNombreComercial) == false) {
+            return false;
+        }
+
+        if (taDescriCompuesto.getText().equals("") == true) {
+            lblCompuestos.setForeground(Color.RED);
+            Toolkit.getDefaultToolkit().beep();
+            JOptionPane.showMessageDialog(this, "Complete el campo con titulo en rojo", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            taDescriCompuesto.requestFocus();
+            return false;
+        }
+
         if (cbRegistrante.getSelectedIndex() == -1) {
             Toolkit.getDefaultToolkit().beep();
-            JOptionPane.showMessageDialog(this, "Seleccione un apoderado", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Seleccione un registrante", "Advertencia", JOptionPane.WARNING_MESSAGE);
             cbRegistrante.requestFocus();
             return false;
         }
+
+        if (cbFabricante.getSelectedIndex() == -1) {
+            Toolkit.getDefaultToolkit().beep();
+            JOptionPane.showMessageDialog(this, "Seleccione un fabricante", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            cbFabricante.requestFocus();
+            return false;
+        }
+
+        if (cbClaseUso.getSelectedIndex() == -1) {
+            Toolkit.getDefaultToolkit().beep();
+            JOptionPane.showMessageDialog(this, "Seleccione una clase de uso", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            cbClaseUso.requestFocus();
+            return false;
+        }
+
+        if (cbFormulacion.getSelectedIndex() == -1) {
+            Toolkit.getDefaultToolkit().beep();
+            JOptionPane.showMessageDialog(this, "Seleccione una formulacion", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            cbFormulacion.requestFocus();
+            return false;
+        }
+
+        if (cbPaisOrigen.getSelectedIndex() == -1) {
+            Toolkit.getDefaultToolkit().beep();
+            JOptionPane.showMessageDialog(this, "Seleccione un pais de origen", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            cbPaisOrigen.requestFocus();
+            return false;
+        }
+
+        if (cbToxicologia.getSelectedIndex() == -1) {
+            Toolkit.getDefaultToolkit().beep();
+            JOptionPane.showMessageDialog(this, "Seleccione un nivel de toxicologia", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            cbToxicologia.requestFocus();
+            return false;
+        }
+
         return true;
     }
 
@@ -267,19 +367,19 @@ public class ABMProducto extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        BuscadorCompuestos = new javax.swing.JDialog();
+        BuscadorCompuesto = new javax.swing.JDialog();
         panel6 = new org.edisoncor.gui.panel.Panel();
         jLabel12 = new javax.swing.JLabel();
-        txtBuscarApoderado = new javax.swing.JTextField();
-        lblBuscarCampoApoderado = new javax.swing.JLabel();
-        cbCampoBuscarApoderado = new javax.swing.JComboBox();
-        scApoderado = new javax.swing.JScrollPane();
-        tbApoderado = new javax.swing.JTable(){
+        txtBuscarCompuesto = new javax.swing.JTextField();
+        lblBuscarCampoCompuesto = new javax.swing.JLabel();
+        cbCampoBuscarCompuesto = new javax.swing.JComboBox();
+        scCompuestoBuscadorCompuesto = new javax.swing.JScrollPane();
+        tbCompuestoBuscadorCompuesto = new javax.swing.JTable(){
             public boolean isCellEditable(int rowIndex, int colIndex) {
                 return false; //Disallow the editing of any cell
             }
         };
-        lbCantRegistrosApoderado = new javax.swing.JLabel();
+        lblCantRegistroBuscadorCompuesto = new javax.swing.JLabel();
         jpPrincipal = new javax.swing.JPanel();
         jpTabla = new javax.swing.JPanel();
         scPrincipal = new javax.swing.JScrollPane();
@@ -331,7 +431,7 @@ public class ABMProducto extends javax.swing.JDialog {
         txtNombreComercial = new javax.swing.JTextField();
         lblNombreComercial = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        taCompuestos = new javax.swing.JTextArea();
+        taDescriCompuesto = new javax.swing.JTextArea();
         txtIdCompuesto = new javax.swing.JTextField();
         lblNombreComercial1 = new javax.swing.JLabel();
         scDosis = new javax.swing.JScrollPane();
@@ -341,72 +441,89 @@ public class ABMProducto extends javax.swing.JDialog {
             }
         };
         jLabel14 = new javax.swing.JLabel();
+        txtTipoCompuesto = new javax.swing.JTextField();
+        jLabel15 = new javax.swing.JLabel();
         jpBotones2 = new javax.swing.JPanel();
         btnGuardar = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
         panel1 = new org.edisoncor.gui.panel.Panel();
         labelMetric1 = new org.edisoncor.gui.label.LabelMetric();
 
-        BuscadorCompuestos.setTitle("Buscador de apoderados");
-        BuscadorCompuestos.setModal(true);
-        BuscadorCompuestos.setSize(new java.awt.Dimension(760, 310));
+        BuscadorCompuesto.setTitle("Buscador de apoderados");
+        BuscadorCompuesto.setModal(true);
+        BuscadorCompuesto.setSize(new java.awt.Dimension(760, 310));
 
         jLabel12.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         jLabel12.setForeground(new java.awt.Color(255, 255, 255));
         jLabel12.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/iconos40x40/IconoBuscar40.png"))); // NOI18N
         jLabel12.setText("  BUSCAR ");
 
-        txtBuscarApoderado.setFont(new java.awt.Font("Tahoma", 1, 17)); // NOI18N
-        txtBuscarApoderado.setForeground(new java.awt.Color(0, 153, 153));
-        txtBuscarApoderado.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        txtBuscarApoderado.setCaretColor(new java.awt.Color(0, 204, 204));
-        txtBuscarApoderado.setDisabledTextColor(new java.awt.Color(0, 204, 204));
-        txtBuscarApoderado.addKeyListener(new java.awt.event.KeyAdapter() {
+        txtBuscarCompuesto.setFont(new java.awt.Font("Tahoma", 1, 17)); // NOI18N
+        txtBuscarCompuesto.setForeground(new java.awt.Color(0, 153, 153));
+        txtBuscarCompuesto.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        txtBuscarCompuesto.setCaretColor(new java.awt.Color(0, 204, 204));
+        txtBuscarCompuesto.setDisabledTextColor(new java.awt.Color(0, 204, 204));
+        txtBuscarCompuesto.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
-                txtBuscarApoderadoKeyReleased(evt);
+                txtBuscarCompuestoKeyReleased(evt);
             }
         });
 
-        lblBuscarCampoApoderado.setFont(new java.awt.Font("sansserif", 1, 14)); // NOI18N
-        lblBuscarCampoApoderado.setForeground(new java.awt.Color(255, 255, 255));
-        lblBuscarCampoApoderado.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        lblBuscarCampoApoderado.setText("Buscar por:");
+        lblBuscarCampoCompuesto.setFont(new java.awt.Font("sansserif", 1, 14)); // NOI18N
+        lblBuscarCampoCompuesto.setForeground(new java.awt.Color(255, 255, 255));
+        lblBuscarCampoCompuesto.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        lblBuscarCampoCompuesto.setText("Buscar por:");
 
-        tbApoderado.setAutoCreateRowSorter(true);
-        tbApoderado.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        tbApoderado.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        tbApoderado.setModel(new javax.swing.table.DefaultTableModel(
+        tbCompuestoBuscadorCompuesto.setAutoCreateRowSorter(true);
+        tbCompuestoBuscadorCompuesto.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        tbCompuestoBuscadorCompuesto.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        tbCompuestoBuscadorCompuesto.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-
+                "Codigo", "Descripción", "Tipo de compuesto"
             }
-        ));
-        tbApoderado.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
-        tbApoderado.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        tbApoderado.setGridColor(new java.awt.Color(0, 153, 204));
-        tbApoderado.setOpaque(false);
-        tbApoderado.setRowHeight(20);
-        tbApoderado.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        tbApoderado.getTableHeader().setReorderingAllowed(false);
-        tbApoderado.addMouseListener(new java.awt.event.MouseAdapter() {
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tbCompuestoBuscadorCompuesto.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
+        tbCompuestoBuscadorCompuesto.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        tbCompuestoBuscadorCompuesto.setGridColor(new java.awt.Color(0, 153, 204));
+        tbCompuestoBuscadorCompuesto.setOpaque(false);
+        tbCompuestoBuscadorCompuesto.setRowHeight(20);
+        tbCompuestoBuscadorCompuesto.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        tbCompuestoBuscadorCompuesto.getTableHeader().setReorderingAllowed(false);
+        tbCompuestoBuscadorCompuesto.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
-                tbApoderadoMousePressed(evt);
+                tbCompuestoBuscadorCompuestoMousePressed(evt);
             }
         });
-        tbApoderado.addKeyListener(new java.awt.event.KeyAdapter() {
+        tbCompuestoBuscadorCompuesto.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
-                tbApoderadoKeyReleased(evt);
+                tbCompuestoBuscadorCompuestoKeyReleased(evt);
             }
         });
-        scApoderado.setViewportView(tbApoderado);
+        scCompuestoBuscadorCompuesto.setViewportView(tbCompuestoBuscadorCompuesto);
 
-        lbCantRegistrosApoderado.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-        lbCantRegistrosApoderado.setForeground(new java.awt.Color(153, 153, 0));
-        lbCantRegistrosApoderado.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        lbCantRegistrosApoderado.setText("0 Registros encontrados");
-        lbCantRegistrosApoderado.setPreferredSize(new java.awt.Dimension(57, 25));
+        lblCantRegistroBuscadorCompuesto.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        lblCantRegistroBuscadorCompuesto.setForeground(new java.awt.Color(153, 153, 0));
+        lblCantRegistroBuscadorCompuesto.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        lblCantRegistroBuscadorCompuesto.setText("0 Registros encontrados");
+        lblCantRegistroBuscadorCompuesto.setPreferredSize(new java.awt.Dimension(57, 25));
 
         javax.swing.GroupLayout panel6Layout = new javax.swing.GroupLayout(panel6);
         panel6.setLayout(panel6Layout);
@@ -415,18 +532,18 @@ public class ABMProducto extends javax.swing.JDialog {
             .addGroup(panel6Layout.createSequentialGroup()
                 .addGap(14, 14, 14)
                 .addGroup(panel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(scApoderado, javax.swing.GroupLayout.PREFERRED_SIZE, 717, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(scCompuestoBuscadorCompuesto, javax.swing.GroupLayout.PREFERRED_SIZE, 717, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(panel6Layout.createSequentialGroup()
-                        .addComponent(lbCantRegistrosApoderado, javax.swing.GroupLayout.PREFERRED_SIZE, 359, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(lblCantRegistroBuscadorCompuesto, javax.swing.GroupLayout.PREFERRED_SIZE, 359, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(8, 8, 8))
                     .addGroup(panel6Layout.createSequentialGroup()
                         .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtBuscarApoderado, javax.swing.GroupLayout.PREFERRED_SIZE, 276, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtBuscarCompuesto, javax.swing.GroupLayout.PREFERRED_SIZE, 276, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(lblBuscarCampoApoderado)
+                        .addComponent(lblBuscarCampoCompuesto)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cbCampoBuscarApoderado, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(cbCampoBuscarCompuesto, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         panel6Layout.setVerticalGroup(
@@ -434,25 +551,25 @@ public class ABMProducto extends javax.swing.JDialog {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel6Layout.createSequentialGroup()
                 .addGap(16, 16, 16)
                 .addGroup(panel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                    .addComponent(cbCampoBuscarApoderado, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblBuscarCampoApoderado, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtBuscarApoderado, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cbCampoBuscarCompuesto, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblBuscarCampoCompuesto, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtBuscarCompuesto, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(2, 2, 2)
-                .addComponent(scApoderado, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(scCompuestoBuscadorCompuesto, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(2, 2, 2)
-                .addComponent(lbCantRegistrosApoderado, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(lblCantRegistroBuscadorCompuesto, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18))
         );
 
-        javax.swing.GroupLayout BuscadorCompuestosLayout = new javax.swing.GroupLayout(BuscadorCompuestos.getContentPane());
-        BuscadorCompuestos.getContentPane().setLayout(BuscadorCompuestosLayout);
-        BuscadorCompuestosLayout.setHorizontalGroup(
-            BuscadorCompuestosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout BuscadorCompuestoLayout = new javax.swing.GroupLayout(BuscadorCompuesto.getContentPane());
+        BuscadorCompuesto.getContentPane().setLayout(BuscadorCompuestoLayout);
+        BuscadorCompuestoLayout.setHorizontalGroup(
+            BuscadorCompuestoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(panel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
-        BuscadorCompuestosLayout.setVerticalGroup(
-            BuscadorCompuestosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        BuscadorCompuestoLayout.setVerticalGroup(
+            BuscadorCompuestoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(panel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
@@ -800,7 +917,7 @@ public class ABMProducto extends javax.swing.JDialog {
             }
         });
 
-        lblCompuestos.setFont(new java.awt.Font("Arial", 0, 10)); // NOI18N
+        lblCompuestos.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         lblCompuestos.setForeground(new java.awt.Color(0, 0, 0));
         lblCompuestos.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         lblCompuestos.setText("Compuestos*:");
@@ -919,14 +1036,14 @@ public class ABMProducto extends javax.swing.JDialog {
         lblNombreComercial.setText("Nombre comercial*:");
         lblNombreComercial.setFocusable(false);
 
-        taCompuestos.setColumns(20);
-        taCompuestos.setFont(new java.awt.Font("Dialog", 0, 11)); // NOI18N
-        taCompuestos.setForeground(new java.awt.Color(0, 0, 0));
-        taCompuestos.setLineWrap(true);
-        taCompuestos.setRows(5);
-        taCompuestos.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        taCompuestos.setEnabled(false);
-        jScrollPane1.setViewportView(taCompuestos);
+        taDescriCompuesto.setColumns(20);
+        taDescriCompuesto.setFont(new java.awt.Font("Dialog", 0, 11)); // NOI18N
+        taDescriCompuesto.setForeground(new java.awt.Color(0, 0, 0));
+        taDescriCompuesto.setLineWrap(true);
+        taDescriCompuesto.setRows(5);
+        taDescriCompuesto.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        taDescriCompuesto.setEnabled(false);
+        jScrollPane1.setViewportView(taDescriCompuesto);
 
         txtIdCompuesto.setFont(new java.awt.Font("Dialog", 0, 11)); // NOI18N
         txtIdCompuesto.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
@@ -1008,6 +1125,29 @@ public class ABMProducto extends javax.swing.JDialog {
         jLabel14.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel14.setText("Id del compuesto");
 
+        txtTipoCompuesto.setFont(new java.awt.Font("Dialog", 0, 11)); // NOI18N
+        txtTipoCompuesto.setHorizontalAlignment(javax.swing.JTextField.LEFT);
+        txtTipoCompuesto.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        txtTipoCompuesto.setEnabled(false);
+        txtTipoCompuesto.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtTipoCompuestoFocusLost(evt);
+            }
+        });
+        txtTipoCompuesto.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtTipoCompuestoKeyReleased(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtTipoCompuestoKeyTyped(evt);
+            }
+        });
+
+        jLabel15.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel15.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel15.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabel15.setText("Tipo compuesto:");
+
         javax.swing.GroupLayout jpEdicionLayout = new javax.swing.GroupLayout(jpEdicion);
         jpEdicion.setLayout(jpEdicionLayout);
         jpEdicionLayout.setHorizontalGroup(
@@ -1036,8 +1176,12 @@ public class ABMProducto extends javax.swing.JDialog {
                             .addComponent(lblNombreComercial, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(lblCodigo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(lblCompuestos, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(2, 2, 2)))
+                        .addGap(2, 2, 2))
+                    .addGroup(jpEdicionLayout.createSequentialGroup()
+                        .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addGroup(jpEdicionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(txtTipoCompuesto)
                     .addComponent(txtNumRegistro, javax.swing.GroupLayout.DEFAULT_SIZE, 260, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpEdicionLayout.createSequentialGroup()
                         .addComponent(txtCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1125,7 +1269,11 @@ public class ABMProducto extends javax.swing.JDialog {
                         .addComponent(txtNombreComercial, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(201, 201, 201))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jpEdicionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtTipoCompuesto, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(161, 161, 161))
             .addGroup(jpEdicionLayout.createSequentialGroup()
                 .addGroup(jpEdicionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jpEdicionLayout.createSequentialGroup()
@@ -1323,7 +1471,7 @@ public class ABMProducto extends javax.swing.JDialog {
         RegistroEliminar();
         Limpiar();
         ModoEdicion(false);
-        
+
         ConsultaAllProducto();
     }//GEN-LAST:event_btnEliminarActionPerformed
 
@@ -1337,31 +1485,27 @@ public class ABMProducto extends javax.swing.JDialog {
         if (tbPrincipal.isEnabled() == true) {
             btnModificar.setEnabled(true);
             btnEliminar.setEnabled(true);
-            
+
             ModoVistaPrevia();
         }
     }//GEN-LAST:event_tbPrincipalMousePressed
 
     private void txtNumVentaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNumVentaKeyTyped
-        metodostxt.SoloTextoKeyTyped(evt);
-
         //Cantidad de caracteres
-        metodostxt.TxtCantidadCaracteresKeyTyped(txtNumVenta, 30);
+        metodostxt.TxtCantidadCaracteresKeyTyped(txtNumVenta, 70);
     }//GEN-LAST:event_txtNumVentaKeyTyped
 
     private void txtNumVentaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNumVentaKeyReleased
-        metodostxt.TxtColorLabelKeyReleased(txtNumVenta, lblNumVenta);
+        metodostxt.TxtColorLabelKeyReleased(txtNumVenta, lblNumVenta, colorGris);
     }//GEN-LAST:event_txtNumVentaKeyReleased
 
     private void txtNumRegistroKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNumRegistroKeyTyped
-        metodostxt.SoloTextoKeyTyped(evt);
-
         //Cantidad de caracteres
-        metodostxt.TxtCantidadCaracteresKeyTyped(txtNumRegistro, 30);
+        metodostxt.TxtCantidadCaracteresKeyTyped(txtNumRegistro, 70);
     }//GEN-LAST:event_txtNumRegistroKeyTyped
 
     private void txtNumRegistroKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNumRegistroKeyReleased
-        metodostxt.TxtColorLabelKeyReleased(txtNumRegistro, lblNumRegistro);
+        metodostxt.TxtColorLabelKeyReleased(txtNumRegistro, lblNumRegistro, colorGris);
     }//GEN-LAST:event_txtNumRegistroKeyReleased
 
     private void tbPrincipalKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tbPrincipalKeyReleased
@@ -1370,31 +1514,42 @@ public class ABMProducto extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_tbPrincipalKeyReleased
 
-    private void txtBuscarApoderadoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBuscarApoderadoKeyReleased
-        metodos.FiltroJTable(txtBuscarApoderado.getText(), cbCampoBuscarApoderado.getSelectedIndex(), tbApoderado);
-        
-        if (tbApoderado.getRowCount() == 1) {
-            lbCantRegistrosApoderado.setText(tbApoderado.getRowCount() + " Registro encontrado");
+    private void txtBuscarCompuestoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBuscarCompuestoKeyReleased
+        metodos.FiltroJTable(txtBuscarCompuesto.getText(), cbCampoBuscarCompuesto.getSelectedIndex(), tbCompuestoBuscadorCompuesto);
+
+        if (tbCompuestoBuscadorCompuesto.getRowCount() == 1) {
+            lblCantRegistroBuscadorCompuesto.setText(tbCompuestoBuscadorCompuesto.getRowCount() + " Registro encontrado");
         } else {
-            lbCantRegistrosApoderado.setText(tbApoderado.getRowCount() + " Registros encontrados");
+            lblCantRegistroBuscadorCompuesto.setText(tbCompuestoBuscadorCompuesto.getRowCount() + " Registros encontrados");
         }
-    }//GEN-LAST:event_txtBuscarApoderadoKeyReleased
+    }//GEN-LAST:event_txtBuscarCompuestoKeyReleased
 
-    private void tbApoderadoMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbApoderadoMousePressed
+    private void tbCompuestoBuscadorCompuestoMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbCompuestoBuscadorCompuestoMousePressed
         if (evt.getClickCount() == 2) {
-            int codselect = Integer.parseInt(tbApoderado.getValueAt(tbApoderado.getSelectedRow(), 0) + "");
-            metodoscombo.SetSelectedCodigoItem(cbRegistrante, codselect);
-            BuscadorCompuestos.dispose();
+            DobleClickTbCompuesto();
         }
-    }//GEN-LAST:event_tbApoderadoMousePressed
+    }//GEN-LAST:event_tbCompuestoBuscadorCompuestoMousePressed
 
-    private void tbApoderadoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tbApoderadoKeyReleased
-        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            int codselect = Integer.parseInt(tbApoderado.getValueAt(tbApoderado.getSelectedRow(), 0) + "");
-            metodoscombo.SetSelectedCodigoItem(cbRegistrante, codselect);
-            BuscadorCompuestos.dispose();
+    private void DobleClickTbCompuesto() throws NumberFormatException {
+        int idCompuestoSelect = Integer.parseInt(tbCompuestoBuscadorCompuesto.getValueAt(tbCompuestoBuscadorCompuesto.getSelectedRow(), 0) + "");
+        String descripcionSelect = tbCompuestoBuscadorCompuesto.getValueAt(tbCompuestoBuscadorCompuesto.getSelectedRow(), 1) + "";
+        String tipocompuestoSelect = tbCompuestoBuscadorCompuesto.getValueAt(tbCompuestoBuscadorCompuesto.getSelectedRow(), 2) + "";
+        txtIdCompuesto.setText(idCompuestoSelect + "");
+        taDescriCompuesto.setText(descripcionSelect);
+        txtTipoCompuesto.setText(tipocompuestoSelect);
+
+        if (taDescriCompuesto.getText().equals("") == false) {
+            lblCompuestos.setForeground(colorGris);
         }
-    }//GEN-LAST:event_tbApoderadoKeyReleased
+
+        BuscadorCompuesto.dispose();
+    }
+
+    private void tbCompuestoBuscadorCompuestoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tbCompuestoBuscadorCompuestoKeyReleased
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            DobleClickTbCompuesto();
+        }
+    }//GEN-LAST:event_tbCompuestoBuscadorCompuestoKeyReleased
 
     private void tbPrincipalMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbPrincipalMouseClicked
         // TODO add your handling code here:
@@ -1510,11 +1665,11 @@ public class ABMProducto extends javax.swing.JDialog {
     }//GEN-LAST:event_txtNombreComercialFocusLost
 
     private void txtNombreComercialKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNombreComercialKeyReleased
-        // TODO add your handling code here:
+        metodostxt.TxtColorLabelKeyReleased(txtNombreComercial, lblNombreComercial, colorGris);
     }//GEN-LAST:event_txtNombreComercialKeyReleased
 
     private void txtNombreComercialKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNombreComercialKeyTyped
-        // TODO add your handling code here:
+        metodostxt.TxtCantidadCaracteresKeyTyped(txtNombreComercial, 400);
     }//GEN-LAST:event_txtNombreComercialKeyTyped
 
     private void btnQuitarCompuestosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnQuitarCompuestosActionPerformed
@@ -1526,9 +1681,10 @@ public class ABMProducto extends javax.swing.JDialog {
     }//GEN-LAST:event_btnQuitarCompuestosActionPerformed
 
     private void btnCompuestosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCompuestosActionPerformed
-        /*ABMIngredienteActivo abmingredienteactivo = new ABMIngredienteActivo(this, null, true);
-        abmingredienteactivo.getBtnAnadir().setEnabled(true); //Se activa el boton anadir
-        abmingredienteactivo.setVisible(true);*/
+        ConsultaAllCompuestos();
+
+        BuscadorCompuesto.setLocationRelativeTo(this);
+        BuscadorCompuesto.setVisible(true);
     }//GEN-LAST:event_btnCompuestosActionPerformed
 
     private void cbFormulacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbFormulacionActionPerformed
@@ -1559,6 +1715,18 @@ public class ABMProducto extends javax.swing.JDialog {
         // TODO add your handling code here:
     }//GEN-LAST:event_tbDosisKeyReleased
 
+    private void txtTipoCompuestoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtTipoCompuestoFocusLost
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtTipoCompuestoFocusLost
+
+    private void txtTipoCompuestoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTipoCompuestoKeyReleased
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtTipoCompuestoKeyReleased
+
+    private void txtTipoCompuestoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTipoCompuestoKeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtTipoCompuestoKeyTyped
+
     /**
      * @param args the command line arguments
      */
@@ -1573,7 +1741,7 @@ public class ABMProducto extends javax.swing.JDialog {
                 if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
-                    
+
                 }
             }
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
@@ -1603,7 +1771,7 @@ public class ABMProducto extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JDialog BuscadorCompuestos;
+    private javax.swing.JDialog BuscadorCompuesto;
     private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnCargarImagen;
     private javax.swing.JButton btnCompuestos;
@@ -1618,7 +1786,7 @@ public class ABMProducto extends javax.swing.JDialog {
     private javax.swing.JButton btnPantallaCompleta;
     private javax.swing.JButton btnQuitarCompuestos;
     private javax.swing.JComboBox cbCampoBuscar;
-    private javax.swing.JComboBox cbCampoBuscarApoderado;
+    private javax.swing.JComboBox cbCampoBuscarCompuesto;
     private javax.swing.JComboBox<MetodosCombo> cbClaseUso;
     private javax.swing.JComboBox<MetodosCombo> cbFabricante;
     private javax.swing.JComboBox<MetodosCombo> cbFormulacion;
@@ -1628,6 +1796,7 @@ public class ABMProducto extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JPanel jpBotones;
@@ -1638,10 +1807,10 @@ public class ABMProducto extends javax.swing.JDialog {
     private javax.swing.JTabbedPane jtpEdicion;
     private org.edisoncor.gui.label.LabelMetric labelMetric1;
     private javax.swing.JLabel lbCantRegistros;
-    private javax.swing.JLabel lbCantRegistrosApoderado;
     private javax.swing.JLabel lbImagen;
-    private javax.swing.JLabel lblBuscarCampoApoderado;
     private javax.swing.JLabel lblBuscarCampoApoderado1;
+    private javax.swing.JLabel lblBuscarCampoCompuesto;
+    private javax.swing.JLabel lblCantRegistroBuscadorCompuesto;
     private javax.swing.JLabel lblCodigo;
     private javax.swing.JLabel lblCompuestos;
     private javax.swing.JLabel lblEstado;
@@ -1656,19 +1825,20 @@ public class ABMProducto extends javax.swing.JDialog {
     private javax.swing.JLabel lblSexo;
     private org.edisoncor.gui.panel.Panel panel1;
     private org.edisoncor.gui.panel.Panel panel6;
-    private javax.swing.JScrollPane scApoderado;
+    private javax.swing.JScrollPane scCompuestoBuscadorCompuesto;
     private javax.swing.JScrollPane scDosis;
     private javax.swing.JScrollPane scPrincipal;
-    private javax.swing.JTextArea taCompuestos;
-    private javax.swing.JTable tbApoderado;
+    private javax.swing.JTextArea taDescriCompuesto;
+    private javax.swing.JTable tbCompuestoBuscadorCompuesto;
     private javax.swing.JTable tbDosis;
     private javax.swing.JTable tbPrincipal;
     private javax.swing.JTextField txtBuscar;
-    private javax.swing.JTextField txtBuscarApoderado;
+    private javax.swing.JTextField txtBuscarCompuesto;
     private javax.swing.JTextField txtCodigo;
     private javax.swing.JTextField txtIdCompuesto;
     private javax.swing.JTextField txtNombreComercial;
     private javax.swing.JTextField txtNumRegistro;
     private javax.swing.JTextField txtNumVenta;
+    private javax.swing.JTextField txtTipoCompuesto;
     // End of variables declaration//GEN-END:variables
 }

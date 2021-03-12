@@ -98,14 +98,9 @@ public class MetodosTXT {
     }
 
     //Metodo en cual si el texto esta vacio, su label queda en gris, si esta cargado queda en verde
-    public void TxtColorLabelKeyReleased(JTextField ElTXT, JLabel ElLabel) {
-        if (ElTXT.getText().equals("")) {
-            if (ElLabel.getForeground() == Color.RED) { //Si esta en rojo, y es vacio entonces no hace nada
-
-            }
-            //ElLabel.setForeground(new Color(0, 0, 0)); //Negro
-        } else { //Si es distinto a vacio
-            ElLabel.setForeground(new Color(0, 153, 51)); //Verde
+    public void TxtColorLabelKeyReleased(JTextField elTXT, JLabel elLabel, Color elColor) {
+        if (elTXT.getText().equals("") == false) {
+            elLabel.setForeground(elColor);
         }
     }
 
