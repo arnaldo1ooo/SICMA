@@ -23,14 +23,16 @@ import java.util.logging.Logger;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import metodos.Metodos;
-import metodos.MetodosCombo;
+import utilidades.Metodos;
+import utilidades.MetodosCombo;
 
 /**
  *
  * @author Lic. Arnaldo Cantero
  */
 public class TablaEntrada extends javax.swing.JDialog {
+
+    private Conexion con = new Conexion();
 
     public TablaEntrada(java.awt.Frame parent, Boolean modal) {
         super(parent, modal);
@@ -52,11 +54,11 @@ public class TablaEntrada extends javax.swing.JDialog {
     Boolean CombosListo = false;
 
     private void CargarCombos() {
-        metodoscombo.CargarComboBox(cbProductorFiltro, "SELECT prod_codigo, CONCAT(prod_nombre, ' ', prod_apellido) FROM productor");
+        metodoscombo.CargarComboConsulta(cbProductorFiltro, "SELECT prod_codigo, CONCAT(prod_nombre, ' ', prod_apellido) FROM productor", 1);
         if (cbProductorFiltro.getItemCount() > 0) {
             cbProductorFiltro.setSelectedIndex(0);
         }
-        metodoscombo.CargarComboBox(cbEstablecimientoFiltro, "SELECT estab_codigo, estab_descripcion FROM establecimiento WHERE estab_productor = " + metodoscombo.ObtenerIdComboBox(cbProductorFiltro));
+        metodoscombo.CargarComboConsulta(cbEstablecimientoFiltro, "SELECT estab_codigo, estab_descripcion FROM establecimiento WHERE estab_productor = " + metodoscombo.ObtenerIDSelectCombo(cbProductorFiltro), 1);
         if (cbEstablecimientoFiltro.getItemCount() > 0) {
             cbEstablecimientoFiltro.setSelectedIndex(0);
         }
@@ -480,7 +482,7 @@ public class TablaEntrada extends javax.swing.JDialog {
 
     private void cbProductorFiltroItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbProductorFiltroItemStateChanged
         if (cbProductorFiltro.getSelectedIndex() != -1 && CombosListo == true) {
-            metodoscombo.CargarComboBox(cbEstablecimientoFiltro, "SELECT estab_codigo, estab_descripcion FROM establecimiento WHERE estab_productor = " + metodoscombo.ObtenerIdComboBox(cbProductorFiltro));
+            metodoscombo.CargarComboConsulta(cbEstablecimientoFiltro, "SELECT estab_codigo, estab_descripcion FROM establecimiento WHERE estab_productor = " + metodoscombo.ObtenerIDSelectCombo(cbProductorFiltro), 1);
             if (cbEstablecimientoFiltro.getItemCount() > 0) {
                 cbEstablecimientoFiltro.setSelectedIndex(0);
             }
@@ -521,7 +523,7 @@ public class TablaEntrada extends javax.swing.JDialog {
 
         String campobuscar = "";
         String tipofecha = "";
-        int idestablecimiento = metodoscombo.ObtenerIdComboBox(cbEstablecimientoFiltro);
+        int idestablecimiento = metodoscombo.ObtenerIDSelectCombo(cbEstablecimientoFiltro);
         SimpleDateFormat formatofecha = new SimpleDateFormat("yyyy-MM-dd");
         String fechainicio;
         if (dcFechaInicio.getDate() != null) {
@@ -604,7 +606,7 @@ public class TablaEntrada extends javax.swing.JDialog {
         try {
             sentencia = "SELECT es_descripcion FROM producto, formulacion, estado "
                     + "WHERE pro_formulacion = for_codigo AND for_estado = es_codigo AND pro_codigo = '" + rs.getString("pro_codigo") + "'";
-            Conexion con = metodos.ObtenerRSSentencia(sentencia);
+            con = con.ObtenerRSSentencia(sentencia);
             con.getResultSet().next();
 
             estado = con.getResultSet().getString("es_descripcion");
@@ -623,7 +625,7 @@ public class TablaEntrada extends javax.swing.JDialog {
     }
 
     private void txtBuscarKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBuscarKeyTyped
-        metodos.FiltroDeCaracteres(evt);
+
     }//GEN-LAST:event_txtBuscarKeyTyped
 
     private void rb1ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_rb1ItemStateChanged
@@ -657,7 +659,7 @@ public class TablaEntrada extends javax.swing.JDialog {
 
     private void btnNuevaEntradaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevaEntradaActionPerformed
         AMEntrada amentrada = new AMEntrada(this, true);
-        metodoscombo.setSelectedNombreItem(amentrada.getCbEstablecimiento(), cbEstablecimientoFiltro.getSelectedItem().toString());
+        metodoscombo.SetSelectedNombreItem(amentrada.getCbEstablecimiento(), cbEstablecimientoFiltro.getSelectedItem().toString());
 
         amentrada.addWindowListener(new WindowAdapter() {
             @Override
@@ -695,7 +697,7 @@ public class TablaEntrada extends javax.swing.JDialog {
 
             amentrada.setTxtCodigo(codigo);
 
-            Conexion con = metodos.ObtenerRSSentencia("SELECT en_producto, en_usuario FROM entrada WHERE en_codigo = " + codigo);
+            con = con.ObtenerRSSentencia("SELECT en_producto, en_usuario FROM entrada WHERE en_codigo = " + codigo);
             con.getResultSet().next();
             amentrada.setCbProducto(con.getResultSet().getInt("en_producto"));
 

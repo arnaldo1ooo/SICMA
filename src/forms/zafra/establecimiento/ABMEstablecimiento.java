@@ -6,7 +6,7 @@
 package forms.zafra.establecimiento;
 
 import conexion.Conexion;
-import forms.producto.ABMProductoViejo;
+import forms.producto.ABMProducto;
 import java.awt.HeadlessException;
 import java.awt.event.KeyEvent;
 import java.sql.Connection;
@@ -19,10 +19,10 @@ import java.util.logging.Logger;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import metodos.Metodos;
-import metodos.MetodosCombo;
-import metodos.MetodosImagen;
-import metodos.VistaCompleta;
+import utilidades.Metodos;
+import utilidades.MetodosCombo;
+import utilidades.MetodosImagen;
+import utilidades.VistaCompleta;
 
 /**
  *
@@ -31,6 +31,7 @@ import metodos.VistaCompleta;
 public final class ABMEstablecimiento extends javax.swing.JDialog {
 
     private MetodosCombo metodoscombo = new MetodosCombo();
+    private Conexion con = new Conexion();
 
     public ABMEstablecimiento(java.awt.Frame parent, Boolean modal) {
         super(parent, modal);
@@ -54,9 +55,9 @@ public final class ABMEstablecimiento extends javax.swing.JDialog {
         cbDepartamento.removeAllItems();
         cbDistrito.removeAllItems();
 
-        metodoscombo.CargarComboBox(cbProductor, "SELECT prod_codigo, CONCAT(prod_nombre, ' ', prod_apellido) FROM productor");
-        metodoscombo.CargarComboBox(cbDepartamento, "SELECT dep_codigo, dep_descripcion FROM departamento");
-        metodoscombo.CargarComboBox(cbDistrito, "SELECT dis_codigo, dis_descripcion FROM distrito WHERE dis_departamento = " + metodoscombo.ObtenerIdComboBox(cbDepartamento));
+        metodoscombo.CargarComboConsulta(cbProductor, "SELECT prod_codigo, CONCAT(prod_nombre, ' ', prod_apellido) FROM productor", 1);
+        metodoscombo.CargarComboConsulta(cbDepartamento, "SELECT dep_codigo, dep_descripcion FROM departamento", 1);
+        metodoscombo.CargarComboConsulta(cbDistrito, "SELECT dis_codigo, dis_descripcion FROM distrito WHERE dis_departamento = " + metodoscombo.ObtenerIDSelectCombo(cbDepartamento), 1);
     }
 
     Metodos metodos = new Metodos();
@@ -928,12 +929,12 @@ public final class ABMEstablecimiento extends javax.swing.JDialog {
     private void ModoVistaPrevia() {
         txtCodigo.setText(tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 0).toString());
         txtDescripcion.setText(tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 1).toString());
-        metodoscombo.setSelectedNombreItem(cbProductor, tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 2).toString());
+        metodoscombo.SetSelectedNombreItem(cbProductor, tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 2).toString());
 
         try {
             sum = 0.0;
             cont = 0;
-            Conexion con = metodos.ObtenerRSSentencia("SELECT par_extension FROM parcela WHERE par_establecimiento = " + txtCodigo.getText());
+            con = con.ObtenerRSSentencia("SELECT par_extension FROM parcela WHERE par_establecimiento = " + txtCodigo.getText());
             while (con.getResultSet().next()) {
                 sum = sum + con.getResultSet().getDouble("par_extension");
                 cont++;
@@ -947,8 +948,8 @@ public final class ABMEstablecimiento extends javax.swing.JDialog {
             System.out.println("Error al sumar extension de parcelas " + e);
         }
 
-        metodoscombo.setSelectedNombreItem(cbDepartamento, tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 3).toString());
-        metodoscombo.setSelectedNombreItem(cbDistrito, tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 4).toString());
+        metodoscombo.SetSelectedNombreItem(cbDepartamento, tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 3).toString());
+        metodoscombo.SetSelectedNombreItem(cbDistrito, tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 4).toString());
         txtLocalidad.setText(tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 5).toString());
         txtX.setText(tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 6).toString());
         txtY.setText(tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 7).toString());
@@ -961,7 +962,7 @@ public final class ABMEstablecimiento extends javax.swing.JDialog {
     private void ConsultaTablaParcelas() {
         String[] titlesEstablecimientos = {"Codigo", "Descripción", "Extensión", "Departamento", "Distrito", "Localidad", "Coordenada X", "Coordenada Y"};
         DefaultTableModel modeloParcelas = new DefaultTableModel(null, titlesEstablecimientos);
-        Conexion con = metodos.ObtenerRSSentencia("SELECT par_codigo, par_descripcion, par_extension, dep_descripcion, dis_descripcion, par_localidad, par_x, par_y  FROM parcela, departamento, distrito WHERE par_distrito = dis_codigo AND dep_codigo = dis_departamento AND par_establecimiento = " + tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 0).toString());
+        con = con.ObtenerRSSentencia("SELECT par_codigo, par_descripcion, par_extension, dep_descripcion, dis_descripcion, par_localidad, par_x, par_y  FROM parcela, departamento, distrito WHERE par_distrito = dis_codigo AND dep_codigo = dis_departamento AND par_establecimiento = " + tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 0).toString());
         String registro[] = new String[con.NumColumnsRS()];
         try {
             while (con.getResultSet().next()) {
@@ -979,7 +980,7 @@ public final class ABMEstablecimiento extends javax.swing.JDialog {
             con.DesconectarBasedeDatos();
             metodos.AnchuraColumna(tbParcelas);
         } catch (SQLException ex) {
-            Logger.getLogger(ABMProductoViejo.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ABMProducto.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -1060,7 +1061,7 @@ public final class ABMEstablecimiento extends javax.swing.JDialog {
     }//GEN-LAST:event_btnReporteActionPerformed
 
     private void txtBuscarKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBuscarKeyTyped
-        metodos.FiltroDeCaracteres(evt);
+       
     }//GEN-LAST:event_txtBuscarKeyTyped
 
     private void txtXKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtXKeyPressed
@@ -1109,7 +1110,7 @@ public final class ABMEstablecimiento extends javax.swing.JDialog {
 
     private void cbDepartamentoItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbDepartamentoItemStateChanged
         cbDistrito.removeAllItems();
-        metodoscombo.CargarComboBox(cbDistrito, "SELECT dis_codigo, dis_descripcion FROM distrito WHERE dis_departamento = " + metodoscombo.ObtenerIdComboBox(cbDepartamento));
+        metodoscombo.CargarComboConsulta(cbDistrito, "SELECT dis_codigo, dis_descripcion FROM distrito WHERE dis_departamento = " + metodoscombo.ObtenerIDSelectCombo(cbDepartamento),1);
         if (cbDistrito.getItemCount() > 0) {
             cbDistrito.setSelectedIndex(0);
         }
@@ -1136,7 +1137,7 @@ public final class ABMEstablecimiento extends javax.swing.JDialog {
 
     private void btnPantallaCompletaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPantallaCompletaActionPerformed
         VistaCompleta vistacompleta = new VistaCompleta("src/forms/zafra/establecimiento/imagenescroquis/imagecroquis_" + txtCodigo.getText());
-        metodos.centrarventanaJDialog(vistacompleta);
+ 
         vistacompleta.setVisible(true);
     }//GEN-LAST:event_btnPantallaCompletaActionPerformed
 
@@ -1216,8 +1217,8 @@ public final class ABMEstablecimiento extends javax.swing.JDialog {
                     && !(cbProductor.getSelectedIndex() == -1)
                     && !(cbDistrito.getSelectedIndex() == -1)) {
                 String descripcion = txtDescripcion.getText();
-                int idproductor = metodoscombo.ObtenerIdComboBox(cbProductor);
-                int iddistrito = metodoscombo.ObtenerIdComboBox(cbDistrito);
+                int idproductor = metodoscombo.ObtenerIDSelectCombo(cbProductor);
+                int iddistrito = metodoscombo.ObtenerIDSelectCombo(cbDistrito);
                 String localidad = txtLocalidad.getText();
                 String X = txtX.getText();
                 String Y = txtY.getText();
@@ -1240,7 +1241,7 @@ public final class ABMEstablecimiento extends javax.swing.JDialog {
                         Limpiar();
 
                         //Guardar Croquis
-                        metodosimagen.GuardarImagen("src/forms/zafra/establecimiento/imagenescroquis/imagecroquis_" + metodos.ObtenerIdUltimoRegistro("estab_codigo", "establecimiento"));
+                        //metodosimagen.GuardarImagen("src/forms/zafra/establecimiento/imagenescroquis/imagecroquis_" + con("estab_codigo", "establecimiento"));
 
                     } catch (HeadlessException ex) {
                         JOptionPane.showMessageDialog(this, "Ocurrió un Error " + ex.getMessage());
@@ -1264,13 +1265,13 @@ public final class ABMEstablecimiento extends javax.swing.JDialog {
 
     public void RegistroModificar() {
         //guarda los datos que se han modificado en los campos
-                Connection con = Conexion.ConectarBasedeDatos();
+        Connection con = Conexion.ConectarBasedeDatos();
         String sentencia;
 
         String codigo = txtCodigo.getText();
         String descripcion = txtDescripcion.getText();
-        int idproductor = metodoscombo.ObtenerIdComboBox(cbProductor);
-        int iddistrito = metodoscombo.ObtenerIdComboBox(cbDistrito);
+        int idproductor = metodoscombo.ObtenerIDSelectCombo(cbProductor);
+        int iddistrito = metodoscombo.ObtenerIDSelectCombo(cbDistrito);
         String localidad = txtLocalidad.getText();
         String X = txtX.getText();
         String Y = txtY.getText();
@@ -1294,7 +1295,7 @@ public final class ABMEstablecimiento extends javax.swing.JDialog {
                     if (lbImagen.getIcon() == null) { //Elimina Imagen
                         metodosimagen.EliminarImagen("src/forms/zafra/establecimiento/imagenescroquis/imagecroquis_" + txtCodigo.getText());
                     } else {//Guarda Imagen
-                        metodosimagen.GuardarImagen("src/forms/zafra/establecimiento/imagenescroquis/imagecroquis_" + metodos.ObtenerIdUltimoRegistro("estab_codigo", "establecimiento"));
+                        //metodosimagen.GuardarImagen("src/forms/zafra/establecimiento/imagenescroquis/imagecroquis_" + metodos.ObtenerIdUltimoRegistro("estab_codigo", "establecimiento"));
                     }
                 } catch (SQLException ex) {
                     JOptionPane.showMessageDialog(null, "Error al modificar registro " + ex, "Advertencia", JOptionPane.WARNING_MESSAGE);
@@ -1323,7 +1324,7 @@ public final class ABMEstablecimiento extends javax.swing.JDialog {
                 if (confirmado == JOptionPane.YES_OPTION) {
                     codigo = (String) tbPrincipal.getModel().getValueAt(filasel, 0);
 
-                Connection con = Conexion.ConectarBasedeDatos();
+                    Connection con = Conexion.ConectarBasedeDatos();
                     String sentence;
                     sentence = "CALL SP_EstablecimientoEliminar(" + codigo + ")";
 
@@ -1358,9 +1359,9 @@ public final class ABMEstablecimiento extends javax.swing.JDialog {
     private javax.swing.JButton btnProductor;
     private javax.swing.JButton btnReporte;
     private javax.swing.JComboBox cbCampoBuscar;
-    public javax.swing.JComboBox<metodos.MetodosCombo> cbDepartamento;
-    public javax.swing.JComboBox<metodos.MetodosCombo> cbDistrito;
-    public javax.swing.JComboBox<metodos.MetodosCombo> cbProductor;
+    public javax.swing.JComboBox<utilidades.MetodosCombo> cbDepartamento;
+    public javax.swing.JComboBox<utilidades.MetodosCombo> cbDistrito;
+    public javax.swing.JComboBox<utilidades.MetodosCombo> cbProductor;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel13;

@@ -388,7 +388,6 @@ public class Metodos {
         int y = 0; //(int) ((dimension.getHeight() - LaVentana.getHeight()) / 2);
         LaVentana.setLocation(x, y);
     }
-
     public void CentrarVentanaJDialog(JDialog LaVentana) {
         Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
         int x = (int) ((dimension.getWidth() - LaVentana.getWidth()) / 2);

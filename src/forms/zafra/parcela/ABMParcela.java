@@ -20,8 +20,8 @@ import java.text.DecimalFormat;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import metodos.Metodos;
-import metodos.MetodosCombo;
+import utilidades.Metodos;
+import utilidades.MetodosCombo;
 
 /**
  *
@@ -49,11 +49,11 @@ public final class ABMParcela extends javax.swing.JDialog {
         cbEstablecimiento1.removeAllItems();
         cbEstablecimiento2.removeAllItems();
 
-        metodoscombo.CargarComboBox(cbDepartamento, "SELECT dep_codigo, dep_descripcion FROM departamento");
-        metodoscombo.CargarComboBox(cbDistrito, "SELECT dis_codigo, dis_descripcion FROM distrito");
+        metodoscombo.CargarComboConsulta(cbDepartamento, "SELECT dep_codigo, dep_descripcion FROM departamento", 1);
+        metodoscombo.CargarComboConsulta(cbDistrito, "SELECT dis_codigo, dis_descripcion FROM distrito", 1);
 
-        metodoscombo.CargarComboBox(cbEstablecimiento1, "SELECT estab_codigo, estab_descripcion FROM establecimiento");
-        metodoscombo.CargarComboBox(cbEstablecimiento2, "SELECT estab_codigo, estab_descripcion FROM establecimiento");
+        metodoscombo.CargarComboConsulta(cbEstablecimiento1, "SELECT estab_codigo, estab_descripcion FROM establecimiento", 1);
+        metodoscombo.CargarComboConsulta(cbEstablecimiento2, "SELECT estab_codigo, estab_descripcion FROM establecimiento", 1);
         if (cbEstablecimiento1.getItemCount() > 0) {
             cbEstablecimiento1.setSelectedIndex(0);
         }
@@ -87,9 +87,9 @@ public final class ABMParcela extends javax.swing.JDialog {
                 for (int i = 1; i < campoconsulta.length; i++) {
                     todoscamposconsulta = todoscamposconsulta + ", " + campoconsulta[i];
                 }
-                sentencia = "CALL " + nombresp + " ('" + todoscamposconsulta + "', '" + filtro + " ('" + metodoscombo.ObtenerIdComboBox(cbEstablecimiento1) + "');";
+                sentencia = "CALL " + nombresp + " ('" + todoscamposconsulta + "', '" + filtro + " ('" + metodoscombo.ObtenerIDSelectCombo(cbEstablecimiento1) + "');";
             } else {
-                sentencia = "CALL " + nombresp + " ('" + titlesconsulta[cbCampoBuscar.getSelectedIndex()] + "', '" + filtro + "', '" + metodoscombo.ObtenerIdComboBox(cbEstablecimiento1) + "');";
+                sentencia = "CALL " + nombresp + " ('" + titlesconsulta[cbCampoBuscar.getSelectedIndex()] + "', '" + filtro + "', '" + metodoscombo.ObtenerIDSelectCombo(cbEstablecimiento1) + "');";
             }
             System.out.println("sentencia filtro tabla BD: " + sentencia);
 
@@ -794,14 +794,14 @@ public final class ABMParcela extends javax.swing.JDialog {
     private void VistaPrevia() {
         txtCodigo.setText(tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 0).toString());
         txtDescripcion.setText(tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 1).toString());
-        metodoscombo.setSelectedNombreItem(cbEstablecimiento2, cbEstablecimiento1.getSelectedItem().toString());
+        metodoscombo.SetSelectedNombreItem(cbEstablecimiento2, cbEstablecimiento1.getSelectedItem().toString());
         txtExtension.setText(tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 2).toString());
         txtLocalidad.setText(tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 5).toString());
         txtX.setText(tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 6).toString());
         txtY.setText(tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 7).toString());
 
-        metodoscombo.setSelectedNombreItem(cbDepartamento, tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 3).toString());
-        metodoscombo.setSelectedNombreItem(cbDistrito, tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 4).toString());
+        metodoscombo.SetSelectedNombreItem(cbDepartamento, tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 3).toString());
+        metodoscombo.SetSelectedNombreItem(cbDistrito, tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 4).toString());
     }
 
     private void txtDescripcionKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDescripcionKeyReleased
@@ -839,7 +839,7 @@ public final class ABMParcela extends javax.swing.JDialog {
     private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoActionPerformed
         ModoEdicion(true);
         Limpiar();
-        metodoscombo.setSelectedNombreItem(cbEstablecimiento2, cbEstablecimiento1.getSelectedItem().toString());
+        metodoscombo.SetSelectedNombreItem(cbEstablecimiento2, cbEstablecimiento1.getSelectedItem().toString());
         txtDescripcion.requestFocus();
     }//GEN-LAST:event_btnNuevoActionPerformed
 
@@ -877,7 +877,7 @@ public final class ABMParcela extends javax.swing.JDialog {
     }//GEN-LAST:event_btnReporteActionPerformed
 
     private void txtBuscarKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBuscarKeyTyped
-        metodos.FiltroDeCaracteres(evt);
+
     }//GEN-LAST:event_txtBuscarKeyTyped
 
     private void btnEstablecimiento1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEstablecimiento1ActionPerformed
@@ -916,7 +916,7 @@ public final class ABMParcela extends javax.swing.JDialog {
     private void cbDepartamentoItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbDepartamentoItemStateChanged
         if (evt.getStateChange() == ItemEvent.SELECTED) {
             cbDistrito.removeAllItems();
-            metodoscombo.CargarComboBox(cbDistrito, "SELECT dis_codigo, dis_descripcion FROM distrito WHERE dis_departamento = " + metodoscombo.ObtenerIdComboBox(cbDepartamento));
+            metodoscombo.CargarComboConsulta(cbDistrito, "SELECT dis_codigo, dis_descripcion FROM distrito WHERE dis_departamento = " + metodoscombo.ObtenerIDSelectCombo(cbDepartamento), 1);
             if (cbDistrito.getItemCount() > 0) {
                 cbDistrito.setSelectedIndex(0);
             }
@@ -990,9 +990,9 @@ public final class ABMParcela extends javax.swing.JDialog {
                     && !(cbEstablecimiento2.getSelectedIndex() == -1)
                     && !txtExtension.getText().trim().isEmpty()) {
                 String descripcion = txtDescripcion.getText();
-                int idestablecimiento = metodoscombo.ObtenerIdComboBox(cbEstablecimiento2);
+                int idestablecimiento = metodoscombo.ObtenerIDSelectCombo(cbEstablecimiento2);
                 Double extension = Double.parseDouble(txtExtension.getText().replace(",", "."));
-                int iddistrito = metodoscombo.ObtenerIdComboBox(cbDistrito);
+                int iddistrito = metodoscombo.ObtenerIDSelectCombo(cbDistrito);
                 String localidad = txtLocalidad.getText();
                 String X = txtX.getText();
                 String Y = txtY.getText();
@@ -1042,9 +1042,9 @@ public final class ABMParcela extends javax.swing.JDialog {
 
         String codigo = txtCodigo.getText();
         String descripcion = txtDescripcion.getText();
-        int idestablecimiento = metodoscombo.ObtenerIdComboBox(cbEstablecimiento2);
+        int idestablecimiento = metodoscombo.ObtenerIDSelectCombo(cbEstablecimiento2);
         String extension = txtExtension.getText().replace(",", ".");
-        int iddistrito = metodoscombo.ObtenerIdComboBox(cbDistrito);
+        int iddistrito = metodoscombo.ObtenerIDSelectCombo(cbDistrito);
         String localidad = txtLocalidad.getText();
         String X = txtX.getText();
         String Y = txtY.getText();
@@ -1125,10 +1125,10 @@ public final class ABMParcela extends javax.swing.JDialog {
     private javax.swing.JButton btnNuevo;
     private javax.swing.JButton btnReporte;
     private javax.swing.JComboBox cbCampoBuscar;
-    public javax.swing.JComboBox<metodos.MetodosCombo> cbDepartamento;
-    public javax.swing.JComboBox<metodos.MetodosCombo> cbDistrito;
-    public javax.swing.JComboBox<metodos.MetodosCombo> cbEstablecimiento1;
-    public javax.swing.JComboBox<metodos.MetodosCombo> cbEstablecimiento2;
+    public javax.swing.JComboBox<utilidades.MetodosCombo> cbDepartamento;
+    public javax.swing.JComboBox<utilidades.MetodosCombo> cbDistrito;
+    public javax.swing.JComboBox<utilidades.MetodosCombo> cbEstablecimiento1;
+    public javax.swing.JComboBox<utilidades.MetodosCombo> cbEstablecimiento2;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;

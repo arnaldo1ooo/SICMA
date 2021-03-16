@@ -20,8 +20,8 @@ import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
-import metodos.Metodos;
-import metodos.MetodosCombo;
+import utilidades.Metodos;
+import utilidades.MetodosCombo;
 
 /**
  *
@@ -46,8 +46,8 @@ public class FormInventario extends javax.swing.JDialog {
 
     //-------------METODOS----------//
     private void CargarCombos() {
-        metodoscombo.CargarComboBox(cbProductor, "SELECT prod_codigo, CONCAT(prod_nombre,' ', prod_apellido) FROM productor ORDER BY prod_nombre");
-        metodoscombo.CargarComboBox(cbEstablecimiento, "SELECT estab_codigo, estab_descripcion FROM establecimiento WHERE estab_productor = " + metodoscombo.ObtenerIdComboBox(cbProductor) + " ORDER BY estab_descripcion");
+        metodoscombo.CargarComboConsulta(cbProductor, "SELECT prod_codigo, CONCAT(prod_nombre,' ', prod_apellido) FROM productor ORDER BY prod_nombre", 1);
+        metodoscombo.CargarComboConsulta(cbEstablecimiento, "SELECT estab_codigo, estab_descripcion FROM establecimiento WHERE estab_productor = " + metodoscombo.ObtenerIDSelectCombo(cbProductor) + " ORDER BY estab_descripcion", 1);
         if (cbProductor.getItemCount() > 0) {
             cbProductor.setSelectedIndex(0);
         }
@@ -62,7 +62,7 @@ public class FormInventario extends javax.swing.JDialog {
         String titlesconsulta[] = {"in_codigo", "pro_descripcion", "in_presentacion", "in_fechaultimaentrada", "in_fechaultimasalida",
             "in_cantidadentrada", "in_cantidadsalida", "in_existencia", "in_existenciatotal", "in_costototal"};
         String nombresp = "SP_InventarioConsulta";
-        int idestablecimiento = metodoscombo.ObtenerIdComboBox(cbEstablecimiento);
+        int idestablecimiento = metodoscombo.ObtenerIDSelectCombo(cbEstablecimiento);
 
         ConsultaFiltroTablaBD(tbTabla, titlesJtabla, titlesconsulta, nombresp, filtro, cbCampoBuscar, idestablecimiento);
         metodos.AnchuraColumna(tbTabla);
@@ -141,7 +141,7 @@ public class FormInventario extends javax.swing.JDialog {
         try {
             String sentencia = "SELECT es_descripcion FROM producto, formulacion, estado "
                     + "WHERE pro_formulacion = for_codigo AND for_estado = es_codigo AND pro_codigo = '" + rs.getString("pro_codigo") + "'";
-            con = metodos.ObtenerRSSentencia(sentencia);
+            con = con.ObtenerRSSentencia(sentencia);
             con.getResultSet().next();
 
             estado = con.getResultSet().getString("es_descripcion");
@@ -491,7 +491,7 @@ public class FormInventario extends javax.swing.JDialog {
     }//GEN-LAST:event_txtFiltroKeyTyped
 
     private void cbProductorItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbProductorItemStateChanged
-        metodoscombo.CargarComboBox(cbEstablecimiento, "SELECT estab_codigo, estab_descripcion FROM establecimiento WHERE estab_productor = " + metodoscombo.ObtenerIdComboBox(cbProductor) + " ORDER BY estab_descripcion");
+        metodoscombo.CargarComboConsulta(cbEstablecimiento, "SELECT estab_codigo, estab_descripcion FROM establecimiento WHERE estab_productor = " + metodoscombo.ObtenerIDSelectCombo(cbProductor) + " ORDER BY estab_descripcion",1);
         if (cbEstablecimiento.getItemCount() > 0) {
             cbEstablecimiento.setSelectedIndex(0);
         }
@@ -504,7 +504,7 @@ public class FormInventario extends javax.swing.JDialog {
     private void btnNuevaEntradaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevaEntradaActionPerformed
         if (cbEstablecimiento.getSelectedIndex() != -1) {
             AMEntrada abmentrada = new AMEntrada(this, true);
-            metodoscombo.setSelectedNombreItem(abmentrada.getCbEstablecimiento(), cbEstablecimiento.getSelectedItem().toString());
+            metodoscombo.SetSelectedNombreItem(abmentrada.getCbEstablecimiento(), cbEstablecimiento.getSelectedItem().toString());
 
             abmentrada.addWindowListener(new WindowAdapter() {
                 @Override

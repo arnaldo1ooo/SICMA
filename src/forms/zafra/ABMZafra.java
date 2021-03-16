@@ -23,10 +23,10 @@ import java.util.logging.Logger;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import metodos.Metodos;
-import metodos.MetodosCombo;
-import metodos.MetodosImagen;
-import metodos.VistaCompleta;
+import utilidades.Metodos;
+import utilidades.MetodosCombo;
+import utilidades.MetodosImagen;
+import utilidades.VistaCompleta;
 
 /**
  *
@@ -54,15 +54,15 @@ public final class ABMZafra extends javax.swing.JDialog {
     Boolean CombosListo = false;
 
     private void CargarCombos() {
-        metodoscombo.CargarComboBox(cbProductorFiltro, "SELECT prod_codigo, CONCAT(prod_nombre, ' ', prod_apellido) FROM productor");
+        metodoscombo.CargarComboConsulta(cbProductorFiltro, "SELECT prod_codigo, CONCAT(prod_nombre, ' ', prod_apellido) FROM productor", 1);
         if (cbProductorFiltro.getItemCount() > 0) {
             cbProductorFiltro.setSelectedIndex(0);
         }
-        metodoscombo.CargarComboBox(cbEstablecimientoFiltro, "SELECT estab_codigo, estab_descripcion FROM establecimiento WHERE estab_productor = " + metodoscombo.ObtenerIdComboBox(cbProductorFiltro));
+        metodoscombo.CargarComboConsulta(cbEstablecimientoFiltro, "SELECT estab_codigo, estab_descripcion FROM establecimiento WHERE estab_productor = " + metodoscombo.ObtenerIDSelectCombo(cbProductorFiltro), 1);
         if (cbEstablecimientoFiltro.getItemCount() > 0) {
             cbEstablecimientoFiltro.setSelectedIndex(0);
         }
-        metodoscombo.CargarComboBox(cbParcelaFiltro, "SELECT par_codigo, par_descripcion FROM parcela WHERE par_establecimiento = " + metodoscombo.ObtenerIdComboBox(cbEstablecimientoFiltro));
+        metodoscombo.CargarComboConsulta(cbParcelaFiltro, "SELECT par_codigo, par_descripcion FROM parcela WHERE par_establecimiento = " + metodoscombo.ObtenerIDSelectCombo(cbEstablecimientoFiltro), 1);
         if (cbParcelaFiltro.getItemCount() > 0) {
             cbParcelaFiltro.setSelectedIndex(0);
         }
@@ -99,9 +99,9 @@ public final class ABMZafra extends javax.swing.JDialog {
             for (int i = 1; i < campoconsulta.length; i++) {
                 todoscamposconsulta = todoscamposconsulta + ", " + campoconsulta[i];
             }
-            sentencia = "CALL " + nombresp + " ('" + todoscamposconsulta + "', '" + filtro + " ('" + metodoscombo.ObtenerIdComboBox(cbParcelaFiltro) + "');";
+            sentencia = "CALL " + nombresp + " ('" + todoscamposconsulta + "', '" + filtro + " ('" + metodoscombo.ObtenerIDSelectCombo(cbParcelaFiltro) + "');";
         } else {
-            sentencia = "CALL " + nombresp + " ('" + titlesconsulta[cbCampoBuscar.getSelectedIndex()] + "', '" + filtro + "', '" + metodoscombo.ObtenerIdComboBox(cbParcelaFiltro) + "');";
+            sentencia = "CALL " + nombresp + " ('" + titlesconsulta[cbCampoBuscar.getSelectedIndex()] + "', '" + filtro + "', '" + metodoscombo.ObtenerIDSelectCombo(cbParcelaFiltro) + "');";
         }
         System.out.println("sentencia filtro tabla BD: " + sentencia);
 
@@ -1030,10 +1030,10 @@ public final class ABMZafra extends javax.swing.JDialog {
     private void VistaPrevia() {
         txtCodigo.setText(tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 0).toString());
         txtDescripcion.setText(tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 1).toString());
-        metodoscombo.setSelectedNombreItem(cbProductor, tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 2).toString());
+        metodoscombo.SetSelectedNombreItem(cbProductor, tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 2).toString());
 
-        metodoscombo.setSelectedNombreItem(cbDepartamento, tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 3).toString());
-        metodoscombo.setSelectedNombreItem(cbDistrito, tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 4).toString());
+        metodoscombo.SetSelectedNombreItem(cbDepartamento, tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 3).toString());
+        metodoscombo.SetSelectedNombreItem(cbDistrito, tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 4).toString());
         txtLocalidad.setText(tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 5).toString());
         txtX.setText(tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 6).toString());
         txtY.setText(tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 7).toString());
@@ -1100,7 +1100,7 @@ public final class ABMZafra extends javax.swing.JDialog {
     }//GEN-LAST:event_btnReporteActionPerformed
 
     private void txtBuscarKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBuscarKeyTyped
-        metodos.FiltroDeCaracteres(evt);
+
     }//GEN-LAST:event_txtBuscarKeyTyped
 
     private void txtXKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtXKeyPressed
@@ -1141,7 +1141,7 @@ public final class ABMZafra extends javax.swing.JDialog {
 
     private void cbDepartamentoItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbDepartamentoItemStateChanged
         cbDistrito.removeAllItems();
-        metodoscombo.CargarComboBox(cbDistrito, "SELECT dis_codigo, dis_descripcion FROM distrito WHERE dis_departamento = " + metodoscombo.ObtenerIdComboBox(cbDepartamento));
+        metodoscombo.CargarComboConsulta(cbDistrito, "SELECT dis_codigo, dis_descripcion FROM distrito WHERE dis_departamento = " + metodoscombo.ObtenerIDSelectCombo(cbDepartamento), 1);
         if (cbDistrito.getItemCount() > 0) {
             cbDistrito.setSelectedIndex(0);
         }
@@ -1168,7 +1168,7 @@ public final class ABMZafra extends javax.swing.JDialog {
 
     private void btnPantallaCompletaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPantallaCompletaActionPerformed
         VistaCompleta vistacompleta = new VistaCompleta("src/forms/zafra/establecimiento/imagenescroquis/imagecroquis_" + txtCodigo.getText());
-        metodos.centrarventanaJDialog(vistacompleta);
+
         vistacompleta.setVisible(true);
     }//GEN-LAST:event_btnPantallaCompletaActionPerformed
 
@@ -1177,11 +1177,11 @@ public final class ABMZafra extends javax.swing.JDialog {
             cbEstablecimientoFiltro.removeAllItems();
             cbParcelaFiltro.removeAllItems();
 
-            metodoscombo.CargarComboBox(cbEstablecimientoFiltro, "SELECT estab_codigo, estab_descripcion FROM establecimiento WHERE estab_productor = " + metodoscombo.ObtenerIdComboBox(cbProductorFiltro));
+            metodoscombo.CargarComboConsulta(cbEstablecimientoFiltro, "SELECT estab_codigo, estab_descripcion FROM establecimiento WHERE estab_productor = " + metodoscombo.ObtenerIDSelectCombo(cbProductorFiltro), 1);
             if (cbEstablecimientoFiltro.getItemCount() > 0) {
                 cbEstablecimientoFiltro.setSelectedIndex(0);
             }
-            metodoscombo.CargarComboBox(cbParcelaFiltro, "SELECT par_codigo, par_descripcion FROM parcela WHERE par_establecimiento = " + metodoscombo.ObtenerIdComboBox(cbEstablecimientoFiltro));
+            metodoscombo.CargarComboConsulta(cbParcelaFiltro, "SELECT par_codigo, par_descripcion FROM parcela WHERE par_establecimiento = " + metodoscombo.ObtenerIDSelectCombo(cbEstablecimientoFiltro), 1);
             if (cbParcelaFiltro.getItemCount() > 0) {
                 cbParcelaFiltro.setSelectedIndex(0);
             }
@@ -1191,7 +1191,7 @@ public final class ABMZafra extends javax.swing.JDialog {
     private void cbEstablecimientoFiltroItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbEstablecimientoFiltroItemStateChanged
         if (CombosListo == true) {
             cbParcelaFiltro.removeAllItems();
-            metodoscombo.CargarComboBox(cbParcelaFiltro, "SELECT par_codigo, par_descripcion FROM parcela WHERE par_establecimiento = " + metodoscombo.ObtenerIdComboBox(cbEstablecimientoFiltro));
+            metodoscombo.CargarComboConsulta(cbParcelaFiltro, "SELECT par_codigo, par_descripcion FROM parcela WHERE par_establecimiento = " + metodoscombo.ObtenerIDSelectCombo(cbEstablecimientoFiltro), 1);
             if (cbParcelaFiltro.getItemCount() > 0) {
                 cbParcelaFiltro.setSelectedIndex(0);
             }
@@ -1278,8 +1278,8 @@ public final class ABMZafra extends javax.swing.JDialog {
                     && !(cbProductor.getSelectedIndex() == -1)
                     && !(cbDistrito.getSelectedIndex() == -1)) {
                 String descripcion = txtDescripcion.getText();
-                int idproductor = metodoscombo.ObtenerIdComboBox(cbProductor);
-                int iddistrito = metodoscombo.ObtenerIdComboBox(cbDistrito);
+                int idproductor = metodoscombo.ObtenerIDSelectCombo(cbProductor);
+                int iddistrito = metodoscombo.ObtenerIDSelectCombo(cbDistrito);
                 String localidad = txtLocalidad.getText();
                 String X = txtX.getText();
                 String Y = txtY.getText();
@@ -1289,26 +1289,21 @@ public final class ABMZafra extends javax.swing.JDialog {
                 if (JOptionPane.YES_OPTION == confirmado) {
                     //REGISTRAR NUEVO
                     try {
-                        Connection con = Conexion.ConectarBasedeDatos();
+                        Conexion con = new Conexion();
                         String sentencia = "CALL SP_EstablecimientoAlta ('" + descripcion + "','" + idproductor + "','" + iddistrito + "','" + localidad + "','" + X + "','" + Y + "')";
                         System.out.println("Insertar registro: " + sentencia);
-                        Statement st = (Statement) con.createStatement();
-                        st.executeUpdate(sentencia);
 
-                        con.close();
-                        st.close();
                         JOptionPane.showMessageDialog(this, "Se agrego correctamente", "Información", JOptionPane.INFORMATION_MESSAGE);
                         ModoEdicion(false);
                         Limpiar();
+                        con.DesconectarBasedeDatos();
 
                         //Guardar Croquis
-                        metodosimagen.GuardarImagen("src/forms/zafra/establecimiento/imagenescroquis/imagecroquis_" + metodos.ObtenerIdUltimoRegistro("estab_codigo", "establecimiento"));
+                        metodosimagen.GuardarImagen("src/forms/zafra/establecimiento/imagenescroquis/imagecroquis_" + con.ObtenerUltimoID("estab_codigo FROM establecimiento"));
 
                     } catch (HeadlessException ex) {
                         JOptionPane.showMessageDialog(this, "Ocurrió un Error " + ex.getMessage());
-                    } catch (SQLException ex) {
-                        JOptionPane.showMessageDialog(this, "Ocurrió un Error " + ex.getMessage());
-                    }
+                    } 
                 } else {
                     System.out.println("No se guardo el registro");
                 }
@@ -1331,8 +1326,8 @@ public final class ABMZafra extends javax.swing.JDialog {
 
         String codigo = txtCodigo.getText();
         String descripcion = txtDescripcion.getText();
-        int idproductor = metodoscombo.ObtenerIdComboBox(cbProductor);
-        int iddistrito = metodoscombo.ObtenerIdComboBox(cbDistrito);
+        int idproductor = metodoscombo.ObtenerIDSelectCombo(cbProductor);
+        int iddistrito = metodoscombo.ObtenerIDSelectCombo(cbDistrito);
         String localidad = txtLocalidad.getText();
         String X = txtX.getText();
         String Y = txtY.getText();
@@ -1356,7 +1351,7 @@ public final class ABMZafra extends javax.swing.JDialog {
                     if (lbImagen.getIcon() == null) { //Elimina Imagen
                         metodosimagen.EliminarImagen("src/forms/zafra/establecimiento/imagenescroquis/imagecroquis_" + txtCodigo.getText());
                     } else {//Guarda Imagen
-                        metodosimagen.GuardarImagen("src/forms/zafra/establecimiento/imagenescroquis/imagecroquis_" + metodos.ObtenerIdUltimoRegistro("estab_codigo", "establecimiento"));
+                        //metodosimagen.GuardarImagen("src/forms/zafra/establecimiento/imagenescroquis/imagecroquis_" + con("estab_codigo", "establecimiento"));
                     }
                 } catch (SQLException ex) {
                     JOptionPane.showMessageDialog(null, "Error al modificar registro " + ex, "Advertencia", JOptionPane.WARNING_MESSAGE);
@@ -1419,12 +1414,12 @@ public final class ABMZafra extends javax.swing.JDialog {
     private javax.swing.JButton btnPantallaCompleta;
     private javax.swing.JButton btnReporte;
     private javax.swing.JComboBox cbCampoBuscar;
-    public javax.swing.JComboBox<metodos.MetodosCombo> cbDepartamento;
-    public javax.swing.JComboBox<metodos.MetodosCombo> cbDistrito;
+    public javax.swing.JComboBox<utilidades.MetodosCombo> cbDepartamento;
+    public javax.swing.JComboBox<utilidades.MetodosCombo> cbDistrito;
     private javax.swing.JComboBox cbEstablecimientoFiltro;
     private javax.swing.JComboBox cbParcelaFiltro;
-    public javax.swing.JComboBox<metodos.MetodosCombo> cbProductor;
-    public javax.swing.JComboBox<metodos.MetodosCombo> cbProductor1;
+    public javax.swing.JComboBox<utilidades.MetodosCombo> cbProductor;
+    public javax.swing.JComboBox<utilidades.MetodosCombo> cbProductor1;
     private javax.swing.JComboBox cbProductorFiltro;
     private com.toedter.calendar.JDateChooser jDateChooser1;
     private com.toedter.calendar.JDateChooser jDateChooser2;

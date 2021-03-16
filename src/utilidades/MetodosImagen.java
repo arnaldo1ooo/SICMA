@@ -5,14 +5,12 @@
  */
 package utilidades;
 
-import conexion.Conexion;
 import java.awt.Graphics2D;
 import java.awt.HeadlessException;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
@@ -32,9 +30,8 @@ public class MetodosImagen {
 
     JFileChooser fc;
     Boolean fcEstaCargado = false;
-    static org.apache.log4j.Logger log_historial = org.apache.log4j.Logger.getLogger(MetodosImagen.class.getName());
 
-    public void CargarImagenDesdeFC(JLabel ElLabel) {
+    public void CargarImagenFC(JLabel ElLabelImagen) throws HeadlessException {
         CambiarLookSwing("windows"); //Cambiamos el look a Windows
 
         //Traducir
@@ -60,13 +57,8 @@ public class MetodosImagen {
         fc.setFileFilter(new FileNameExtensionFilter("JPG & PNG", "jpg", "png"));
 
         if (fc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
-            File imagenseleccionada = fc.getSelectedFile();
-            String ruta = imagenseleccionada.getPath();
-            ImageIcon imagenImageIcon = new ImageIcon(ruta);
-            imagenImageIcon = new ImageIcon(EscalarImage(imagenImageIcon.getImage(), ElLabel));
-            ElLabel.setIcon(imagenImageIcon);
-            ElLabel.setText("");
-            System.out.println("Se cargó la imagen desde el filechooser: " + ruta);
+            EscalarImagen(ElLabelImagen, fc, null);
+            ElLabelImagen.setText("");
             fcEstaCargado = true;
         } else {
             System.out.println("Cargar Imagen Cancelado");
@@ -76,133 +68,108 @@ public class MetodosImagen {
         CambiarLookSwing("nimbus"); //Cambiamos el look a Nimbus otra vez
     }
 
-    public void GuardarImagen(String rutadestino) {
+    public void GuardarImagen(String rutadestinoimagen) {
         //Guardar nuevo imagen
+        //rutadestinoimagen = System.getProperty("user.dir") + rutadestinoimagen;
         try {
             if (fcEstaCargado == true) { //Si la FileChooser tiene cargado un file
-                String filenombre = fc.getSelectedFile().getName(); //Nombre del archivo
-                String fileextension = filenombre.substring(filenombre.lastIndexOf(".") + 1,
-                        fc.getSelectedFile().getName().length()); //Extension del archivo
                 BufferedImage biImagen = ImageIO.read(fc.getSelectedFile());
+                //Obtener extension
+                String filenombre = fc.getSelectedFile().getName();
+                String fileextension = filenombre.substring(filenombre.lastIndexOf(".") + 1, fc.getSelectedFile().getName().length());
 
-                ImageIcon icon = new ImageIcon(biImagen); //BufferedImage a ImageIcon
+                ImageIcon icon = new ImageIcon(biImagen); //Convierte un BufferedImage a ImageIcon
                 Graphics2D g2 = biImagen.createGraphics();
                 g2.drawImage(icon.getImage(), 0, 0, icon.getImageObserver());
                 g2.dispose();
                 // Escribe la imagen
                 try {
-                    rutadestino = rutadestino + "." + fileextension;
-
-                    File fileimagen = new File(rutadestino);
-                    if (fileimagen.exists() == true) {
-                        System.out.println("Ya existe, eliminando antes de guardar la nueva imagen");
-                        EliminarImagen(rutadestino); //Elimina la imagen por si ya existe, sucede en el caso de modificar imagen 
-                    }
-
-                    System.out.println("Guardando imagen... " + rutadestino);
-                    ImageIO.write(biImagen, fileextension, new File(rutadestino));
-                } catch (IOException e) {
-                    JOptionPane.showMessageDialog(null, "Error al guardar imagen... " + e, "Error", JOptionPane.ERROR_MESSAGE);
-                    log_historial.error("Error 1022: " + e);
-                    e.printStackTrace();
+                    EliminarImagen(rutadestinoimagen + "." + fileextension); //Elimina la imagen por si ya existe, sucede en el caso de modificar imagen
+                    System.out.println("Guardando imagen... " + rutadestinoimagen + "." + fileextension);
+                    ImageIO.write(biImagen, fileextension, new File(rutadestinoimagen + "." + fileextension));
+                } catch (IOException ex) {
+                    JOptionPane.showMessageDialog(null, "Error al guardar imagen del producto... " + ex, "Error", JOptionPane.ERROR_MESSAGE);
+   
                 }
             }
         } catch (HeadlessException | IOException e) {
             System.out.println("Error al Guardar Imagen del registro" + e);
-            log_historial.error("Error 1023: " + e);
-            e.printStackTrace();
         }
     }
 
-    public void LeerImagenExterna(JLabel elLabel, String rutaimagen, String PorDefault) {
-        Image imagenExterna;
-        File imagefile;
+    public boolean LeerImagen(JLabel ElLabel, String rutaimagen) {
+        rutaimagen = System.getProperty("user.dir") + rutaimagen;
+        //ObtenerImagen Escalado al Label
         String ruta;
+        File ficheroimagen;
 
-        imagefile = new File(rutaimagen + ".png");
         ruta = rutaimagen + ".png";
-        System.out.println("\nBuscar imagen png: " + ruta + " exist: " + imagefile.exists());
-        if (imagefile.exists() == false) {
-            imagefile = new File(rutaimagen + ".jpg");
-            ruta = rutaimagen + ".jpg";
-            System.out.println("Buscar imagen jpg: " + ruta + " exist: " + imagefile.exists());
-            if (imagefile.exists() == false) {
-                ruta = null;
-            }
-        }
-        if (ruta == null) { //Si no existe la foto
-            elLabel.setIcon(null);
-            elLabel.setText(PorDefault);
+        ficheroimagen = new File(ruta);
+        if (ficheroimagen.exists()) {
+            ElLabel.setText("");
+            EscalarImagen(ElLabel, null, ruta);
+            System.out.println("Se cargó la imagen: " + ruta);
+            return true;
         } else {
-            imagenExterna = new ImageIcon(ruta).getImage();
-            imagenExterna = EscalarImage(imagenExterna, elLabel);
-            elLabel.setIcon(new javax.swing.ImageIcon(imagenExterna));
-            elLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER); //Centra la imagen
-            elLabel.setText(""); //Borra el texto del label
-            System.out.println("Se cargó la imagen: " + ruta + "\n");
-        }
-    }
-
-    public void LeerImagenInterna(JLabel elLabel, String rutaimagen) {
-        Image imagenInterna;
-        String ruta = "C:\\VentaRopas\\fotoproductos\\imageproducto_0.png";
-
-        try {
-            imagenInterna = new ImageIcon(getClass().getResource(rutaimagen + ".png")).getImage();
-            if (imagenInterna != null) { //Si png existe
-                ruta = rutaimagen + ".png";
-            }
-        } catch (Exception e) {
-            log_historial.warn("Error 1024: " + e);
-            e.printStackTrace();
-            try {
-                imagenInterna = new ImageIcon(getClass().getResource(rutaimagen + ".jpg")).getImage();
-                if (imagenInterna != null) { //Si jpg existe
-                    ruta = rutaimagen + ".jpg";
-                }
-            } catch (Exception e2) {
-                imagenInterna = new ImageIcon(ruta).getImage(); //Si no existe ninguno se pone la imagen por defecto
-                log_historial.warn("Error 1025: " + e);
-                e.printStackTrace();
-            }
+            System.out.println("Error al LeerImagen, La imagen solicitada no existe o la ruta esta mal, revise la extension o ruta: " + ficheroimagen.getAbsolutePath());
         }
 
-        imagenInterna = EscalarImage(imagenInterna, elLabel);
-        elLabel.setIcon(new javax.swing.ImageIcon(imagenInterna));
-        elLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER); //Centra la imagen
-        System.out.println("Se cargó la imagen: " + ruta);
-    }
-
-    private Image EscalarImage(Image imagenInterna, JLabel elLabel) {
-        //Mantener relacion
-        ImageIcon tmpImagen = new ImageIcon(imagenInterna);
-        float delta = ((elLabel.getWidth() * 100) / tmpImagen.getIconWidth()) / 100f;
-        if (tmpImagen.getIconHeight() > elLabel.getHeight()) {
-            delta = ((elLabel.getHeight() * 100) / tmpImagen.getIconHeight()) / 100f;
+        ruta = rutaimagen + ".jpg";
+        ficheroimagen = new File(ruta);
+        if (ficheroimagen.exists()) {
+            ElLabel.setText("");
+            EscalarImagen(ElLabel, null, ruta);
+            System.out.println("Se cargó la imagen: " + ruta);
+            return true;
+        } else {
+            System.out.println("Error al LeerImagen, La imagen solicitada no existe o la ruta esta mal, revise la extension o ruta: " + ficheroimagen.getAbsolutePath());
         }
-        int ancho = (int) (tmpImagen.getIconWidth() * delta);
-        int alto = (int) (tmpImagen.getIconHeight() * delta);
-        imagenInterna = imagenInterna.getScaledInstance(ancho, alto, Image.SCALE_AREA_AVERAGING);
-        return imagenInterna;
+        return false;
     }
 
     public void EliminarImagen(String rutaimagen) {
-        File fichero;
-
-        fichero = new File(rutaimagen + ".png");
+        rutaimagen = System.getProperty("user.dir") + rutaimagen;
+        String ruta;
+        ruta = rutaimagen + ".png";
+        File fichero = new File(ruta);
         if (fichero.exists() == false) {
-            fichero = new File(rutaimagen + ".jpg");
+            ruta = rutaimagen + ".jpg";
+            fichero = new File(ruta);
         }
-
-        try {
-            System.out.println("Eliminar imagen: " + rutaimagen);
-            if (fichero.delete()) { //Eliminar imagen
-                System.out.println("La imagen ha sido borrado satisfactoriamente");
+        if (fichero.exists()) { //Si fichero existe
+            try {
+                if (fichero.delete()) { //Eliminar imagen
+                    System.out.println("La imagen ha sido borrado satisfactoriamente");
+                }
+            } catch (Exception e) {
+                System.out.println("Error al querer eliminar imagen " + e);
             }
-        } catch (Exception e) {
-            System.out.println("Error al querer eliminar imagen " + e);
-            log_historial.error("Error 1026: " + e);
-            e.printStackTrace();
+        }
+    }
+
+    public void EscalarImagen(JLabel ElLabel, JFileChooser fc, String UrlImagen) {
+        if (fc != null) { //Si la imagen viene desde un File Chooser
+            //Si se presiona boton aceptar
+
+            //Escala la imagen al Jlabel sin perder la proporcion
+            ImageIcon tmpImagen = new ImageIcon(fc.getSelectedFile().toString());
+            float delta = ((ElLabel.getWidth() * 100) / tmpImagen.getIconWidth()) / 100f;
+            if (tmpImagen.getIconHeight() > ElLabel.getHeight()) {
+                delta = ((ElLabel.getHeight() * 100) / tmpImagen.getIconHeight()) / 100f;
+            }
+            int ancho = (int) (tmpImagen.getIconWidth() * delta);
+            int alto = (int) (tmpImagen.getIconHeight() * delta);
+            ElLabel.setIcon(new ImageIcon(tmpImagen.getImage().getScaledInstance(ancho, alto, Image.SCALE_AREA_AVERAGING)));
+        } else { //Si la imagen viene desde una URL
+            //Escala la imagen al Jlabel sin perder la proporcion
+            ImageIcon imicImagen = new ImageIcon(UrlImagen);
+            float delta = ((ElLabel.getWidth() * 100) / imicImagen.getIconWidth()) / 100f;
+            if (imicImagen.getIconHeight() > ElLabel.getHeight()) {
+                delta = ((ElLabel.getHeight() * 100) / imicImagen.getIconHeight()) / 100f;
+            }
+            int ancho = (int) (imicImagen.getIconWidth() * delta);
+            int alto = (int) (imicImagen.getIconHeight() * delta);
+            ElLabel.setIcon(new ImageIcon(imicImagen.getImage().getScaledInstance(ancho, alto, Image.SCALE_AREA_AVERAGING)));
         }
     }
 
@@ -215,37 +182,8 @@ public class MetodosImagen {
         }
         try {
             javax.swing.UIManager.setLookAndFeel(look);
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e) {
-            log_historial.error("Error 1027: " + e);
-            e.printStackTrace();
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
+
         }
-    }
-
-    /* public void EscalarImagenAjButton(String rutaimagen, JButton EljButton) {
-        // Crea un icono que referencie a la imagen en disco
-        ImageIcon iconoOriginal = new ImageIcon(rutaimagen);
-
-        int ancho = 32; // ancho en pixeles que tendra el icono escalado
-        int alto = -1; // alto (para que conserve la proporcion pasamos -1)
-
-// Obtiene un icono en escala con las dimensiones especificadas
-        ImageIcon iconoEscala = new ImageIcon(iconoOriginal.getImage().getScaledInstance(EljButton.getho, largojbutton, java.awt.Image.SCALE_DEFAULT));
-    }*/
-    public String ObtenerUltimoID() {
-        String idultimoproducto = "";
-        try {
-            Conexion con = new Conexion();
-            con = con.ObtenerRSSentencia("SELECT MAX(pro_codigo) AS idultimoproducto FROM producto");
-            while (con.getResultSet().next()) {
-                idultimoproducto = con.getResultSet().getString("idultimoproducto");
-            }
-            con.DesconectarBasedeDatos();
-
-        } catch (SQLException e) {
-            System.out.println("No se pudo obtener el idultimoproducto: " + idultimoproducto);
-            log_historial.error("Error 1028: " + e);
-            e.printStackTrace();
-        }
-        return idultimoproducto;
     }
 }

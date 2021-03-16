@@ -7,7 +7,7 @@ package forms.inventario.entrada;
 
 import conexion.Conexion;
 import forms.inventario.registrante.ABMEmpresaVendedora;
-import forms.producto.ABMProductoViejo;
+import forms.producto.ABMProducto;
 import java.awt.HeadlessException;
 import java.awt.event.KeyEvent;
 import java.sql.Connection;
@@ -21,14 +21,16 @@ import java.util.GregorianCalendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
-import metodos.Metodos;
-import metodos.MetodosCombo;
+import utilidades.Metodos;
+import utilidades.MetodosCombo;
 
 /**
  *
  * @author Lic. Arnaldo Cantero
  */
 public class AMEntrada extends javax.swing.JDialog {
+
+    private Conexion con = new Conexion();
 
     public AMEntrada(java.awt.Dialog parent, Boolean modal) {
         super(parent, modal);
@@ -64,9 +66,9 @@ public class AMEntrada extends javax.swing.JDialog {
     MetodosCombo metodoscombo = new MetodosCombo();
 
     private void CargarCombos() {
-        metodoscombo.CargarComboBox(getCbEstablecimiento(), "SELECT estab_codigo, estab_descripcion FROM establecimiento ORDER BY estab_descripcion");
-        metodoscombo.CargarComboBox(cbProducto, "SELECT pro_codigo, pro_descripcion FROM producto ORDER BY pro_descripcion");
-        metodoscombo.CargarComboBox(cbEmpresaVendedora, "SELECT emv_codigo, emv_descripcion FROM empresa_vendedora ORDER BY emv_descripcion");
+        metodoscombo.CargarComboConsulta(getCbEstablecimiento(), "SELECT estab_codigo, estab_descripcion FROM establecimiento ORDER BY estab_descripcion", 1);
+        metodoscombo.CargarComboConsulta(cbProducto, "SELECT pro_codigo, pro_descripcion FROM producto ORDER BY pro_descripcion", 1);
+        metodoscombo.CargarComboConsulta(cbEmpresaVendedora, "SELECT emv_codigo, emv_descripcion FROM empresa_vendedora ORDER BY emv_descripcion", 1);
     }
 
     @SuppressWarnings("unchecked")
@@ -596,8 +598,7 @@ public class AMEntrada extends javax.swing.JDialog {
     }//GEN-LAST:event_btnGuardarKeyPressed
 
     private void btnProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProductoActionPerformed
-        ABMProductoViejo abmproducto = new ABMProductoViejo(null, true, cbProducto);
-        abmproducto.setVisible(true);
+  
     }//GEN-LAST:event_btnProductoActionPerformed
 
     private void txtCantidadKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCantidadKeyReleased
@@ -685,8 +686,8 @@ public class AMEntrada extends javax.swing.JDialog {
     private void EstadoProducto() {
         if (cbProducto.getSelectedIndex() != -1) {
             try {
-                Conexion con = metodos.ObtenerRSSentencia("SELECT es_descripcion FROM producto, formulacion, estado "
-                        + "WHERE pro_formulacion = for_codigo AND for_estado = es_codigo AND pro_codigo = '" + metodoscombo.ObtenerIdComboBox(cbProducto) + "'");
+                con = con.ObtenerRSSentencia("SELECT es_descripcion FROM producto, formulacion, estado "
+                        + "WHERE pro_formulacion = for_codigo AND for_estado = es_codigo AND pro_codigo = '" + metodoscombo.ObtenerIDSelectCombo(cbProducto) + "'");
                 con.getResultSet().next();
 
                 String estado = con.getResultSet().getString("es_descripcion");
@@ -737,10 +738,10 @@ public class AMEntrada extends javax.swing.JDialog {
                 SimpleDateFormat formatofecha = new SimpleDateFormat("yyyy-MM-dd");
                 DecimalFormat formatodecimal2 = new DecimalFormat("#.##");
 
-                int idestablecimiento = metodoscombo.ObtenerIdComboBox(getCbEstablecimiento());
-                int idproducto = metodoscombo.ObtenerIdComboBox(cbProducto);
+                int idestablecimiento = metodoscombo.ObtenerIDSelectCombo(getCbEstablecimiento());
+                int idproducto = metodoscombo.ObtenerIDSelectCombo(cbProducto);
                 String numfactura = txtNumFactura.getText();
-                int idempresavendedora = metodoscombo.ObtenerIdComboBox(cbEmpresaVendedora);
+                int idempresavendedora = metodoscombo.ObtenerIDSelectCombo(cbEmpresaVendedora);
                 String fechaentrada = formatofecha.format(dcFechaEntrada.getDate());
                 String fechacompra = formatofecha.format(dcFechaCompra.getDate());
                 double cantidad = Double.parseDouble(txtCantidad.getText());
@@ -755,7 +756,7 @@ public class AMEntrada extends javax.swing.JDialog {
                 if (JOptionPane.YES_OPTION == confirmado) {
                     //REGISTRAR NUEVO
                     try {
-                        try (Connection con = Conexion.ConectarBasedeDatos()) {
+                        try ( Connection con = Conexion.ConectarBasedeDatos()) {
                             String sentencia = "CALL SP_EntradaAlta ('" + idestablecimiento + "', '" + idproducto + "', '" + numfactura
                                     + "', '" + idempresavendedora + "', '" + fechaentrada + "', '" + fechacompra + "', '"
                                     + cantidad + "', '" + presentacion + "', '" + preciounitario + "', '" + preciototal + "', '"
@@ -789,8 +790,8 @@ public class AMEntrada extends javax.swing.JDialog {
     private void RegistroNuevoInventario() {
         try {
             SimpleDateFormat formatofecha = new SimpleDateFormat("yyyy-MM-dd");
-            int idestablecimiento = metodoscombo.ObtenerIdComboBox(getCbEstablecimiento());
-            int idproducto = metodoscombo.ObtenerIdComboBox(cbProducto);
+            int idestablecimiento = metodoscombo.ObtenerIDSelectCombo(getCbEstablecimiento());
+            int idproducto = metodoscombo.ObtenerIDSelectCombo(cbProducto);
             double presentacion = Double.parseDouble(cbPresentacion.getSelectedItem() + "");
             String fechaultimaentrada = formatofecha.format(new Date());
             String fechaultimasalida = "0000-00-00";
@@ -831,10 +832,10 @@ public class AMEntrada extends javax.swing.JDialog {
     private javax.swing.JButton btnEmpresaVendedora;
     private javax.swing.JButton btnGuardar;
     private javax.swing.JButton btnProducto;
-    private javax.swing.JComboBox<metodos.MetodosCombo> cbEmpresaVendedora;
-    private javax.swing.JComboBox<metodos.MetodosCombo> cbEstablecimiento;
+    private javax.swing.JComboBox<utilidades.MetodosCombo> cbEmpresaVendedora;
+    private javax.swing.JComboBox<utilidades.MetodosCombo> cbEstablecimiento;
     private javax.swing.JComboBox cbPresentacion;
-    private javax.swing.JComboBox<metodos.MetodosCombo> cbProducto;
+    private javax.swing.JComboBox<utilidades.MetodosCombo> cbProducto;
     private com.toedter.calendar.JDateChooser dcFechaCompra;
     private com.toedter.calendar.JDateChooser dcFechaEntrada;
     private javax.swing.JLabel jLabel10;
@@ -873,13 +874,13 @@ public class AMEntrada extends javax.swing.JDialog {
      * @param cbEmpresaVendedora the cbEmpresaVendedora to set
      */
     public void setCbEmpresaVendedora(String cbEmpresaVendedora) {
-        metodoscombo.setSelectedNombreItem(this.cbEmpresaVendedora, cbEmpresaVendedora);
+        metodoscombo.SetSelectedNombreItem(this.cbEmpresaVendedora, cbEmpresaVendedora);
     }
 
     /**
      * @param cbEstablecimiento the cbEstablecimiento to set
      */
-    public void setCbEstablecimiento(javax.swing.JComboBox<metodos.MetodosCombo> cbEstablecimiento) {
+    public void setCbEstablecimiento(javax.swing.JComboBox<utilidades.MetodosCombo> cbEstablecimiento) {
         this.cbEstablecimiento = cbEstablecimiento;
     }
 
@@ -967,7 +968,7 @@ public class AMEntrada extends javax.swing.JDialog {
         MetodosCombo item;
         for (int i = 0; i < this.cbProducto.getItemCount(); i++) {
             item = (MetodosCombo) this.cbProducto.getItemAt(i);
-            if (item.getId() == idproducto) {
+            if (item.getCodigo() == idproducto) {
                 this.cbProducto.setSelectedIndex(i);
                 break;
             } else {
@@ -978,7 +979,7 @@ public class AMEntrada extends javax.swing.JDialog {
     /**
      * @return the cbEstablecimiento
      */
-    public javax.swing.JComboBox<metodos.MetodosCombo> getCbEstablecimiento() {
+    public javax.swing.JComboBox<utilidades.MetodosCombo> getCbEstablecimiento() {
         return cbEstablecimiento;
     }
 

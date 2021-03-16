@@ -6,7 +6,7 @@
 package forms.producto.formulacion;
 
 import conexion.Conexion;
-import forms.producto.ABMProductoViejo;
+import forms.producto.ABMProducto;
 import java.awt.HeadlessException;
 import java.awt.event.KeyEvent;
 import java.sql.Connection;
@@ -16,8 +16,8 @@ import java.sql.Statement;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
-import metodos.Metodos;
-import metodos.MetodosCombo;
+import utilidades.Metodos;
+import utilidades.MetodosCombo;
 
 /**
  *
@@ -25,18 +25,18 @@ import metodos.MetodosCombo;
  */
 public class ABMFormulacion extends JDialog {
 
-    private ABMProductoViejo abmproducto; //Para que tenga relacion con su form padre
+    private ABMProducto abmproducto; //Para que tenga relacion con su form padre
     Metodos metodos = new Metodos();
     MetodosCombo metodoscombo = new MetodosCombo();
 
-    public ABMFormulacion(ABMProductoViejo abmproducto, java.awt.Frame parent, Boolean modal) {
+    public ABMFormulacion(ABMProducto abmproducto, java.awt.Frame parent, Boolean modal) {
         super(parent, modal);
         this.abmproducto = abmproducto;
         initComponents();
         TablaConsulta(""); //Trae todos los registros
         //Carga los combobox con las consultas
 
-        metodoscombo.CargarComboBox(cbEstado, "SELECT es_codigo, es_descripcion FROM estado ORDER BY es_descripcion");
+        metodoscombo.CargarComboConsulta(cbEstado, "SELECT es_codigo, es_descripcion FROM estado ORDER BY es_descripcion",1);
         Limpiar();
         txtBuscar.requestFocus();
 
@@ -600,9 +600,6 @@ public class ABMFormulacion extends JDialog {
         } else { //Si es modificar
             RegistroModificar();
         }
-        abmproducto.CargarComboBoxes(); //Actualizarcombos de form AbmProducto
-
-        abmproducto.TablaPrincipalConsulta("");
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
@@ -620,7 +617,7 @@ public class ABMFormulacion extends JDialog {
         txtCodigo.setText(tbTabla.getValueAt(tbTabla.getSelectedRow(), 0).toString());
         txtDescripcion.setText(tbTabla.getValueAt(tbTabla.getSelectedRow(), 1).toString());
         txtAbreviatura.setText(tbTabla.getValueAt(tbTabla.getSelectedRow(), 2).toString());
-        metodoscombo.setSelectedNombreItem(cbEstado, tbTabla.getValueAt(tbTabla.getSelectedRow(), 3).toString());//COmpara y trae el que coincide con la celda
+        metodoscombo.SetSelectedNombreItem(cbEstado, tbTabla.getValueAt(tbTabla.getSelectedRow(), 3).toString());//COmpara y trae el que coincide con la celda
 
         ModoEdicion(true);
     }//GEN-LAST:event_btnModificarActionPerformed
@@ -630,7 +627,6 @@ public class ABMFormulacion extends JDialog {
         ModoEdicion(false);
         Limpiar();
 
-        abmproducto.CargarComboBoxes(); //Actualizarcombos de form AbmProducto
 
     }//GEN-LAST:event_btnEliminarActionPerformed
 
@@ -712,7 +708,7 @@ public class ABMFormulacion extends JDialog {
                 String descri = txtDescripcion.getText();
                 String abreviatura = txtAbreviatura.getText();
 
-                int idestado = cbEstado.getItemAt(cbEstado.getSelectedIndex()).getId();
+                int idestado = cbEstado.getItemAt(cbEstado.getSelectedIndex()).getCodigo();
                 int confirmado = JOptionPane.showConfirmDialog(null, "¿Esta seguro crear este nuevo registro?", "Confirmación", JOptionPane.YES_OPTION);
 
                 if (JOptionPane.YES_OPTION == confirmado) {
@@ -755,7 +751,7 @@ public class ABMFormulacion extends JDialog {
         String cod = txtCodigo.getText();
         String descri = txtDescripcion.getText();
         String abreviatura = txtAbreviatura.getText();
-        int idestado = cbEstado.getItemAt(cbEstado.getSelectedIndex()).getId();
+        int idestado = cbEstado.getItemAt(cbEstado.getSelectedIndex()).getCodigo();
 
         if (!cod.isEmpty() && !descri.isEmpty()
                 && !txtAbreviatura.getText().trim().isEmpty()

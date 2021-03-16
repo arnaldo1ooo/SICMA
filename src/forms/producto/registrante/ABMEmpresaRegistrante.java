@@ -6,7 +6,7 @@
 package forms.producto.registrante;
 
 import conexion.Conexion;
-import forms.producto.ABMProductoViejo;
+import forms.producto.ABMProducto;
 import java.awt.HeadlessException;
 import java.awt.event.KeyEvent;
 import java.sql.Connection;
@@ -15,7 +15,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
-import metodos.Metodos;
+import utilidades.Metodos;
 
 /**
  *
@@ -23,10 +23,10 @@ import metodos.Metodos;
  */
 public final class ABMEmpresaRegistrante extends javax.swing.JDialog {
 
-    private ABMProductoViejo abmproducto; //Para que tenga relacion con su form padre
+    private ABMProducto abmproducto; //Para que tenga relacion con su form padre
     public String framepadre = "";
 
-    public ABMEmpresaRegistrante(ABMProductoViejo abmproducto, java.awt.Frame parent, Boolean modal) {
+    public ABMEmpresaRegistrante(ABMProducto abmproducto, java.awt.Frame parent, Boolean modal) {
         super(parent, modal);
         this.abmproducto = abmproducto;
         initComponents();
@@ -542,8 +542,7 @@ public final class ABMEmpresaRegistrante extends javax.swing.JDialog {
         } else { //Si es modificar
             RegistroModificar();
         }
-        abmproducto.CargarComboBoxes(); //Actualizarcombos de form AbmProducto
-        abmproducto.TablaPrincipalConsulta("");
+
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
@@ -567,7 +566,6 @@ public final class ABMEmpresaRegistrante extends javax.swing.JDialog {
         RegistroEliminar();
         ModoEdicion(false);
         Limpiar();
-        abmproducto.CargarComboBoxes(); //Actualizarcombos de form AbmProducto
     }//GEN-LAST:event_btnEliminarActionPerformed
 
     private void txtDescripcionKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDescripcionKeyPressed

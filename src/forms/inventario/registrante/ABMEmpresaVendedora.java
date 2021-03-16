@@ -14,7 +14,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
-import metodos.Metodos;
+import utilidades.Metodos;
 
 /**
  *

@@ -406,7 +406,7 @@
                 <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="cbProductoItemStateChanged"/>
               </Events>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;metodos.MetodosCombo&gt;"/>
+                <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;utilidades.MetodosCombo&gt;"/>
               </AuxValues>
             </Component>
             <Component class="javax.swing.JLabel" name="lbPresentacion">
@@ -626,7 +626,7 @@
                 </Property>
               </Properties>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;metodos.MetodosCombo&gt;"/>
+                <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;utilidades.MetodosCombo&gt;"/>
               </AuxValues>
             </Component>
             <Component class="javax.swing.JButton" name="btnProducto">
@@ -699,7 +699,7 @@
                 </Property>
               </Properties>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;metodos.MetodosCombo&gt;"/>
+                <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;utilidades.MetodosCombo&gt;"/>
               </AuxValues>
             </Component>
             <Component class="javax.swing.JButton" name="btnEmpresaVendedora">
