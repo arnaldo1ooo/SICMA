@@ -69,7 +69,7 @@ public class SplashScreen extends javax.swing.JFrame implements Runnable {
         setUndecorated(true);
         setResizable(false);
 
-        pnPrincipal.setColorPrimario(new java.awt.Color(0, 204, 51));
+        pnPrincipal.setColorPrimario(new java.awt.Color(0, 140, 119));
         pnPrincipal.setColorSecundario(new java.awt.Color(255, 255, 255));
 
         lmCargando.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);

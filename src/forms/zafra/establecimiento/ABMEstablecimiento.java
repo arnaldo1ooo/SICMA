@@ -7,6 +7,7 @@ package forms.zafra.establecimiento;
 
 import conexion.Conexion;
 import forms.producto.ABMProducto;
+import java.awt.Color;
 import java.awt.HeadlessException;
 import java.awt.event.KeyEvent;
 import java.sql.Connection;
@@ -32,6 +33,9 @@ public final class ABMEstablecimiento extends javax.swing.JDialog {
 
     private MetodosCombo metodoscombo = new MetodosCombo();
     private Conexion con = new Conexion();
+    private final String rutaFotoDefault = "/src/images/IconoProductoSinFoto.png";
+    private Color colorAdvertencia = new Color(206, 16, 45);
+    private Color colorTitulos = Color.WHITE;
 
     public ABMEstablecimiento(java.awt.Frame parent, Boolean modal) {
         super(parent, modal);
@@ -954,7 +958,7 @@ public final class ABMEstablecimiento extends javax.swing.JDialog {
         txtX.setText(tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 6).toString());
         txtY.setText(tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 7).toString());
 
-        metodosimagen.LeerImagen(lbImagen, "src/forms/zafra/establecimiento/imagenescroquis/imagecroquis_" + txtCodigo.getText());
+        metodosimagen.LeerImagen(lbImagen, "src/forms/zafra/establecimiento/imagenescroquis/imagecroquis_" + txtCodigo.getText(), rutaFotoDefault);
 
         ConsultaTablaParcelas();
     }
@@ -1061,7 +1065,7 @@ public final class ABMEstablecimiento extends javax.swing.JDialog {
     }//GEN-LAST:event_btnReporteActionPerformed
 
     private void txtBuscarKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBuscarKeyTyped
-       
+
     }//GEN-LAST:event_txtBuscarKeyTyped
 
     private void txtXKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtXKeyPressed
@@ -1110,7 +1114,7 @@ public final class ABMEstablecimiento extends javax.swing.JDialog {
 
     private void cbDepartamentoItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbDepartamentoItemStateChanged
         cbDistrito.removeAllItems();
-        metodoscombo.CargarComboConsulta(cbDistrito, "SELECT dis_codigo, dis_descripcion FROM distrito WHERE dis_departamento = " + metodoscombo.ObtenerIDSelectCombo(cbDepartamento),1);
+        metodoscombo.CargarComboConsulta(cbDistrito, "SELECT dis_codigo, dis_descripcion FROM distrito WHERE dis_departamento = " + metodoscombo.ObtenerIDSelectCombo(cbDepartamento), 1);
         if (cbDistrito.getItemCount() > 0) {
             cbDistrito.setSelectedIndex(0);
         }
@@ -1136,8 +1140,8 @@ public final class ABMEstablecimiento extends javax.swing.JDialog {
     }//GEN-LAST:event_btnEliminarImagenActionPerformed
 
     private void btnPantallaCompletaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPantallaCompletaActionPerformed
-        VistaCompleta vistacompleta = new VistaCompleta("src/forms/zafra/establecimiento/imagenescroquis/imagecroquis_" + txtCodigo.getText());
- 
+        VistaCompleta vistacompleta = new VistaCompleta("src/forms/zafra/establecimiento/imagenescroquis/imagecroquis_" + txtCodigo.getText(), rutaFotoDefault);
+
         vistacompleta.setVisible(true);
     }//GEN-LAST:event_btnPantallaCompletaActionPerformed
 
@@ -1242,7 +1246,6 @@ public final class ABMEstablecimiento extends javax.swing.JDialog {
 
                         //Guardar Croquis
                         //metodosimagen.GuardarImagen("src/forms/zafra/establecimiento/imagenescroquis/imagecroquis_" + con("estab_codigo", "establecimiento"));
-
                     } catch (HeadlessException ex) {
                         JOptionPane.showMessageDialog(this, "Ocurrió un Error " + ex.getMessage());
                     } catch (SQLException ex) {

@@ -6,6 +6,7 @@
 package forms.zafra;
 
 import conexion.Conexion;
+import java.awt.Color;
 import java.awt.HeadlessException;
 import java.awt.event.ItemEvent;
 import java.awt.event.KeyEvent;
@@ -35,6 +36,9 @@ import utilidades.VistaCompleta;
 public final class ABMZafra extends javax.swing.JDialog {
 
     private MetodosCombo metodoscombo = new MetodosCombo();
+    private final String rutaFotoDefault = "/src/images/IconoProductoSinFoto.png";
+    private Color colorAdvertencia = new Color(206, 16, 45);
+    private Color colorTitulos = Color.WHITE;
 
     public ABMZafra(java.awt.Frame parent, Boolean modal) {
         super(parent, modal);
@@ -1038,7 +1042,7 @@ public final class ABMZafra extends javax.swing.JDialog {
         txtX.setText(tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 6).toString());
         txtY.setText(tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 7).toString());
 
-        metodosimagen.LeerImagen(lbImagen, "src/forms/zafra/establecimiento/imagenescroquis/imagecroquis_" + txtCodigo.getText());
+        metodosimagen.LeerImagen(lbImagen, "src/forms/zafra/establecimiento/imagenescroquis/imagecroquis_" + txtCodigo.getText(), rutaFotoDefault);
     }
 
     private void txtDescripcionKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDescripcionKeyReleased
@@ -1167,7 +1171,7 @@ public final class ABMZafra extends javax.swing.JDialog {
     }//GEN-LAST:event_btnEliminarImagenActionPerformed
 
     private void btnPantallaCompletaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPantallaCompletaActionPerformed
-        VistaCompleta vistacompleta = new VistaCompleta("src/forms/zafra/establecimiento/imagenescroquis/imagecroquis_" + txtCodigo.getText());
+        VistaCompleta vistacompleta = new VistaCompleta("src/forms/zafra/establecimiento/imagenescroquis/imagecroquis_" + txtCodigo.getText(), rutaFotoDefault);
 
         vistacompleta.setVisible(true);
     }//GEN-LAST:event_btnPantallaCompletaActionPerformed
@@ -1299,11 +1303,11 @@ public final class ABMZafra extends javax.swing.JDialog {
                         con.DesconectarBasedeDatos();
 
                         //Guardar Croquis
-                        metodosimagen.GuardarImagen("src/forms/zafra/establecimiento/imagenescroquis/imagecroquis_" + con.ObtenerUltimoID("estab_codigo FROM establecimiento"));
+                        //metodosimagen.GuardarImagen("src/forms/zafra/establecimiento/imagenescroquis/imagecroquis_" + con.ObtenerUltimoID("estab_codigo FROM establecimiento"),);
 
                     } catch (HeadlessException ex) {
                         JOptionPane.showMessageDialog(this, "Ocurrió un Error " + ex.getMessage());
-                    } 
+                    }
                 } else {
                     System.out.println("No se guardo el registro");
                 }
