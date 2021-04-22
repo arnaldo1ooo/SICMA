@@ -382,6 +382,20 @@ public class Metodos {
         laTabla.getRowSorter().toggleSortOrder(numColumna);
     }
 
+    public String PrimerLetraPalabraMayus(String cadena) {
+        // el -2 es para evitar una excepción al caernos del arreglo
+        cadena = cadena.toLowerCase(); //Poner todo a minuscula        
+        char[] cadenaArray = cadena.toCharArray();
+        cadenaArray[0] = Character.toUpperCase(cadenaArray[0]);
+        for (int i = 0; i < cadena.length() - 2; i++) {// Es 'palabra'
+            if (cadenaArray[i] == ' ' || cadenaArray[i]=='\n' || cadenaArray[i] == '.' || cadenaArray[i] == ',') {// Reemplazamos
+                cadenaArray[i + 1] = Character.toUpperCase(cadenaArray[i + 1]);
+            }
+        }
+        return new String(cadenaArray);
+    }
+
+
     /*public void CentrarventanaJInternalFrame(JInternalFrame LaVentana) {
         Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
         int x = (int) ((dimension.getWidth() - LaVentana.getWidth()) / 2);
